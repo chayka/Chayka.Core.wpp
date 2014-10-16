@@ -1,0 +1,33 @@
+{
+    "name": "chayka/core-wpp",
+    "description": "Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications",
+    "minimum-stability": "dev",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Boris",
+            "email": "borix@tut.by"
+        }
+    ],
+    "repositories": [
+        {
+            "name" : "chayka/helpers",
+            "type" : "git",
+            "url" : "git@github.com:chayka/Chayka.Helpers.git"
+        },
+        {
+            "name" : "chayka/mvc",
+            "type" : "git",
+            "url" : "git@github.com:chayka/Chayka.MVC.git"
+        },
+        {
+            "name" : "chayka/wp",
+            "type" : "git",
+            "url" : "git@github.com:chayka/Chayka.MVC.git"
+        }
+    ],
+
+    "require":{
+        "chayka/wp": "*"
+    }
+}
