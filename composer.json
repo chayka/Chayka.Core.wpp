@@ -23,7 +23,7 @@
         {
             "name" : "chayka/wp",
             "type" : "git",
-            "url" : "git@github.com:chayka/Chayka.MVC.git"
+            "url" : "git@github.com:chayka/Chayka.WP.git"
         }
     ],
 
