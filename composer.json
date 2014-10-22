@@ -9,25 +9,9 @@
             "email": "borix@tut.by"
         }
     ],
-    "repositories": [
-        {
-            "name" : "chayka/helpers",
-            "type" : "git",
-            "url" : "git@github.com:chayka/Chayka.Helpers.git"
-        },
-        {
-            "name" : "chayka/mvc",
-            "type" : "git",
-            "url" : "git@github.com:chayka/Chayka.MVC.git"
-        },
-        {
-            "name" : "chayka/wp",
-            "type" : "git",
-            "url" : "git@github.com:chayka/Chayka.WP.git"
-        }
-    ],
 
     "require":{
-        "chayka/wp": "*"
+        "chayka/wp": "dev-master",
+        "chayka/email-wpp": "dev-master"
     }
 }

@@ -55,6 +55,7 @@ class Plugin extends WP\Plugin{
         $plugin->addSupport_Metaboxes();
         $plugin->addSupport_PostProcessing();
 
+        $plugin->registerComposerPlugins();
     }
 
     public function thisPluginGoesFirst() {
@@ -206,6 +207,8 @@ class Plugin extends WP\Plugin{
 
     public function registerResources($minimize = false){
         $this->registerBowerResources(true);
+        $this->registerScript('ng-form-validator', 'src/js/ng-form-validator.js', array('angular', 'angular-sanitize'));
+        $this->registerScript('ng-options-form', 'src/js/ng-options-form.js', array('angular', 'ng-form-validator'));
 //        $isAdminPost = is_admin() && (strpos($_SERVER['REQUEST_URI'], 'post.php') || strpos($_SERVER['REQUEST_URI'], 'revision.php'));
 //
 //        // backbone & underscore
