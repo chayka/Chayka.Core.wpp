@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ng-form-validator', ['ngSanitize'])
+angular.module('chayka-forms', ['ngSanitize'])
     .directive('formValidator', ['$http', '$window', function($http, $window) {
         return {
             restrict: 'AE',
@@ -95,14 +95,20 @@ angular.module('ng-form-validator', ['ngSanitize'])
                     return 'progress';
                 };
 
+                ctrl.checkCustom = function(field){
+                    var c = field.checks.custom;
+                    var callback = c.callback;
+                    return $scope.$parent[callback].call($scope, field.value);
+                };
+
                 ctrl.validateField = function(field) {
                     var valid = true,
                         message = '',
                         state;
 
-                    //if(field.checks.condition){
-                    //
-                    //}
+                    if(!field.active){
+                        return true;
+                    }
 
                     if(field.checks.required && !ctrl.checkRequired(field)){
                         valid = false;
@@ -123,6 +129,9 @@ angular.module('ng-form-validator', ['ngSanitize'])
                                     break;
                                 case 'passwords':
                                     valid = ctrl.checkPasswords(field);
+                                    break;
+                                case 'custom':
+                                    valid = ctrl.checkCustom(field);
                                     break;
                                 default :
                             }
@@ -186,12 +195,21 @@ angular.module('ng-form-validator', ['ngSanitize'])
                 };
 
                 ctrl.showErrors = function(errors){
+                    var scrollTo = 0;
                     angular.forEach(errors, function(message, key){
                         var field = fields[key];
                         if(field){
                             ctrl.setFieldState(field, 'invalid', message);
+                            var scrollPos = field.element.offset().top;
+                            if(!scrollTo || scrollPos && scrollTo > scrollPos){
+                                scrollTo = scrollPos;
+                            }
                         }
                     });
+
+                    if(scrollTo){
+                        ctrl.scrollTo(scrollTo);
+                    }
                 };
 
                 $scope.validator = ctrl;
@@ -239,6 +257,8 @@ angular.module('ng-form-validator', ['ngSanitize'])
 
                 scope.state = 'clean'; // clean|progress|valid|invalid
 
+                scope.active = true;
+
                 scope.checks = {};
 
                 scope.element = element;
@@ -259,9 +279,9 @@ angular.module('ng-form-validator', ['ngSanitize'])
 
                 function setupIf(){
                     if(attrs.checkIf){
-                        scope.checks.condition = {
-                            fieldId: attrs.checkIf
-                        };
+                        scope.$watch(attrs.checkIf, function(value){
+                            scope.active = value;
+                        });
                     }
                 }
 
@@ -346,17 +366,34 @@ angular.module('ng-form-validator', ['ngSanitize'])
                 }
 
                 function setupApiCall() {
-                    var short = attrs.checkApi; // '/api/check-existing/{name}/{value}|Email exists'
+                    var short = attrs.checkApi; // '/api/check-existing/{name}/{value}|Email exists|500'
                     var shorts = short?short.split('|'):[];
 
                     var url = shorts[0] || attrs.checkApiUrl;
 
-                    var message= shorts[1] || attrs.checkApiMessage;
+                    var message = shorts[1] || attrs.checkApiMessage;
+
+                    var delay = shorts[2] || 0;
 
                     scope.checks.api = {
                         message: message,
                         url: url,
+                        delay: delay,
                         dictionary: {}
+                    };
+                }
+
+                function setupCustom() {
+                    var short = attrs.checkCustom; // 'pass1id|Введенные пароли отличаются'
+                    var shorts = short?short.split('|'):[];
+
+                    var callback = shorts[0] || attrs.checkCustomCallback;
+
+                    var message = shorts[1] || attrs.checkCustomMessage || 'Invalid';
+
+                    scope.checks.custom = {
+                        message: message,
+                        callback: callback
                     };
                 }
 
@@ -389,6 +426,9 @@ angular.module('ng-form-validator', ['ngSanitize'])
                             case 'Api':
                                 setupApiCall();
                                 break;
+                            case 'Custom':
+                                setupCustom();
+                                break;
                             default:
                         }
                     }
@@ -410,7 +450,23 @@ angular.module('ng-form-validator', ['ngSanitize'])
             },
             controller: function($scope){
             }
-            //templateUrl: 'field.html'
         };
-    });
+    })
+    .factory('delayedCall', ['$timeout', function($timeout){
+        var timeouts={};
+
+        var delayedCall = function(callId, timeout, callback){
+            var handle = timeouts[callId];
+            if(handle){
+                $timeout.cancel(handle);
+            }
+            timeouts[callId] = $timeout(function(){
+                timeouts[callId] = null;
+                callback.call()
+            }, timeout);
+        };
+
+        return delayedCall;
+    }])
+;
 

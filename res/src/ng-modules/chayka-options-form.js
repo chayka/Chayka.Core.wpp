@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('ng-options-form', ['ng-form-validator'])
+angular.module('chayka-options-form', ['chayka-forms'])
     .controller('optionsForm', ['$scope', '$http', function($scope, $http){
         $scope.namespace = '';
         $scope.options = {

@@ -56,6 +56,8 @@ class Plugin extends WP\Plugin{
         $plugin->addSupport_PostProcessing();
 
         $plugin->registerComposerPlugins();
+
+        $plugin->addModals();
     }
 
     public function thisPluginGoesFirst() {
@@ -207,8 +209,10 @@ class Plugin extends WP\Plugin{
 
     public function registerResources($minimize = false){
         $this->registerBowerResources(true);
-        $this->registerScript('ng-form-validator', 'src/js/ng-form-validator.js', array('angular', 'angular-sanitize'));
-        $this->registerScript('ng-options-form', 'src/js/ng-options-form.js', array('angular', 'ng-form-validator'));
+        $this->registerScript('chayka-forms', 'src/ng-modules/chayka-forms.js', array('jquery', 'angular', 'angular-sanitize'));
+        $this->registerScript('chayka-options-form', 'src/ng-modules/chayka-options-form.js', array('chayka-forms'));
+        $this->registerScript('chayka-modals', 'src/ng-modules/chayka-modals.js', array('jquery', 'angular', 'angular-sanitize'));
+        $this->registerStyle('chayka-modals', 'src/ng-modules/chayka-modals.css', array());
 //        $isAdminPost = is_admin() && (strpos($_SERVER['REQUEST_URI'], 'post.php') || strpos($_SERVER['REQUEST_URI'], 'revision.php'));
 //
 //        // backbone & underscore
@@ -299,6 +303,15 @@ class Plugin extends WP\Plugin{
     public function registerRoutes()
     {
         // TODO: Implement registerRoutes() method.
+    }
+
+    public function addModals(){
+        wp_enqueue_script('chayka-modals');
+        wp_enqueue_style('chayka-modals');
+        $view = self::getView();
+        $this->addAction('wp_footer', function() use ($view){
+            echo $view->render('chayka-modals.phtml');
+        });
     }
 }
 
