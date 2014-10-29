@@ -251,7 +251,7 @@ angular.module('chayka-forms', ['ngSanitize'])
                 }
                 //console.log('model binding: '+model);
 
-                console.dir({'attrs': attrs, element: element, input: input});
+                //console.dir({'attrs': attrs, element: element, input: input});
 
                 scope.valid = true;
 
@@ -338,7 +338,7 @@ angular.module('chayka-forms', ['ngSanitize'])
                         forbid: forbid
                     };
 
-                    console.dir({'regexp':scope.checks.regexp});
+                    //console.dir({'regexp':scope.checks.regexp});
 
                 }
 

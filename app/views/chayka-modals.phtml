@@ -1,13 +1,13 @@
 <div id="chayka-modals" data-ng-controller="modalCtrl" data-ng-show="queue.length" class="ng-cloak">
-    <div class="chayka-modals-fader" data-ng-click="queue.shift()">
+    <div class="chayka-modals-fader" data-ng-click="">
         <div data-ng-repeat="item in queue | limitTo: 1" class="chayka-modals-modal">
             <div class="modal_header">
                 <div class="modal_header-title">{{item.title}}</div>
                 <div class="modal_header-close" data-ng-click="item.hide()">&times;</div>
             </div>
             <div class="modal_body">
-                <div class="modal_body-content" data-ng-show="item.content">{{item.content}}</div>
-                <div class="modal_body-element" data-ng-show="item.content" data-modal-element="item.element"></div>
+                <div class="modal_body-content" data-ng-show="!!item.content">{{item.content}}</div>
+                <div class="modal_body-element" data-ng-show="!!item.element" data-modal-element="item.element"></div>
             </div>
             <div class="modal_buttons" data-ng-show="item.buttons && item.buttons.length">
                 <button data-ng-repeat="button in item.buttons" data-ng-click="button.callback && button.callback(); item.hide();">{{button.text}}</button>

@@ -1,16 +1,12 @@
+'use strict';
 
 angular.module('chayka-modals', [])
     .controller('modalCtrl', ['$scope', 'modals', function($scope, modals){
-        $scope.queue = modals.queue;
-        console.log('Huuaa');
-
         modals.setQueueScope($scope);
-
+        $scope.close = modals.close;
+        $scope.queue = modals.queue;
     }])
     .factory('modals', ['$window', function($window){
-
-        var total = 0;
-
 
         $window.Chayka = $window.Chayka || {};
         $window.Chayka.Modals = $window.Chayka.Modals || {
@@ -21,14 +17,19 @@ angular.module('chayka-modals', [])
         var modals = $window.Chayka.Modals;
 
         var modal = {
+            isOpen: false,
             show: function(){
-                modals.queue.push(this);
-                if(modals.scope){
-                    modals.scope.$apply();
+                if(!this.isOpen) {
+                    this.isOpen = true;
+                    modals.queue.push(this);
+                    if (modals.scope) {
+                        modals.scope.$apply();
+                    }
                 }
             },
             hide: function(){
-                modals.queue.shift();
+                var m = modals.queue.shift();
+                m.isOpen = false;
             }
         };
 
@@ -38,27 +39,14 @@ angular.module('chayka-modals', [])
             setQueueScope: function($scope){
                 modals.scope = $scope;
             },
+
             /**
-             * Shows $el in a modal window.
-             * Ensures $el with modal $.brx.Modals.Window.
-             * Calls $.brx.Modals.create($el, options) and shows modal via queue
-             * processing.
+             * Creates config object to be pushed to a modal queue
              *
-             * @param {$(DOMnode)} $el
-             * @param {object} options
-             *  - title
-             *  - content
-             *  - element
-             *  - width
-             *  - height
-             *  - buttons
-             * @returns {$.brx.Modals.Window}
+             * @param options
+             * @returns {modal}
              */
             create: function(options){
-                //var view = $.brx.Modals.create($el, options);
-                //
-                //view.open();
-                //return view;
                 if(options.buttons && angular.isObject(options.buttons) && !angular.isArray(options.buttons)){
                     var buttons = [];
                     angular.forEach(options.buttons, function(button, text){
@@ -68,9 +56,6 @@ angular.module('chayka-modals', [])
                     options.buttons = buttons;
                 }
                 var defaultOptions = {
-                    //width: '50%',
-                    //id: 'modal' + (total++),
-                    //preserve: !!options.element
                 };
                 var m = angular.extend(defaultOptions, options, modal);
                 //m.prototype = modal;
@@ -80,9 +65,20 @@ angular.module('chayka-modals', [])
                 return m;
             },
 
+            /**
+             * Shows anything in a modal window.
+             *
+             * @param {object} options
+             *  - title
+             *  - content
+             *  - element
+             *  - width
+             *  - height
+             *  - buttons
+             * @returns {modal}
+             */
             show: function(options){
                 var m = api.create(options);
-                console.dir({'m': m});
                 m.show();
             },
 
@@ -124,6 +120,11 @@ angular.module('chayka-modals', [])
                         {text: 'No'}
                     ]
                 });
+            },
+
+            close: function(){
+                var m = modals.queue.shift();
+                m.isOpen = false;
             }
         };
 
@@ -133,13 +134,14 @@ angular.module('chayka-modals', [])
         return {
             restrict: 'AE',
             //transclude: true,
-            scope: {
-                modal: '=',
-                modalTitle: '='
-            },
+            //scope: {
+            //    modal: '=',
+            //    modalTitle: '='
+            //},
             link: function(scope, element, attrs){
-                scope.dialog = modals.create({
-                    title: scope.modalTitle,
+                //element.remove();
+                scope[attrs.modal] = modals.create({
+                    title: attrs.modalTitle,
                     element: element
                 });
             },
@@ -152,11 +154,15 @@ angular.module('chayka-modals', [])
             restrict: 'AE',
             //transclude: true,
             scope: {
-                element: '=modalElement',
+                element: '=modalElement'
             },
             link: function(scope, element, attrs){
                 if(scope.element){
                     element.append(scope.element);
+                    var s = angular.element(scope.element).scope();
+                    if(s){
+                        s.$apply();
+                    }
                 }
             },
             controller: function($scope) {
