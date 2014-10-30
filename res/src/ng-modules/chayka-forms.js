@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('chayka-forms', ['ngSanitize'])
-    .directive('formValidator', ['$http', '$window', function($http, $window) {
+angular.module('chayka-forms', ['ngSanitize', 'chayka-modals'])
+    .directive('formValidator', ['$http', '$window', 'modals', function($http, $window, modals) {
         return {
             restrict: 'AE',
             //transclude: true,
@@ -16,7 +16,7 @@ angular.module('chayka-forms', ['ngSanitize'])
             controller: function($scope) {
                 var fields = $scope.fields = {};
                 var ctrl = this;
-
+                var messageBox = null;
                 $scope.scrollMargin = $scope.scrollMargin || 50;
                 //console.log('validation form');
 
@@ -25,6 +25,29 @@ angular.module('chayka-forms', ['ngSanitize'])
                         return params[param].toString() || '';
                     });
                 };
+
+                ctrl.setMessageBox = function(msgBox){
+                    messageBox = msgBox;
+                };
+
+                ctrl.showMessage = function(message, state){
+                    if(messageBox){
+                        messageBox.message = message;
+                        messageBox.state = state || '';
+                        return true;
+                    }
+                    modals.alert(message, '', state);
+                    return false;
+                };
+
+                ctrl.clearMessage = function(){
+                    if(messageBox){
+                        messageBox.message = '';
+                        messageBox.state = '';
+                        return true;
+                    }
+                    return false;
+                }
 
                 ctrl.addField = function(field) {
                     //console.dir({'add form-field': field, 'scope': $scope});
@@ -204,6 +227,8 @@ angular.module('chayka-forms', ['ngSanitize'])
                             if(!scrollTo || scrollPos && scrollTo > scrollPos){
                                 scrollTo = scrollPos;
                             }
+                        }else if(key === '*'){
+                            ctrl.showMessage(message, 'error');
                         }
                     });
 
@@ -452,21 +477,35 @@ angular.module('chayka-forms', ['ngSanitize'])
             }
         };
     })
+    .directive('formMessage', function() {
+        return {
+            require: '^formValidator',
+            restrict: 'AE',
+            replace: true,
+            template: '<div class="form-message {{state}}" data-ng-show="!!message">{{message}}</div>',
+            scope: {
+                message: '@'
+            },
+            link: function (scope, element, attrs, formCtrl) {
+                scope.message = '';
+                scope.state = '';
+                formCtrl.setMessageBox(scope);
+            }
+        };
+    })
     .factory('delayedCall', ['$timeout', function($timeout){
         var timeouts={};
 
-        var delayedCall = function(callId, timeout, callback){
+        return function (callId, timeout, callback) {
             var handle = timeouts[callId];
-            if(handle){
+            if (handle) {
                 $timeout.cancel(handle);
             }
-            timeouts[callId] = $timeout(function(){
+            timeouts[callId] = $timeout(function () {
                 timeouts[callId] = null;
                 callback.call()
             }, timeout);
         };
-
-        return delayedCall;
     }])
 ;
 

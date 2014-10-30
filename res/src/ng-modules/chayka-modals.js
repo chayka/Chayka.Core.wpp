@@ -28,6 +28,9 @@ angular.module('chayka-modals', [])
                 }
             },
             hide: function(){
+                if(this.element){
+                    this.element.appendTo(document.getElementById('chayka-modals-pool'));
+                }
                 var m = modals.queue.shift();
                 m.isOpen = false;
             }
@@ -130,6 +133,53 @@ angular.module('chayka-modals', [])
 
         return api;
     }])
+    .directive('modal2', ['modals', function(modals){
+        return {
+            restrict: 'AE',
+            transclude: true,
+            scope: {
+                modal: '=modal2',
+                title: '=modalTitle'
+            },
+            template: document.getElementById('chayka-modals-template').innerHTML,
+            link: function(scope, element, attrs){
+                //element.remove();
+                //scope[attrs.modal] = modals.create({
+                //    title: attrs.modalTitle,
+                //    element: element
+                //});
+                var ctrl = {};
+
+                ctrl.show = function(){
+                    scope.isOpen = true;
+                };
+
+                ctrl.hide = function(){
+                    scope.isOpen = false;
+                };
+
+                ctrl.setTitle = function(title){
+                    scope.title = title;
+                };
+
+                ctrl.setButtons = function(buttons){
+                    if(buttons && angular.isObject(buttons) && !angular.isArray(buttons)){
+                        var btns = [];
+                        angular.forEach(buttons, function(button, text){
+                            button.text = text;
+                            btns.push(button);
+                        });
+                        buttons = btns;
+                    }
+                    scope.buttons = buttons;
+                };
+
+                scope.modal = ctrl;
+            },
+            controller: function($scope) {
+            }
+        };
+    }])
     .directive('modal', ['modals', function(modals){
         return {
             restrict: 'AE',
@@ -160,7 +210,7 @@ angular.module('chayka-modals', [])
                 if(scope.element){
                     element.append(scope.element);
                     var s = angular.element(scope.element).scope();
-                    if(s){
+                    if(s && !s.$$phase){
                         s.$apply();
                     }
                 }

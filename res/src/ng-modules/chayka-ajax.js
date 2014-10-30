@@ -1,5 +1,5 @@
-angular.module('chayka-ajax', ['chayka-modals'])
-    .factory('ajax', ['$window', '$http', 'modals', function($window, $http, modals){
+angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
+    .factory('ajax', ['$window', '$http', 'modals', 'generalSpinner', function($window, $http, modals, generalSpinner){
         var $ = angular.element;
         var Chayka = $window.Chayka || {};
         var ajax = Chayka.Ajax = Chayka.Ajax || {
@@ -106,10 +106,21 @@ angular.module('chayka-ajax', ['chayka-modals'])
                 }
                 return {code: code, message: message, payload: null};
             },
+
             /**
              * Prepares all the handlers to show all the spinners and errors
              *
              * @param options
+             * - spinner: reference to Chayka.Spinners.spinner or false if no spinners needed
+             * - spinnerId: id for generalSpinner
+             * - spinnerFieldId: field id for showing spinner in the form field (uses formValidator)
+             * - spinnerMessage: message to show with spinner
+             * - errorMessage: default error message to show in case of error
+             * - formValidator: reference to Chayka.Forms.formValidator
+             * - success: function(data, status, headers, config)
+             * - error: function(data, status, headers, config)
+             * - complete: function(data, status, headers, config)
+             *
              * @returns {*}
              */
             prepare: function(options){
@@ -132,8 +143,9 @@ angular.module('chayka-ajax', ['chayka-modals'])
                 var error = options.error;
                 var complete = options.complete;
 
+                var prepared = {};
                 /**
-                 * Sender
+                 * Sender, ensures all the spinner initializations
                  *
                  * @returns {boolean}
                  */
@@ -148,15 +160,15 @@ angular.module('chayka-ajax', ['chayka-modals'])
                                 spinner.show(spinnerMessage);
                             }else if(spinnerFieldId && formValidator){
                                 formValidator.setFieldState(spinnerFieldId, 'progress', spinnerMessage);
-                            }else if(angular.isFunction($.trigger)){
-                                $(document).trigger('Chayka.Spinners.show', spinnerMessage, spinnerId);
+                            }else{
+                                generalSpinner.show(spinnerMessage, spinnerId);
                             }
                         }
                     }
                     return result;
                 };
 
-                options.send = sendHandler;
+                prepared.send = sendHandler;
 
                 /**
                  * Complete handler, called no matter what.
@@ -172,8 +184,8 @@ angular.module('chayka-ajax', ['chayka-modals'])
                             spinner.hide();
                         }else if(spinnerFieldId && formValidator){
                             formValidator.setFieldState(spinnerFieldId, 'clean', spinnerMessage);
-                        }else if(angular.isFunction($.trigger)){
-                            $(document).trigger('Chayka.Spinners.hide', spinnerId);
+                        }else{
+                            generalSpinner.hide(spinnerId);
                         }
                     }
                     if(complete && angular.isFunction(complete)){
@@ -181,7 +193,7 @@ angular.module('chayka-ajax', ['chayka-modals'])
                     }
                 };
 
-                options.complete = completeHandler;
+                prepared.complete = completeHandler;
 
                 /**
                  * Extended error handler, calls complete beforehand
@@ -211,10 +223,10 @@ angular.module('chayka-ajax', ['chayka-modals'])
                     }
                 };
 
-                options.error = errorHandler;
+                prepared.error = errorHandler;
 
                 /**
-                 * Extended success handler, calls complete beforehand
+                 * Extended success handler, calls complete beforehand, and error if needed
                  *
                  * @param data
                  * @param status
@@ -223,11 +235,10 @@ angular.module('chayka-ajax', ['chayka-modals'])
                  */
                 var successHandler = function(data, status, headers, config){
                     //var data = $.brx.Ajax.detectArgData(arguments);
-                    var data = ajax.processResponse(data, errorMessage);
+                    data = ajax.processResponse(data, errorMessage);
                     if(data.code){
                         errorHandler(data, status, headers, config);
                     }else{
-
                         completeHandler(data, status, headers, config);
 
                         if(success && angular.isFunction(success)){
@@ -236,12 +247,22 @@ angular.module('chayka-ajax', ['chayka-modals'])
                     }
                 };
 
-                options.success = successHandler;
+                prepared.success = successHandler;
 
-                return options;
+                return prepared;
 
             },
 
+            /**
+             * Main request function.
+             * @param url
+             * @param options can contain all the 'prepare' options alongside with:
+             * - data: data for post, put, patch
+             * - method: http method ('get', 'post', etc)
+             * - config: config for angular.$http
+             *
+             * @returns {*}
+             */
             request: function(url, options){
 
                 var data = options.data || null,
@@ -344,5 +365,7 @@ angular.module('chayka-ajax', ['chayka-modals'])
                 options.config = config;
                 return ajax.request(url, options);
             }
-        }
+        };
+
+        return ajax;
     }]);

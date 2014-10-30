@@ -1,4 +1,4 @@
-<div id="chayka-modals" data-ng-controller="modalCtrl" data-ng-show="queue.length" class="ng-cloak">
+<div id="chayka-modals" data-ng-controller="modalCtrl" data-ng-show="queue.length" class="ng-cloak chayka-modals">
     <div class="chayka-modals-fader" data-ng-click="">
         <div data-ng-repeat="item in queue | limitTo: 1" class="chayka-modals-modal">
             <div class="modal_header">
@@ -6,15 +6,33 @@
                 <div class="modal_header-close" data-ng-click="item.hide()">&times;</div>
             </div>
             <div class="modal_body">
-                <div class="modal_body-content" data-ng-show="!!item.content">{{item.content}}</div>
-                <div class="modal_body-element" data-ng-show="!!item.element" data-modal-element="item.element"></div>
+                <div class="modal_body-content">{{item.content}}</div>
+<!--                <div class="modal_body-element" data-ng-show="!!item.element" data-modal-element="item.element"></div>-->
             </div>
             <div class="modal_buttons" data-ng-show="item.buttons && item.buttons.length">
                 <button data-ng-repeat="button in item.buttons" data-ng-click="button.callback && button.callback(); item.hide();">{{button.text}}</button>
             </div>
         </div>
     </div>
+    <div class="ng-hide" id="chayka-modals-pool"></div>
 </div>
+<script type="template/javascript" id="chayka-modals-template">
+    <div class="chayka-modals ng-cloak" data-ng-show="isOpen">
+        <div class="chayka-modals-fader" data-ng-click="">
+            <div class="chayka-modals-modal">
+                <div class="modal_header">
+                    <div class="modal_header-title">{{title}}</div>
+                    <div class="modal_header-close" data-ng-click="hide()">&times;</div>
+                </div>
+                <div class="modal_body" data-ng-transclude>
+                </div>
+                <div class="modal_buttons" data-ng-show="modal.buttons && modal.buttons.length">
+                    <button data-ng-repeat="button in item.buttons" data-ng-click="button.callback && button.callback(); hide();">{{button.text}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
 <script>
     (function($, angular){
         $(document).ready(function(){
@@ -22,10 +40,3 @@
         });
     }(window.jQuery, window.angular));
 </script>
-<?php
-/**
- * Created by PhpStorm.
- * User: borismossounov
- * Date: 27.10.14
- * Time: 22:08
- */ 
