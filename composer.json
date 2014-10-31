@@ -14,6 +14,7 @@
         "chayka/wp": "dev-master"
     },
     "suggest":{
-        "chayka/email-wpp": "dev-master"
+        "chayka/email-wpp": "dev-master",
+        "chayka/auth-wpp": "dev-master"
     }
 }

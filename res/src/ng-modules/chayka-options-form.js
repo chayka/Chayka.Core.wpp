@@ -9,7 +9,10 @@ angular.module('chayka-options-form', ['chayka-forms'])
         $scope.validator = null;
 
         var processResponse = function (data){
-            $scope.options = data.payload;
+            angular.forEach(data.payload, function(value, option){
+                $scope.options[option] = value;
+            });
+            //$scope.options = data.payload;
         };
 
         $scope.saveOptions = function(){

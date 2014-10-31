@@ -1,18 +1,18 @@
 'use strict';
 
-angular.module('chayka-spinners', [])
+angular.module('chayka-spinners', ['chayka-translate'])
     .directive('spinner', [function(){
         return {
             restrict: 'AE',
             scope:{
                 spinner: '=',
                 visible: '@',
-                message: '='
+                message: '@'
             },
             template: '<div class="chayka-spinner" data-ng-show="visible">{{message}}</div>',
-            replace: true,
+            //replace: true,
             controller: function($scope){
-                var ctrl = this;
+                var ctrl = {};
 
                 ctrl.show = function(message){
                     $scope.message = message || $scope.message || 'Loading...';
@@ -34,9 +34,9 @@ angular.module('chayka-spinners', [])
                 spinner: '=',
             },
             template: '<div class="chayka-multi_spinner" data-ng-show="spinners.keys.length"><div data-ng-repeat="(id, message) in spinners"><div data-spinner data-message="message" data-visible="true"></div></div></div>',
-            replace: true,
+            //replace: true,
             controller: function($scope){
-                var ctrl = this;
+                var ctrl = {};
                 $scope.spinners = {};
 
                 ctrl.show = function(message, id){
@@ -55,7 +55,7 @@ angular.module('chayka-spinners', [])
         return {
             restrict: 'AE',
             template: '<div class="chayka-general_spinner"><div data-multi-spinner="spinner"></div></div>',
-            replace: true,
+            //replace: true,
             controller: function($scope){
 
                 var $ = angular.element;

@@ -95,7 +95,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
             processResponse: function(response, defaultMessage){
                 var message = defaultMessage || null;
                 var code = 1;
-                if(!response || !response.length){
+                if(!response || angular.isString(response) && !response.length){
                     message = 'Empty response';
                 }else if(!angular.isUndefined(response.payload)){
                     return response;
@@ -163,6 +163,9 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                             }else{
                                 generalSpinner.show(spinnerMessage, spinnerId);
                             }
+                        }
+                        if(formValidator){
+                            formValidator.clearMessage();
                         }
                     }
                     return result;
@@ -240,7 +243,9 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                         errorHandler(data, status, headers, config);
                     }else{
                         completeHandler(data, status, headers, config);
-
+                        if(formValidator && data.message){
+                            formValidator.showMessage(data.message);
+                        }
                         if(success && angular.isFunction(success)){
                             success(data, status, headers, config);
                         }

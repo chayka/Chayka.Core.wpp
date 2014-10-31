@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('chayka-modals', [])
+angular.module('chayka-modals', ['chayka-translate'])
     .controller('modalCtrl', ['$scope', 'modals', function($scope, modals){
         modals.setQueueScope($scope);
         $scope.close = modals.close;
@@ -8,13 +8,13 @@ angular.module('chayka-modals', [])
     }])
     .factory('modals', ['$window', function($window){
 
-        $window.Chayka = $window.Chayka || {};
-        $window.Chayka.Modals = $window.Chayka.Modals || {
+        var Chayka = $window.Chayka = $window.Chayka || {};
+        Chayka.Modals = Chayka.Modals || {
             queue: [],
             scope: null
         };
 
-        var modals = $window.Chayka.Modals;
+        var modals = Chayka.Modals;
 
         var modal = {
             isOpen: false,
@@ -83,6 +83,7 @@ angular.module('chayka-modals', [])
             show: function(options){
                 var m = api.create(options);
                 m.show();
+                return m;
             },
 
             /**
@@ -131,14 +132,16 @@ angular.module('chayka-modals', [])
             }
         };
 
+        Chayka.Modals = angular.extend(modals, api);
+
         return api;
     }])
-    .directive('modal2', ['modals', function(modals){
+    .directive('modal', ['modals', function(modals){
         return {
             restrict: 'AE',
             transclude: true,
             scope: {
-                modal: '=modal2',
+                modal: '=modal',
                 title: '=modalTitle'
             },
             template: document.getElementById('chayka-modals-template').innerHTML,
@@ -152,9 +155,10 @@ angular.module('chayka-modals', [])
 
                 ctrl.show = function(){
                     scope.isOpen = true;
+                    scope.$apply();
                 };
 
-                ctrl.hide = function(){
+                ctrl.hide = scope.hide = function(){
                     scope.isOpen = false;
                 };
 
@@ -180,42 +184,4 @@ angular.module('chayka-modals', [])
             }
         };
     }])
-    .directive('modal', ['modals', function(modals){
-        return {
-            restrict: 'AE',
-            //transclude: true,
-            //scope: {
-            //    modal: '=',
-            //    modalTitle: '='
-            //},
-            link: function(scope, element, attrs){
-                //element.remove();
-                scope[attrs.modal] = modals.create({
-                    title: attrs.modalTitle,
-                    element: element
-                });
-            },
-            controller: function($scope) {
-            }
-        };
-    }])
-    .directive('modalElement', ['modals', function(modals){
-        return {
-            restrict: 'AE',
-            //transclude: true,
-            scope: {
-                element: '=modalElement'
-            },
-            link: function(scope, element, attrs){
-                if(scope.element){
-                    element.append(scope.element);
-                    var s = angular.element(scope.element).scope();
-                    if(s && !s.$$phase){
-                        s.$apply();
-                    }
-                }
-            },
-            controller: function($scope) {
-            }
-        };
-    }]);
+;

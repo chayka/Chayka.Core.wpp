@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('chayka-forms', ['ngSanitize', 'chayka-modals'])
+angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate'])
     .directive('formValidator', ['$http', '$window', 'modals', function($http, $window, modals) {
         return {
             restrict: 'AE',
@@ -227,7 +227,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals'])
                             if(!scrollTo || scrollPos && scrollTo > scrollPos){
                                 scrollTo = scrollPos;
                             }
-                        }else if(key === '*'){
+                        }else{
                             ctrl.showMessage(message, 'error');
                         }
                     });
@@ -254,8 +254,9 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals'])
                 label: '@',
                 hint: '@',
                 message: '@hint'
+                //value: '='
             },
-            link: function(scope, element, attrs, formCtrl) {
+            link: function(scope, element, attrs, formCtrl, transclude) {
                 var input = element.find('[ng-model],[data-ng-model]'),
                     inputType = input.attr('type'),
                 //hint = element.find('.message'),
@@ -274,7 +275,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals'])
                     label.remove();
                     //scope.$digest();
                 }
-                //console.log('model binding: '+model);
+                console.log('model binding: '+model);
 
                 //console.dir({'attrs': attrs, element: element, input: input});
 
@@ -482,7 +483,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals'])
             require: '^formValidator',
             restrict: 'AE',
             replace: true,
-            template: '<div class="form-message {{state}}" data-ng-show="!!message">{{message}}</div>',
+            template: '<div class="form-message {{state}}" data-ng-show="!!message" data-ng-bind-html="message"></div>',
             scope: {
                 message: '@'
             },

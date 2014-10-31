@@ -25,11 +25,13 @@ class OptionsController extends Controller{
             $namespace.='.';
         }
 
-        foreach($options as $option => $value){
-            $options[$option] = get_option($namespace.$option);
+        foreach($options as $option => $defValue){
+            $value = get_option($namespace.$option);
+            $options[$option] = $value?$value:$defValue;
         }
-        foreach($siteOptions as $option => $value){
-            $siteOptions[$option] = get_site_option($namespace.$option);
+        foreach($siteOptions as $option => $defValue){
+            $value = get_site_option($namespace.$option);
+            $siteOptions[$option] = $value?$value:$defValue;
         }
         $options['site'] = $siteOptions;
         JsonHelper::respond($options);

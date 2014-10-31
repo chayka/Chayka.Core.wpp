@@ -30,7 +30,8 @@ require_once 'vendor/autoload.php';
 
 use Chayka\Helpers\Util;
 use Chayka\WP;
-use Chayka\WP\Helpers\NlsHelper;
+use Chayka\Helpers\NlsHelper;
+use Chayka\WP\Helpers\OptionHelper;
 
 class Plugin extends WP\Plugin{
 
@@ -44,12 +45,18 @@ class Plugin extends WP\Plugin{
     public static function init(){
 
         self::$instance = $plugin = new self(__FILE__, array(
-            'admin', 'upload',
+            'admin-core', 'upload',
 //            'timezone',
             'options',
 //            'blockade',
 //            'not-found-404'
         ));
+
+        $locale = OptionHelper::getOption('Locale', 'auto');
+
+        NlsHelper::setLocale($locale);
+
+        $plugin->addJsNls();
 
         $plugin->addSupport_ConsolePages();
         $plugin->addSupport_Metaboxes();
@@ -58,6 +65,8 @@ class Plugin extends WP\Plugin{
         $plugin->registerComposerPlugins();
 
         $plugin->addModals();
+
+
     }
 
     public function thisPluginGoesFirst() {
@@ -148,7 +157,7 @@ class Plugin extends WP\Plugin{
             )
         );
         register_post_type(self::POST_TYPE_CONTENT_FRAGMENT, $args);
-        self::registerTaxonomyContentFagmentTag();
+        self::registerTaxonomyContentFragmentTag();
         self::addMetaBoxContentFragment();
     }
 
@@ -168,7 +177,7 @@ class Plugin extends WP\Plugin{
 
     }
 
-    public static function registerTaxonomyContentFagmentTag(){
+    public static function registerTaxonomyContentFragmentTag(){
         $labels = array(
             'name' => NlsHelper::_('Fragment Tags'), //'taxonomy general name'),
             'singular_name' => NlsHelper::_('Fragment Tag'), //'taxonomy singular name'),
@@ -209,12 +218,13 @@ class Plugin extends WP\Plugin{
 
     public function registerResources($minimize = false){
         $this->registerBowerResources(true);
+        $this->registerScript('chayka-translate', 'src/ng-modules/chayka-translate.js', array('jquery', 'angular', 'angular-translate'));
         $this->registerScript('chayka-utils', 'src/ng-modules/chayka-utils.js', array('jquery', 'angular'));
-        $this->registerScript('chayka-spinners', 'src/ng-modules/chayka-spinners.js', array('jquery', 'angular'));
+        $this->registerScript('chayka-spinners', 'src/ng-modules/chayka-spinners.js', array('jquery', 'angular', 'chayka-translate'));
         $this->registerScript('chayka-ajax', 'src/ng-modules/chayka-ajax.js', array('jquery', 'angular', 'chayka-spinners'));
-        $this->registerScript('chayka-forms', 'src/ng-modules/chayka-forms.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-modals'));
+        $this->registerScript('chayka-forms', 'src/ng-modules/chayka-forms.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate'));
         $this->registerScript('chayka-options-form', 'src/ng-modules/chayka-options-form.js', array('chayka-forms'));
-        $this->registerScript('chayka-modals', 'src/ng-modules/chayka-modals.js', array('jquery', 'angular', 'angular-sanitize'));
+        $this->registerScript('chayka-modals', 'src/ng-modules/chayka-modals.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-translate'));
         $this->registerStyle('chayka-modals', 'src/ng-modules/chayka-modals.css', array());
 //        $isAdminPost = is_admin() && (strpos($_SERVER['REQUEST_URI'], 'post.php') || strpos($_SERVER['REQUEST_URI'], 'revision.php'));
 //
@@ -242,7 +252,6 @@ class Plugin extends WP\Plugin{
 //        $this->registerStyle( 'backbone-brx-spinners', 'brx.spinners.view.less');
 //
 //        $this->registerStyle( 'backbone-brx-modals', 'brx.modals.view.less', array());
-////        TODO need modals
 //        $this->registerScript( 'backbone-brx-modals', 'brx.modals.view.js', array('jquery-ui-dialog', 'backbone-brx'));
 //        $this->registerStyle( 'backbone-brx-optionsForm', 'brx.OptionsForm.view.less');
 //        $this->registerScript( 'backbone-brx-optionsForm', 'brx.OptionsForm.view.js', array('backbone-brx'));
@@ -269,7 +278,7 @@ class Plugin extends WP\Plugin{
     }
 
     public function registerConsolePages() {
-//        $this->addConsolePage('Chayka.Core', 'Chayka.Core', 'update_core', 'chayka-core-admin', '/admin/');
+        $this->addConsolePage('Chayka', 'Chayka', 'update_core', 'chayka-core', '/admin-core/');
 //
 //        $this->addConsoleSubPage('chayka-core-admin',
 //            'phpinfo()', 'phpinfo()', 'update_core', 'zf-core-phpinfo',
@@ -305,15 +314,30 @@ class Plugin extends WP\Plugin{
      */
     public function registerRoutes()
     {
-        // TODO: Implement registerRoutes() method.
+
+        $this->addRoute('default');
     }
 
+    public function addJsNls(){
+        $view = self::getView();
+        $this->addAction('wp_head', function() use ($view){
+            echo $view->render('chayka-js-nls.phtml');
+        });
+    }
     public function addModals(){
         wp_enqueue_script('chayka-modals');
         wp_enqueue_style('chayka-modals');
         $view = self::getView();
         $this->addAction('wp_footer', function() use ($view){
             echo $view->render('chayka-modals.phtml');
+        });
+    }
+    public function addSpinners(){
+        wp_enqueue_script('chayka-spinners');
+        wp_enqueue_style('chayka-spinners');
+        $view = self::getView();
+        $this->addAction('wp_footer', function() use ($view){
+            echo $view->render('chayka-spinners.phtml');
         });
     }
 }
