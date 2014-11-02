@@ -224,7 +224,7 @@ class Plugin extends WP\Plugin{
         $this->registerScript('chayka-ajax', 'src/ng-modules/chayka-ajax.js', array('jquery', 'angular', 'chayka-spinners'));
         $this->registerScript('chayka-forms', 'src/ng-modules/chayka-forms.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate'));
         $this->registerScript('chayka-options-form', 'src/ng-modules/chayka-options-form.js', array('chayka-forms'));
-        $this->registerScript('chayka-modals', 'src/ng-modules/chayka-modals.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-translate'));
+        $this->registerScript('chayka-modals', 'src/ng-modules/chayka-modals.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-translate', 'chayka-utils'));
         $this->registerStyle('chayka-modals', 'src/ng-modules/chayka-modals.css', array());
 //        $isAdminPost = is_admin() && (strpos($_SERVER['REQUEST_URI'], 'post.php') || strpos($_SERVER['REQUEST_URI'], 'revision.php'));
 //

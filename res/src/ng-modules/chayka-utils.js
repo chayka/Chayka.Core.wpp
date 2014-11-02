@@ -9,9 +9,9 @@ angular.module('chayka-utils', [])
             /**
              * Convenient way do define some object with complex names like Chayka.Auth.aaa
              *
-             * @param classname
-             * @param parent
-             * @param implementation
+             * @param {String} classname
+             * @param {Object} parent
+             * @param {Object} implementation
              * @returns {*}
              */
             declare: function(classname, parent, implementation){
@@ -43,6 +43,29 @@ angular.module('chayka-utils', [])
                 }
 
                 return root[part];
+            },
+
+            /**
+             * Ensure that object exists, extends it if needed and returns reference to it.
+             *
+             * @param {String} classname
+             * @param {Object} extend
+             * @returns {*}
+             */
+            ensure: function(classname, extend){
+                var parts = classname.split('.');
+                var root = $window;
+                var part = '';
+                for(var i = 0; i < parts.length; i++){
+                    part = parts[i];
+                    root[part] = root[part] || {};
+                    root = root[part];
+                }
+                if(extend && angular.isObject(extend)){
+                    angular.extend(root, extend);
+                }
+
+                return root;
             },
 
             /**

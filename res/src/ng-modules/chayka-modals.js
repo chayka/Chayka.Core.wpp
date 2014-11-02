@@ -1,20 +1,17 @@
 'use strict';
 
-angular.module('chayka-modals', ['chayka-translate'])
+angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
     .controller('modalCtrl', ['$scope', 'modals', function($scope, modals){
         modals.setQueueScope($scope);
         $scope.close = modals.close;
         $scope.queue = modals.queue;
     }])
-    .factory('modals', ['$window', function($window){
+    .factory('modals', ['$window', 'utils', function($window, _){
 
-        var Chayka = $window.Chayka = $window.Chayka || {};
-        Chayka.Modals = Chayka.Modals || {
+        var modals = _.declare('Chayka.Modals', {
             queue: [],
             scope: null
-        };
-
-        var modals = Chayka.Modals;
+        });
 
         var modal = {
             isOpen: false,
@@ -132,7 +129,7 @@ angular.module('chayka-modals', ['chayka-translate'])
             }
         };
 
-        Chayka.Modals = angular.extend(modals, api);
+        modals = angular.extend(modals, api);
 
         return api;
     }])
@@ -142,10 +139,12 @@ angular.module('chayka-modals', ['chayka-translate'])
             transclude: true,
             scope: {
                 modal: '=modal',
-                title: '=modalTitle'
+                title: '=modalTitle',
+                show: '@modalShow'
             },
             template: document.getElementById('chayka-modals-template').innerHTML,
             link: function(scope, element, attrs){
+                console.log('modal.directive');
                 //element.remove();
                 //scope[attrs.modal] = modals.create({
                 //    title: attrs.modalTitle,
@@ -155,7 +154,9 @@ angular.module('chayka-modals', ['chayka-translate'])
 
                 ctrl.show = function(){
                     scope.isOpen = true;
-                    scope.$apply();
+                    if(!scope.$$phase){
+                        //scope.$apply();
+                    }
                 };
 
                 ctrl.hide = scope.hide = function(){
@@ -179,6 +180,9 @@ angular.module('chayka-modals', ['chayka-translate'])
                 };
 
                 scope.modal = ctrl;
+                if(scope.show){
+                    ctrl.show();
+                }
             },
             controller: function($scope) {
             }
