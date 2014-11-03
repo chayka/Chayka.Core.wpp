@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate'])
-    .directive('formValidator', ['$http', '$window', 'modals', function($http, $window, modals) {
+angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax'])
+    .directive('formValidator', ['$window', 'modals', 'ajax', function($window, modals, ajax) {
         return {
             restrict: 'AE',
             //transclude: true,
@@ -47,7 +47,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                         return true;
                     }
                     return false;
-                }
+                };
 
                 ctrl.addField = function(field) {
                     //console.dir({'add form-field': field, 'scope': $scope});
@@ -55,18 +55,36 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 };
 
                 ctrl.setFieldState = function(field, state, message){
+                    if(angular.isString(field)){
+                        field = fields[field];
+                        if(!field){
+                            return
+                        }
+                    }
                     field.valid = state === 'valid' || state === 'clean';
                     field.state = state;
                     field.message = message || field.hint;
                 };
 
                 ctrl.setFieldError = function(field, message){
+                    if(angular.isString(field)){
+                        field = fields[field];
+                        if(!field){
+                            return
+                        }
+                    }
                     field.valid = false;
                     field.message = message;
                     //field.$digest();
                 };
 
                 ctrl.clearFieldError = function(field){
+                    if(angular.isString(field)){
+                        field = fields[field];
+                        if(!field){
+                            return
+                        }
+                    }
                     field.valid = true;
                     field.message = field.hint;
                     //field.$digest();
@@ -101,21 +119,43 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     var url = ctrl.template(c.url, {name: encodeURIComponent(field.name), value: encodeURIComponent(field.value)});
                     var value = field.value + '';
                     if(value in c.dictionary){
+                        if('valid' === c.dictionary[value]){
+                            ctrl.setFieldState(field, 'valid');
+                        }else{
+                            ctrl.setFieldState(field, 'invalid', c.message);
+                        }
                         return c.dictionary[value];
                     }
                     //ctrl.setFieldState(field, 'progress');
                     c.dictionary[value] = 'progress';
-                    $http.get(url)
-                        .success(function(data, status, headers, config){
+                    ajax.get(url, {
+                        spinner: $scope.spinner,
+                        spinnerFieldId: field.name,
+                        //spinnerMessage: $translate.instant('message_spinner_signout'),
+                        showMessage: false,
+                        formValidator: ctrl,
+                        errorMessage: c.message,
+                        success: function(data){
+                            console.dir({'data': data});
                             c.dictionary[value] = 'valid';
                             ctrl.setFieldState(field, 'valid');
-                        })
-                        .error(function(data, status, headers, config){
+                        },
+                        error: function(data){
                             c.dictionary[value] = 'invalid';
-                            c.message = c.message || data.message;
-                            ctrl.setFieldState(field, 'invalid', c.message || data.message);
-                        });
-                    return 'progress';
+                            c.message = c.message || 'mass_errors' === data.code && data.message[field.name] || data.message;
+                        }
+                    });
+                    //$http.get(url)
+                    //    .success(function(data, status, headers, config){
+                    //        c.dictionary[value] = 'valid';
+                    //        ctrl.setFieldState(field, 'valid');
+                    //    })
+                    //    .error(function(data, status, headers, config){
+                    //        c.dictionary[value] = 'invalid';
+                    //        c.message = c.message || data.message;
+                    //        ctrl.setFieldState(field, 'invalid', c.message || data.message);
+                    //    });
+                    //return 'progress';
                 };
 
                 ctrl.checkCustom = function(field){
@@ -124,7 +164,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     return $scope.$parent[callback].call($scope, field.value);
                 };
 
-                ctrl.validateField = function(field) {
+                ctrl.validateField = function(field, silent) {
                     var valid = true,
                         message = '',
                         state;
@@ -172,7 +212,9 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     }
 
 
-                    ctrl.setFieldState(field, state, message);
+                    if(!silent){
+                        ctrl.setFieldState(field, state, message);
+                    }
 
                     return field.valid;
                 };
@@ -243,7 +285,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
             //template: '<div ng-transclude></div>'
         };
     }])
-    .directive('formField', function() {
+    .directive('formField', ['delayedCall', function(delayedCall) {
         return {
             require: '^formValidator',
             restrict: 'AE',
@@ -407,6 +449,18 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                         delay: delay,
                         dictionary: {}
                     };
+
+                    input.keyup(function(){
+                        formCtrl.setFieldState(scope, 'clean');
+                        scope.$apply();
+                        if(scope.value){
+                            delayedCall('check-api-'+scope.name, delay, function(){
+                                formCtrl.validateField(scope, true);
+                            });
+                        }
+                    });
+
+
                 }
 
                 function setupCustom() {
@@ -477,7 +531,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
             controller: function($scope){
             }
         };
-    })
+    }])
     .directive('formMessage', function() {
         return {
             require: '^formValidator',
@@ -497,6 +551,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
     .factory('delayedCall', ['$timeout', function($timeout){
         var timeouts={};
 
+        /**
+         * This function created named timeout that is canceled and rescheduled
+         * if function was called once again before timeout happened.
+         * Handy for field checks while user types in.
+         *
+         * @param {string} callId
+         * @param {int} timeout
+         * @param {function} callback
+         */
         return function (callId, timeout, callback) {
             var handle = timeouts[callId];
             if (handle) {

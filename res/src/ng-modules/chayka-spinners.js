@@ -27,11 +27,11 @@ angular.module('chayka-spinners', ['chayka-translate'])
             }
         }
     }])
-    .directive('multi-spinner', [function(){
+    .directive('multiSpinner', [function(){
         return {
             restrict: 'AE',
             scope:{
-                spinner: '=',
+                spinner: '=multiSpinner'
             },
             template: '<div class="chayka-multi_spinner" data-ng-show="spinners.keys.length"><div data-ng-repeat="(id, message) in spinners"><div data-spinner data-message="message" data-visible="true"></div></div></div>',
             //replace: true,
@@ -51,13 +51,13 @@ angular.module('chayka-spinners', ['chayka-translate'])
             }
         }
     }])
-    .directive('general-spinner', [function(){
+    .directive('generalSpinner', [function(){
         return {
             restrict: 'AE',
             template: '<div class="chayka-general_spinner"><div data-multi-spinner="spinner"></div></div>',
             //replace: true,
             controller: function($scope){
-
+                $scope.spinner = null;
                 var $ = angular.element;
                 $(document).on('Chayka.Spinners.show', function(e, message, id){
                     if($scope.spinner){

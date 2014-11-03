@@ -1,0 +1,283 @@
+@label-width: 120px;
+
+.form_field{
+    margin-bottom: 1ex;
+    position: relative;
+
+    > label{
+        cursor: auto;
+        display: block;
+        width: @label-width;
+        position: absolute;
+        padding-right: 1ex;
+        min-height: 32px;
+        line-height: 32px;
+        font-size: 16px;
+        border: 1px transparent solid;
+
+    }
+    > label.alignright{
+        text-align: right;
+    }
+    > .input{
+        margin-left: @label-width;
+        display: block;
+
+        input[type=text],
+        input[type=password],
+        input[type=number],
+        input[type=email],
+        input[type=search],
+        input[type=tel],
+        input[type=url],
+        select, textarea{
+            margin: 0;
+            font-size: 16px;
+            min-height: 32px;
+            padding-top: 0;
+            padding-bottom: 0;
+            line-height: 32px;
+            box-sizing: border-box;
+        }
+
+        textarea{
+            resize: vertical;
+            line-height: normal;
+        }
+
+        input[type=radio]{
+
+        }
+
+        input[type=checkbox]{
+
+        }
+
+        label[for]{
+
+        }
+    }
+
+    &.progress > .input{
+        input[type=text],
+        input[type=password],
+        input[type=number],
+        input[type=email],
+        input[type=search],
+        input[type=tel],
+        input[type=url]{
+            background: ~'url(../img/spinner32x32.gif)' no-repeat 98% 50%;
+            background-size: 16px 16px;
+
+        }
+    }
+
+    & > .message{
+        min-height: 1em;
+        line-height: normal;
+    }
+    &.invalid .message{
+        color: #CD0A0A;
+        text-align: right;
+        font-size: .9em;
+    }
+
+
+    > .width05{
+        width: 5%;
+    }
+
+    > .width10{
+        width: 10%;
+    }
+
+    > .width15{
+        width: 15%;
+    }
+
+    > .width20{
+        width: 20%;
+    }
+
+    > .width25{
+        width: 25%;
+    }
+
+    > .width30{
+        width: 30%;
+    }
+
+    > .width35{
+        width: 35%;
+    }
+
+    > .width40{
+        width: 40%;
+    }
+
+    > .width45{
+        width: 45%;
+    }
+
+    > .width50{
+        width: 50%;
+    }
+
+    > .width55{
+        width: 55%;
+    }
+
+    > .width60{
+        width: 60%;
+    }
+
+    > .width65{
+        width: 65%;
+    }
+
+    > .width70{
+        width: 70%;
+    }
+
+    > .width75{
+        width: 75%;
+    }
+
+    > .width80{
+        width: 80%;
+    }
+
+    > .width85{
+        width: 85%;
+    }
+
+    > .width90{
+        width: 90%;
+    }
+
+    > .width95{
+        width: 95%;
+    }
+
+    > .width100{
+        width: 100%;
+    }
+
+    > label.width05 + .input{
+        margin-left: 5%;
+    }
+
+    > label.width10 + .input{
+        margin-left: 10%;
+    }
+
+    > label.width15 + .input{
+        margin-left: 15%;
+    }
+
+    > label.width20 + .input{
+        margin-left: 20%;
+    }
+
+    > label.width25 + .input{
+        margin-left: 25%;
+    }
+
+    > label.width30 + .input{
+        margin-left: 30%;
+    }
+
+    > label.width35 + .input{
+        margin-left: 35%;
+    }
+
+    > label.width40 + .input{
+        margin-left: 40%;
+    }
+
+    > label.width45 + .input{
+        margin-left: 45%;
+    }
+
+    > label.width50 + .input{
+        margin-left: 50%;
+    }
+
+    > label.width55 + .input{
+        margin-left: 55%;
+    }
+
+    > label.width60 + .input{
+        margin-left: 60%;
+    }
+
+    > label.width65 + .input{
+        margin-left: 65%;
+    }
+
+    > label.width70 + .input{
+        margin-left: 70%;
+    }
+
+    > label.width75 + .input{
+        margin-left: 75%;
+    }
+
+    > label.width80 + .input{
+        margin-left: 80%;
+    }
+
+    > label.width85 + .input{
+        margin-left: 85%;
+    }
+
+    > label.width90 + .input{
+        margin-left: 90%;
+    }
+
+    > label.width95 + .input{
+        margin-left: 95%;
+    }
+
+}
+.form_field.fullsize{
+    > label{
+        display: block;
+        width: 100%;
+        position: static;
+        float: none;
+    }
+    .input{
+        margin: 0;
+        width: 100%;
+        input[type=text],
+        input[type=password],
+        input[type=number],
+        input[type=email],
+        input[type=search],
+        input[type=tel],
+        input[type=url],
+        select,
+        textarea{
+            width: 100%;
+        }
+    }
+}
+
+.form_field.stretch{
+    .input{
+
+        input[type=text],
+        input[type=password],
+        input[type=number],
+        input[type=email],
+        input[type=search],
+        input[type=tel],
+        input[type=url],
+        select, textarea{
+            width: 100%;
+        }
+    }
+}
+
+

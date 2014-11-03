@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('chayka-utils', [])
-    .factory('utils', ['$window', function($window){
+    .factory('utils', ['$window', '$timeout', function($window, $timeout){
         var Chayka = $window.Chayka || {};
+
         var _ = Chayka.Utils = Chayka.Utils || {
 
 
@@ -97,7 +98,6 @@ angular.module('chayka-utils', [])
 
                 return defaultValue;
             }
-
         };
 
         return Chayka.Utils;

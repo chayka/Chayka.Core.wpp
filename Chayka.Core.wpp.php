@@ -61,10 +61,12 @@ class Plugin extends WP\Plugin{
         $plugin->addSupport_ConsolePages();
         $plugin->addSupport_Metaboxes();
         $plugin->addSupport_PostProcessing();
+//        $plugin->addSupport_UriProcessing();
 
         $plugin->registerComposerPlugins();
 
         $plugin->addModals();
+        $plugin->addSpinners();
 
 
     }
@@ -221,8 +223,10 @@ class Plugin extends WP\Plugin{
         $this->registerScript('chayka-translate', 'src/ng-modules/chayka-translate.js', array('jquery', 'angular', 'angular-translate'));
         $this->registerScript('chayka-utils', 'src/ng-modules/chayka-utils.js', array('jquery', 'angular'));
         $this->registerScript('chayka-spinners', 'src/ng-modules/chayka-spinners.js', array('jquery', 'angular', 'chayka-translate'));
+        $this->registerStyle('chayka-spinners', 'src/ng-modules/chayka-spinners.css', array());
         $this->registerScript('chayka-ajax', 'src/ng-modules/chayka-ajax.js', array('jquery', 'angular', 'chayka-spinners'));
-        $this->registerScript('chayka-forms', 'src/ng-modules/chayka-forms.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate'));
+        $this->registerScript('chayka-forms', 'src/ng-modules/chayka-forms.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax'));
+        $this->registerStyle('chayka-forms', 'src/ng-modules/chayka-forms.css', array());
         $this->registerScript('chayka-options-form', 'src/ng-modules/chayka-options-form.js', array('chayka-forms'));
         $this->registerScript('chayka-modals', 'src/ng-modules/chayka-modals.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-translate', 'chayka-utils'));
         $this->registerStyle('chayka-modals', 'src/ng-modules/chayka-modals.css', array());

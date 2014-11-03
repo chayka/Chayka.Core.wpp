@@ -95,10 +95,10 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
             processResponse: function(response, defaultMessage){
                 var message = defaultMessage || null;
                 var code = 1;
-                if(!response || angular.isString(response) && !response.length){
-                    message = 'Empty response';
-                }else if(!angular.isUndefined(response.payload)){
+                if(!angular.isUndefined(response.payload)){
                     return response;
+                }else if(!response || angular.isString(response) && !response.length){
+                    message = 'Empty response';
                 }else if(angular.isString(response)){
                     var m = response.match(/<body[^>]*>([\s\S]*)<\/body>/m);
                     m = m?m:response.match(/<br\s*\/>\s*<b>[^<]+<\/b>\:\s*(.*)<br\s*\/>/m);
@@ -137,6 +137,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                 var spinnerMessage = options.spinnerMessage || 'Processing...';
                 var errorMessage = options.errorMessage || 'Operation failed';
                 var formValidator = options.formValidator;
+                var scope = options.scope;
 
                 var send = options.send;
                 var success = options.success;
@@ -167,7 +168,11 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                         if(formValidator){
                             formValidator.clearMessage();
                         }
+                        if(scope && !scope.$$phase){
+                            scope.$apply();
+                        }
                     }
+
                     return result;
                 };
 
@@ -207,8 +212,11 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                  * @param config
                  */
                 var errorHandler = function(data, status, headers, config){
+
+                    data = ajax.processResponse(data, errorMessage);
+
                     completeHandler(data, status, headers, config);
-                    //console.dir({errorHandler: arguments});
+
                     var errors = ajax.handleErrors(data);
                     var message = errorMessage;
                     for(var i in errors){
@@ -223,6 +231,9 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
 
                     if(angular.isFunction(error)){
                         error(data, status, headers, config);
+                    }
+                    if(scope && !scope.$$phase){
+                        scope.$apply();
                     }
                 };
 
@@ -249,6 +260,9 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                         if(success && angular.isFunction(success)){
                             success(data, status, headers, config);
                         }
+                    }
+                    if(scope && !scope.$$phase){
+                        scope.$apply();
                     }
                 };
 
