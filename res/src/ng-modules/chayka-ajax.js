@@ -107,6 +107,8 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                 return {code: code, message: message, payload: null};
             },
 
+            spinnersUsed: 0,
+
             /**
              * Prepares all the handlers to show all the spinners and errors
              *
@@ -117,6 +119,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
              * - spinnerMessage: message to show with spinner
              * - errorMessage: default error message to show in case of error
              * - formValidator: reference to Chayka.Forms.formValidator
+             * - scope: scope to call $apply in callbacks
              * - success: function(data, status, headers, config)
              * - error: function(data, status, headers, config)
              * - complete: function(data, status, headers, config)
@@ -132,7 +135,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                 options = angular.extend(defaults, options);
 
                 var spinner = options.spinner || null;
-                var spinnerId = options.spinnerId;
+                var spinnerId = options.spinnerId || 'spinner';
                 var spinnerFieldId = options.spinnerFieldId;
                 var spinnerMessage = options.spinnerMessage || 'Processing...';
                 var errorMessage = options.errorMessage || 'Operation failed';
@@ -143,6 +146,8 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                 var success = options.success;
                 var error = options.error;
                 var complete = options.complete;
+
+                spinnerId = spinnerId + ajax.spinnersUsed++;
 
                 var prepared = {};
                 /**

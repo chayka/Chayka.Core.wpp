@@ -1,0 +1,29 @@
+.chayka-spinner {
+  padding: 0 0 0 29px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-image: url('../img/spinner32x32.gif');
+  background-size: 24px 24px;
+  min-height: 24px;
+  line-height: 24px;
+  vertical-align: middle;
+  display: inline-block;
+}
+.chayka-general_spinner .chayka-multi_spinner {
+  position: fixed;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  padding: 10px;
+  opacity: 0.8;
+  bottom: 10%;
+  right: 50px;
+}
+.chayka-general_spinner .chayka-multi_spinner [data-ng-repeat] {
+  display: none;
+}
+.chayka-general_spinner .chayka-multi_spinner [data-ng-repeat]:first-child {
+  display: block;
+}
+.chayka-general_spinner .chayka-multi_spinner:hover [data-ng-repeat] {
+  display: block;
+}

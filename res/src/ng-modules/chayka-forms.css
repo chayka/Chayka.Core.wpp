@@ -1,0 +1,211 @@
+.form_field {
+  margin-bottom: 1ex;
+  position: relative;
+}
+.form_field > label {
+  cursor: auto;
+  display: block;
+  width: 120px;
+  position: absolute;
+  padding-right: 1ex;
+  min-height: 32px;
+  line-height: 32px;
+  font-size: 16px;
+  border: 1px transparent solid;
+}
+.form_field > label.alignright {
+  text-align: right;
+}
+.form_field > .input {
+  margin-left: 120px;
+  display: block;
+}
+.form_field > .input input[type=text],
+.form_field > .input input[type=password],
+.form_field > .input input[type=number],
+.form_field > .input input[type=email],
+.form_field > .input input[type=search],
+.form_field > .input input[type=tel],
+.form_field > .input input[type=url],
+.form_field > .input select,
+.form_field > .input textarea {
+  margin: 0;
+  font-size: 16px;
+  min-height: 32px;
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 32px;
+  box-sizing: border-box;
+}
+.form_field > .input textarea {
+  resize: vertical;
+  line-height: normal;
+}
+.form_field.progress > .input input[type=text],
+.form_field.progress > .input input[type=password],
+.form_field.progress > .input input[type=number],
+.form_field.progress > .input input[type=email],
+.form_field.progress > .input input[type=search],
+.form_field.progress > .input input[type=tel],
+.form_field.progress > .input input[type=url] {
+  background: url(../img/spinner32x32.gif) no-repeat 98% 50%;
+  background-size: 16px 16px;
+}
+.form_field > .message {
+  min-height: 1em;
+  line-height: normal;
+}
+.form_field.invalid .message {
+  color: #CD0A0A;
+  text-align: right;
+  font-size: .9em;
+}
+.form_field > .width05 {
+  width: 5%;
+}
+.form_field > .width10 {
+  width: 10%;
+}
+.form_field > .width15 {
+  width: 15%;
+}
+.form_field > .width20 {
+  width: 20%;
+}
+.form_field > .width25 {
+  width: 25%;
+}
+.form_field > .width30 {
+  width: 30%;
+}
+.form_field > .width35 {
+  width: 35%;
+}
+.form_field > .width40 {
+  width: 40%;
+}
+.form_field > .width45 {
+  width: 45%;
+}
+.form_field > .width50 {
+  width: 50%;
+}
+.form_field > .width55 {
+  width: 55%;
+}
+.form_field > .width60 {
+  width: 60%;
+}
+.form_field > .width65 {
+  width: 65%;
+}
+.form_field > .width70 {
+  width: 70%;
+}
+.form_field > .width75 {
+  width: 75%;
+}
+.form_field > .width80 {
+  width: 80%;
+}
+.form_field > .width85 {
+  width: 85%;
+}
+.form_field > .width90 {
+  width: 90%;
+}
+.form_field > .width95 {
+  width: 95%;
+}
+.form_field > .width100 {
+  width: 100%;
+}
+.form_field > label.width05 + .input {
+  margin-left: 5%;
+}
+.form_field > label.width10 + .input {
+  margin-left: 10%;
+}
+.form_field > label.width15 + .input {
+  margin-left: 15%;
+}
+.form_field > label.width20 + .input {
+  margin-left: 20%;
+}
+.form_field > label.width25 + .input {
+  margin-left: 25%;
+}
+.form_field > label.width30 + .input {
+  margin-left: 30%;
+}
+.form_field > label.width35 + .input {
+  margin-left: 35%;
+}
+.form_field > label.width40 + .input {
+  margin-left: 40%;
+}
+.form_field > label.width45 + .input {
+  margin-left: 45%;
+}
+.form_field > label.width50 + .input {
+  margin-left: 50%;
+}
+.form_field > label.width55 + .input {
+  margin-left: 55%;
+}
+.form_field > label.width60 + .input {
+  margin-left: 60%;
+}
+.form_field > label.width65 + .input {
+  margin-left: 65%;
+}
+.form_field > label.width70 + .input {
+  margin-left: 70%;
+}
+.form_field > label.width75 + .input {
+  margin-left: 75%;
+}
+.form_field > label.width80 + .input {
+  margin-left: 80%;
+}
+.form_field > label.width85 + .input {
+  margin-left: 85%;
+}
+.form_field > label.width90 + .input {
+  margin-left: 90%;
+}
+.form_field > label.width95 + .input {
+  margin-left: 95%;
+}
+.form_field.fullsize > label {
+  display: block;
+  width: 100%;
+  position: static;
+  float: none;
+}
+.form_field.fullsize .input {
+  margin: 0;
+  width: 100%;
+}
+.form_field.fullsize .input input[type=text],
+.form_field.fullsize .input input[type=password],
+.form_field.fullsize .input input[type=number],
+.form_field.fullsize .input input[type=email],
+.form_field.fullsize .input input[type=search],
+.form_field.fullsize .input input[type=tel],
+.form_field.fullsize .input input[type=url],
+.form_field.fullsize .input select,
+.form_field.fullsize .input textarea {
+  width: 100%;
+}
+.form_field.stretch .input input[type=text],
+.form_field.stretch .input input[type=password],
+.form_field.stretch .input input[type=number],
+.form_field.stretch .input input[type=email],
+.form_field.stretch .input input[type=search],
+.form_field.stretch .input input[type=tel],
+.form_field.stretch .input input[type=url],
+.form_field.stretch .input select,
+.form_field.stretch .input textarea {
+  width: 100%;
+}

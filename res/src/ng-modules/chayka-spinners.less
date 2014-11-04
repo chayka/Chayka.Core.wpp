@@ -13,3 +13,28 @@
     vertical-align: middle;
     display: inline-block;
 }
+
+.chayka-general_spinner .chayka-multi_spinner{
+    position: fixed;
+    background-color: #eeeeee;
+    border-radius: 5px;
+    padding: 10px;
+    opacity: 0.8;
+
+    bottom: 10%;
+    right: 50px;
+
+    [data-ng-repeat]{
+        display: none;
+
+        &:first-child{
+            display: block;
+        }
+    }
+
+    &:hover{
+        [data-ng-repeat] {
+            display: block;
+        }
+    }
+}

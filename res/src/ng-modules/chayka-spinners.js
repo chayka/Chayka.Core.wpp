@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('chayka-spinners', ['chayka-translate'])
+angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
     .directive('spinner', [function(){
         return {
             restrict: 'AE',
@@ -33,25 +33,39 @@ angular.module('chayka-spinners', ['chayka-translate'])
             scope:{
                 spinner: '=multiSpinner'
             },
-            template: '<div class="chayka-multi_spinner" data-ng-show="spinners.keys.length"><div data-ng-repeat="(id, message) in spinners"><div data-spinner data-message="message" data-visible="true"></div></div></div>',
+            template: '<div class="chayka-multi_spinner" data-ng-show="total"><div data-ng-repeat="(id, message) in messages"><div data-spinner="spinners[id]" data-message="message" data-visible="true"></div></div></div>',
             //replace: true,
             controller: function($scope){
                 var ctrl = {};
                 $scope.spinners = {};
+                $scope.messages = {};
+                $scope.total = 0;
 
                 ctrl.show = function(message, id){
-                    $scope.spinners[id] = message;
+                    if(!id){
+                        id = 'spinner_'+$scope.total;
+                    }
+                    if(!$scope.messages[id]){
+                        $scope.messages[id] = message;
+                        $scope.total++;
+                    }
+                    return id;
                 };
 
                 ctrl.hide = function(id){
-                    delete $scope.spinners[id];
+                    if($scope.messages[id]){
+                        $scope.total--;
+                        delete $scope.messages[id];
+                        $scope.spinners[id] = null;
+                        $scope.$apply();
+                    }
                 };
 
                 $scope.spinner = ctrl;
             }
         }
     }])
-    .directive('generalSpinner', [function(){
+    .directive('generalSpinner', ['generalSpinner', function(){
         return {
             restrict: 'AE',
             template: '<div class="chayka-general_spinner"><div data-multi-spinner="spinner"></div></div>',
@@ -62,25 +76,28 @@ angular.module('chayka-spinners', ['chayka-translate'])
                 $(document).on('Chayka.Spinners.show', function(e, message, id){
                     if($scope.spinner){
                         $scope.spinner.show(message, id);
+                        $scope.$apply();
                     }
                 });
                 $(document).on('Chayka.Spinners.hide', function(e, id){
                     if($scope.spinner){
                         $scope.spinner.hide(id);
+                        $scope.$apply();
                     }
                 });
             }
         }
     }])
-    .factory('generalSpinner', function(){
+    .factory('generalSpinner', ['utils', function(_){
         var $ = angular.element;
-        return {
-            show: function(message, id){
+
+        return _.ensure('Chayka.Spinners', {
+            show: function (message, id) {
                 $(document).trigger('Chayka.Spinners.show', [message, id]);
             },
-            hide: function(message, id){
+            hide: function (id) {
                 $(document).trigger('Chayka.Spinners.hide', [id]);
             }
-        }
-    })
+        });
+    }])
 ;

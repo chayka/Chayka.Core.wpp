@@ -222,7 +222,7 @@ class Plugin extends WP\Plugin{
         $this->registerBowerResources(true);
         $this->registerScript('chayka-translate', 'src/ng-modules/chayka-translate.js', array('jquery', 'angular', 'angular-translate'));
         $this->registerScript('chayka-utils', 'src/ng-modules/chayka-utils.js', array('jquery', 'angular'));
-        $this->registerScript('chayka-spinners', 'src/ng-modules/chayka-spinners.js', array('jquery', 'angular', 'chayka-translate'));
+        $this->registerScript('chayka-spinners', 'src/ng-modules/chayka-spinners.js', array('jquery', 'angular', 'chayka-translate', 'chayka-utils'));
         $this->registerStyle('chayka-spinners', 'src/ng-modules/chayka-spinners.css', array());
         $this->registerScript('chayka-ajax', 'src/ng-modules/chayka-ajax.js', array('jquery', 'angular', 'chayka-spinners'));
         $this->registerScript('chayka-forms', 'src/ng-modules/chayka-forms.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax'));
@@ -282,7 +282,7 @@ class Plugin extends WP\Plugin{
     }
 
     public function registerConsolePages() {
-        $this->addConsolePage('Chayka', 'Chayka', 'update_core', 'chayka-core', '/admin-core/');
+        $this->addConsolePage('Chayka', 'update_core', 'chayka-core', '/admin-core/');
 //
 //        $this->addConsoleSubPage('chayka-core-admin',
 //            'phpinfo()', 'phpinfo()', 'update_core', 'zf-core-phpinfo',
@@ -332,17 +332,21 @@ class Plugin extends WP\Plugin{
         wp_enqueue_script('chayka-modals');
         wp_enqueue_style('chayka-modals');
         $view = self::getView();
-        $this->addAction('wp_footer', function() use ($view){
+        $cb = function() use ($view){
             echo $view->render('chayka-modals.phtml');
-        });
+        };
+        $this->addAction('wp_footer', $cb);
+        $this->addAction('admin_footer', $cb);
     }
     public function addSpinners(){
         wp_enqueue_script('chayka-spinners');
         wp_enqueue_style('chayka-spinners');
         $view = self::getView();
-        $this->addAction('wp_footer', function() use ($view){
+        $cb = function() use ($view){
             echo $view->render('chayka-spinners.phtml');
-        });
+        };
+        $this->addAction('wp_footer', $cb);
+        $this->addAction('admin_footer', $cb);
     }
 }
 

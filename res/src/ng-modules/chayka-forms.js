@@ -135,6 +135,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                         showMessage: false,
                         formValidator: ctrl,
                         errorMessage: c.message,
+                        scope: field,
                         success: function(data){
                             console.dir({'data': data});
                             c.dictionary[value] = 'valid';

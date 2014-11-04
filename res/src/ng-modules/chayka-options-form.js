@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('chayka-options-form', ['chayka-forms'])
-    .controller('optionsForm', ['$scope', '$http', function($scope, $http){
+    .controller('optionsForm', ['$scope', 'ajax', function($scope, ajax){
         $scope.namespace = '';
         $scope.options = {
             site: {}
@@ -17,18 +17,24 @@ angular.module('chayka-options-form', ['chayka-forms'])
 
         $scope.saveOptions = function(){
             if(!$scope.validator || $scope.validator.validateFields()){
-                $http.post('/api/options/set', {
+                ajax.post('/api/options/set', {
                     namespace: $scope.namespace,
                     options: $scope.options
-                }).success(processResponse);
+                },{
+                    spinnerMessage: 'Saving options',
+                    success: processResponse
+                });
             }
         };
 
         $scope.loadOptions = function(){
-            $http.post('/api/options/get', {
+            ajax.post('/api/options/get', {
                 namespace: $scope.namespace,
                 options: $scope.options
-            }).success(processResponse);
+            },{
+                spinnerMessage: 'Loading options',
+                success: processResponse
+            });
         };
         //$scope.$digest();
         setTimeout($scope.loadOptions, 0);
