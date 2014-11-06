@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax'])
-    .directive('formValidator', ['$window', 'modals', 'ajax', function($window, modals, ajax) {
+    .directive('formValidator', ['$window', 'modals', 'ajax', 'utils', function($window, modals, ajax, utils) {
         return {
             restrict: 'AE',
             //transclude: true,
@@ -67,26 +67,41 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 };
 
                 ctrl.setFieldError = function(field, message){
+                    var needApply = false;
                     if(angular.isString(field)){
                         field = fields[field];
                         if(!field){
                             return
                         }
+                        needApply = true;
                     }
                     field.valid = false;
                     field.message = message;
-                    //field.$digest();
+
+                    utils.patchScope(field);
+
+                    if(needApply){
+                        //field.$apply();
+                    }
                 };
 
                 ctrl.clearFieldError = function(field){
+                    var needApply = false;
                     if(angular.isString(field)){
                         field = fields[field];
                         if(!field){
                             return
                         }
+                        needApply = true;
                     }
                     field.valid = true;
                     field.message = field.hint;
+
+                    utils.patchScope(field);
+
+                    if(needApply){
+                        //field.$apply();
+                    }
                     //field.$digest();
                 };
 
@@ -146,6 +161,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                             c.message = c.message || 'mass_errors' === data.code && data.message[field.name] || data.message;
                         }
                     });
+                    return c.dictionary[value];
                     //$http.get(url)
                     //    .success(function(data, status, headers, config){
                     //        c.dictionary[value] = 'valid';
@@ -286,7 +302,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
             //template: '<div ng-transclude></div>'
         };
     }])
-    .directive('formField', ['delayedCall', function(delayedCall) {
+    .directive('formField', ['delayedCall', 'utils', function(delayedCall, utils) {
         return {
             require: '^formValidator',
             restrict: 'AE',
@@ -342,8 +358,9 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     if(scope.value){
                         //console.log('validating value: '+scope.value);
                         formCtrl.validateField(scope);
-                        scope.$digest();
                     }
+                    utils.patchScope(scope);
+                    //scope.$apply(); // ok
                 });
 
                 function setupIf(){
@@ -451,12 +468,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                         dictionary: {}
                     };
 
-                    input.keyup(function(){
+                    input.on('keyup change', function(){
                         formCtrl.setFieldState(scope, 'clean');
-                        scope.$apply();
+                        utils.patchScope(scope);
+                        //scope.$apply(); // ok
                         if(scope.value){
                             delayedCall('check-api-'+scope.name, delay, function(){
                                 formCtrl.validateField(scope, true);
+                                utils.patchScope(scope);
+                                //scope.$apply();
                             });
                         }
                     });
@@ -561,15 +581,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
          * @param {int} timeout
          * @param {function} callback
          */
-        return function (callId, timeout, callback) {
+        return function (callId, delay, callback) {
             var handle = timeouts[callId];
             if (handle) {
                 $timeout.cancel(handle);
             }
             timeouts[callId] = $timeout(function () {
                 timeouts[callId] = null;
-                callback.call()
-            }, timeout);
+                callback();
+            }, delay);
         };
     }])
 ;

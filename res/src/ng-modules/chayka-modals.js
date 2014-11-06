@@ -6,9 +6,9 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
         $scope.close = modals.close;
         $scope.queue = modals.queue;
     }])
-    .factory('modals', ['$window', 'utils', function($window, _){
+    .factory('modals', ['$window', 'utils', function($window, utils){
 
-        var modals = _.declare('Chayka.Modals', {
+        var modals = utils.ensure('Chayka.Modals', {
             queue: [],
             scope: null
         });
@@ -20,7 +20,8 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
                     this.isOpen = true;
                     modals.queue.push(this);
                     if (modals.scope) {
-                        modals.scope.$apply();
+                        utils.patchScope(modals.scope);
+                        //modals.scope.$apply();
                     }
                 }
             },
@@ -34,7 +35,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
         };
 
         var api = {
-            queue: modals.queue,
+            //queue: modals.queue,
 
             setQueueScope: function($scope){
                 modals.scope = $scope;
@@ -96,7 +97,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
                     content: message,
                     title: title,
                     modalClass: modalClass,
-                    modal: false,
+                    //modal: false,
                     buttons: [
                         {text: 'Ok'/*, click: function() {$(this).dialog("close");}*/}
                     ]
@@ -115,7 +116,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
                     content: message,
                     title: title || 'Подтверждение',
                     modalClass: 'modal_confirm',
-                    modal: false,
+                    //modal: false,
                     buttons: [
                         {text: 'Yes', click: callback},
                         {text: 'No'}
@@ -131,7 +132,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
 
         modals = angular.extend(modals, api);
 
-        return api;
+        return modals;
     }])
     .directive('modal', ['modals', function(modals){
         return {
@@ -139,17 +140,13 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
             transclude: true,
             scope: {
                 modal: '=modal',
-                title: '=modalTitle',
+                title: '=?modalTitle',
                 show: '@modalShow'
             },
             template: document.getElementById('chayka-modals-template').innerHTML,
-            link: function(scope, element, attrs){
+            link: function(scope){
                 console.log('modal.directive');
-                //element.remove();
-                //scope[attrs.modal] = modals.create({
-                //    title: attrs.modalTitle,
-                //    element: element
-                //});
+
                 var ctrl = {};
 
                 ctrl.show = function(){

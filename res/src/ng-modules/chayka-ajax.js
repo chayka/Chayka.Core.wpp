@@ -1,5 +1,5 @@
 angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
-    .factory('ajax', ['$window', '$http', 'modals', 'generalSpinner', function($window, $http, modals, generalSpinner){
+    .factory('ajax', ['$window', '$http', '$timeout', 'modals', 'generalSpinner', 'utils', function($window, $http, $timeout, modals, generalSpinner, utils){
         var $ = angular.element;
         var Chayka = $window.Chayka || {};
         var ajax = Chayka.Ajax = Chayka.Ajax || {
@@ -93,7 +93,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
              * @returns {*}
              */
             processResponse: function(response, defaultMessage){
-                var message = defaultMessage || null;
+                var message = defaultMessage || false;
                 var code = 1;
                 if(!angular.isUndefined(response.payload)){
                     return response;
@@ -117,7 +117,8 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
              * - spinnerId: id for generalSpinner
              * - spinnerFieldId: field id for showing spinner in the form field (uses formValidator)
              * - spinnerMessage: message to show with spinner
-             * - errorMessage: default error message to show in case of error
+             * - errorMessage: default error message to show in case of error. Pass 'false' to suppress.
+             * - successMessage: default success message to show in case of success. Pass 'false' to suppress.
              * - formValidator: reference to Chayka.Forms.formValidator
              * - scope: scope to call $apply in callbacks
              * - success: function(data, status, headers, config)
@@ -139,6 +140,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                 var spinnerFieldId = options.spinnerFieldId;
                 var spinnerMessage = options.spinnerMessage || 'Processing...';
                 var errorMessage = options.errorMessage || 'Operation failed';
+                var successMessage = options.successMessage;
                 var formValidator = options.formValidator;
                 var scope = options.scope;
 
@@ -173,9 +175,13 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                         if(formValidator){
                             formValidator.clearMessage();
                         }
-                        if(scope && !scope.$$phase){
-                            scope.$apply();
+
+                        if(scope){
+                            utils.patchScope(scope);
                         }
+                        //if(scope && !scope.$$phase){
+                        //    scope.$apply();
+                        //}
                     }
 
                     return result;
@@ -230,16 +236,19 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                     }
                     if(formValidator){
                         formValidator.showErrors(errors);
-                    }else{
+                    }else if(!(message === false)){
                         modals.alert(message);
                     }
 
                     if(angular.isFunction(error)){
                         error(data, status, headers, config);
                     }
-                    if(scope && !scope.$$phase){
-                        scope.$apply();
+                    if(scope){
+                        utils.patchScope(scope);
                     }
+                    //if(scope && !scope.$$phase){
+                    //    //scope.$digest();
+                    //}
                 };
 
                 prepared.error = errorHandler;
@@ -259,15 +268,16 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                         errorHandler(data, status, headers, config);
                     }else{
                         completeHandler(data, status, headers, config);
-                        if(formValidator && data.message){
-                            formValidator.showMessage(data.message);
+                        var message = successMessage === false ? false : data.message || successMessage;
+                        if(formValidator && message){
+                            formValidator.showMessage(message);
                         }
                         if(success && angular.isFunction(success)){
                             success(data, status, headers, config);
                         }
                     }
-                    if(scope && !scope.$$phase){
-                        scope.$apply();
+                    if(scope){
+                        utils.patchScope(scope);
                     }
                 };
 

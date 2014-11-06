@@ -6,24 +6,24 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
             restrict: 'AE',
             scope:{
                 spinner: '=',
-                visible: '@',
-                message: '@'
+                visible: '=?',
+                message: '=?'
             },
             template: '<div class="chayka-spinner" data-ng-show="visible">{{message}}</div>',
             //replace: true,
             controller: function($scope){
                 var ctrl = {};
 
-                ctrl.show = function(message){
+                $scope.show = function(message){
                     $scope.message = message || $scope.message || 'Loading...';
                     $scope.visible = true;
                 };
 
-                ctrl.hide = function(){
+                $scope.hide = function(){
                     $scope.visible = false;
                 };
 
-                $scope.spinner = ctrl;
+                $scope.spinner = $scope;
             }
         }
     }])
@@ -57,7 +57,7 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
                         $scope.total--;
                         delete $scope.messages[id];
                         $scope.spinners[id] = null;
-                        $scope.$apply();
+                        //$scope.$apply();
                     }
                 };
 
@@ -65,7 +65,7 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
             }
         }
     }])
-    .directive('generalSpinner', ['generalSpinner', function(){
+    .directive('generalSpinner', ['utils', 'generalSpinner', function(utils){
         return {
             restrict: 'AE',
             template: '<div class="chayka-general_spinner"><div data-multi-spinner="spinner"></div></div>',
@@ -76,22 +76,24 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
                 $(document).on('Chayka.Spinners.show', function(e, message, id){
                     if($scope.spinner){
                         $scope.spinner.show(message, id);
-                        $scope.$apply();
+                        utils.patchScope($scope);
+                        //$scope.$apply();
                     }
                 });
                 $(document).on('Chayka.Spinners.hide', function(e, id){
                     if($scope.spinner){
                         $scope.spinner.hide(id);
-                        $scope.$apply();
+                        utils.patchScope($scope);
+                        //$scope.$apply();
                     }
                 });
             }
         }
     }])
-    .factory('generalSpinner', ['utils', function(_){
+    .factory('generalSpinner', ['utils', function(utils){
         var $ = angular.element;
 
-        return _.ensure('Chayka.Spinners', {
+        return utils.ensure('Chayka.Spinners', {
             show: function (message, id) {
                 $(document).trigger('Chayka.Spinners.show', [message, id]);
             },

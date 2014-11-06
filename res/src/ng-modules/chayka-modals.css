@@ -47,6 +47,7 @@
   font-size: 20px;
   text-align: center;
   cursor: pointer;
+  font-family: Arial;
 }
 .chayka-modals > .chayka-modals-fader > .chayka-modals-modal > .modal_body {
   padding: 20px 10px;

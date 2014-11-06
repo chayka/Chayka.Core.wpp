@@ -97,6 +97,17 @@ angular.module('chayka-utils', [])
                 }
 
                 return defaultValue;
+            },
+
+            /**
+             * Bullet proof scope.$apply() caller
+             * @param scope
+             */
+            patchScope: function(scope){
+                if(scope && angular.isFunction(scope.$apply)){
+                    $timeout(function(){scope.$apply()}, 0);
+                }
+
             }
         };
 
