@@ -1,9 +1,6 @@
 .chayka-modals {
   text-align: center;
-  display: table;
   position: fixed;
-  overflow-x: auto;
-  overflow-y: scroll;
   background-color: rgba(0, 0, 0, 0.1);
   top: 0;
   left: 0;
@@ -11,20 +8,25 @@
   bottom: 0;
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  box-sizing: border-box;
   z-index: 10000;
 }
 .chayka-modals > .chayka-modals-fader {
-  display: table-cell;
   vertical-align: middle;
 }
 .chayka-modals > .chayka-modals-fader > .chayka-modals-modal {
   position: relative;
-  top: 0;
   background-color: white;
   display: inline-block;
   min-width: 300px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 50px auto;
   border: 1px solid gray;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 .chayka-modals > .chayka-modals-fader > .chayka-modals-modal > .modal_header {
   position: relative;

@@ -27,7 +27,7 @@
                 <div class="modal_body" data-ng-transclude>
                 </div>
                 <div class="modal_buttons" data-ng-show="modal.buttons && modal.buttons.length">
-                    <button data-ng-repeat="button in item.buttons" data-ng-click="button.callback && button.callback(); hide();">{{button.text}}</button>
+                    <button data-ng-repeat="button in item.buttons" data-ng-click="hide(); button.callback && button.callback();">{{button.text}}</button>
                 </div>
             </div>
         </div>

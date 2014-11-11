@@ -120,6 +120,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
              * - errorMessage: default error message to show in case of error. Pass 'false' to suppress.
              * - successMessage: default success message to show in case of success. Pass 'false' to suppress.
              * - formValidator: reference to Chayka.Forms.formValidator
+             * - validateOnSend: set to false if you don't want automatic validation
              * - scope: scope to call $apply in callbacks
              * - success: function(data, status, headers, config)
              * - error: function(data, status, headers, config)
@@ -142,6 +143,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                 var errorMessage = options.errorMessage || 'Operation failed';
                 var successMessage = options.successMessage;
                 var formValidator = options.formValidator;
+                var validateOnSend = angular.isUndefined(options.validateOnSend)?true:options.validateOnSend;
                 var scope = options.scope;
 
                 var send = options.send;
@@ -159,6 +161,9 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                  */
                 var sendHandler = function(){
                     var result = false;
+                    if(!spinnerFieldId && formValidator && validateOnSend && !formValidator.validateFields()){
+                        return false;
+                    }
                     if(send && angular.isFunction(send)){
                         result = send();
                     }

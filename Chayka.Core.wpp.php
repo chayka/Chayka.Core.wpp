@@ -160,7 +160,7 @@ class Plugin extends WP\Plugin{
         );
         register_post_type(self::POST_TYPE_CONTENT_FRAGMENT, $args);
         self::registerTaxonomyContentFragmentTag();
-        self::addMetaBoxContentFragment();
+//        self::addMetaBoxContentFragment();
     }
 
     public static function addMetaBoxContentFragment(){

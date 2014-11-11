@@ -10,8 +10,8 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 scrollMargin: '@',
                 scrollDuration: '@'
             },
-            link: function(scope, element, attrs){
-                scope.top = element.offset().top;
+            link: function(scope, element){
+                scope.element = element;
             },
             controller: function($scope) {
                 var fields = $scope.fields = {};
@@ -210,15 +210,20 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                                 case 'passwords':
                                     valid = ctrl.checkPasswords(field);
                                     break;
-                                case 'custom':
-                                    valid = ctrl.checkCustom(field);
-                                    break;
+                                //case 'custom':
+                                //    valid = ctrl.checkCustom(field);
+                                //    break;
                                 default :
                             }
                             if(!valid){
                                 message = c.message;
                             }
                         });
+                    }
+
+                    if(valid && field.checks.custom){
+                        valid = ctrl.checkCustom(field);
+                        message = valid?'':field.checks.custom.message;
                     }
 
                     state = valid?'valid':'invalid';
@@ -262,18 +267,27 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     return valid;
                 };
 
-                ctrl.scrollTo = function(scrollTo){
+                ctrl.scrollTo = function(scrollTo, duration){
+
+                    if(angular.isUndefined(duration)){
+                        duration = parseInt($scope.scrollDuration) || $scope.scrollDuration;
+                    }
+
                     scrollTo-=parseInt($scope.scrollMargin);
                     if($window.jQuery){
                         var $ = $window.jQuery;
                         if(scrollTo < $window.pageYOffset || scrollTo > $window.pageYOffset + $($window).height()){
-                            $window.jQuery('html, body').animate({scrollTop: scrollTo}, parseInt($scope.scrollDuration) || $scope.scrollDuration);
+                            if(duration){
+                                $window.jQuery('html, body').animate({scrollTop: scrollTo}, duration);
+                            }else{
+                                $window.jQuery('html, body').scrollTop(scrollTo);
+                            }
                         }
                     }
                 };
 
-                ctrl.scrollUp = function(){
-                    ctrl.scrollTo($scope.top);
+                ctrl.scrollUp = function(duration){
+                    ctrl.scrollTo($scope.element.offset().top, duration);
                 };
 
                 ctrl.showErrors = function(errors){
@@ -365,7 +379,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                 function setupIf(){
                     if(attrs.checkIf){
-                        scope.$watch(attrs.checkIf, function(value){
+                        scope.$parent.$watch(attrs.checkIf, function(value){
                             scope.active = value;
                         });
                     }
