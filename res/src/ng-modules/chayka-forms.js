@@ -162,17 +162,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                         }
                     });
                     return c.dictionary[value];
-                    //$http.get(url)
-                    //    .success(function(data, status, headers, config){
-                    //        c.dictionary[value] = 'valid';
-                    //        ctrl.setFieldState(field, 'valid');
-                    //    })
-                    //    .error(function(data, status, headers, config){
-                    //        c.dictionary[value] = 'invalid';
-                    //        c.message = c.message || data.message;
-                    //        ctrl.setFieldState(field, 'invalid', c.message || data.message);
-                    //    });
-                    //return 'progress';
+
                 };
 
                 ctrl.checkCustom = function(field){
@@ -210,9 +200,6 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                                 case 'passwords':
                                     valid = ctrl.checkPasswords(field);
                                     break;
-                                //case 'custom':
-                                //    valid = ctrl.checkCustom(field);
-                                //    break;
                                 default :
                             }
                             if(!valid){

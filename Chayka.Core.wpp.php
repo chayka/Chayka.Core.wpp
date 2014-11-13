@@ -288,9 +288,9 @@ class Plugin extends WP\Plugin{
 //            'phpinfo()', 'phpinfo()', 'update_core', 'zf-core-phpinfo',
 //            '/admin/phpinfo');
 //
-//        $this->addConsoleSubPage('chayka-core-admin',
-//            'WP Hooks', 'WP Hooks', 'update_core', 'zf-core-wp-hooks',
-//            '/admin/wp-hooks', '', null);
+        $this->addConsoleSubPage('chayka-core',
+            'WP Hooks', 'update_core', 'chayka-core-wp-hooks',
+            '/admin-core/wp-hooks', '', null);
 //
 //        $this->addConsoleSubPage('chayka-core-admin',
 //            'E-mail', 'E-mail settings', 'update_core', 'zf-core-email',

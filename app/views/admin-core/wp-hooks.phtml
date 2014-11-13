@@ -1,0 +1,56 @@
+<?php // LessCss::loadLessCss();?>
+<div class="wrap bem-zf_core-admin">
+    <div id="icon-options-general" class="icon32">
+        <br/>
+    </div>
+    <h2>WP-Hooks</h2>
+</div><style>
+    div.wp_hook{
+        float: left;
+        margin: 0 2em 2em 0;
+    }
+    table.wp_hooks{
+        border: 1px solid #444444;
+        width: 400px;
+    }
+    table.wp_hooks td{
+        padding: 1ex;
+    }
+    table.wp_hooks tr:first-child{
+        font-weight: bold;
+    }
+    h3.hook{
+
+    }
+</style>
+<?php //wp_enqueue_script('jquery-masonry'); wp_print_scripts();?>
+
+<div class="hooks_container">
+    <?php foreach ($this->tables as $tag=>$table):?>
+        <div class="wp_hook">
+            <h3 class="hook"><?php echo $tag?></h3>
+            <table class="wp_hooks" rules="all">
+                <tr>
+                    <?php foreach ($table[0] as $column=>$value):?>
+                        <td><?php echo $column;?></td>
+                    <?php endforeach;?>
+                </tr>
+                <?php foreach ($table as $row):?>
+                    <tr>
+                        <?php foreach ($row as $column=>$value):?>
+                            <td><?php echo $value;?></td>
+                        <?php endforeach;?>
+
+                    </tr>
+                <?php endforeach;?>
+            </table>
+        </div>
+    <?php endforeach;?>
+</div>
+<script type="text/javascript">
+//    (function($){
+//        $('.hooks_container').masonry({
+//            itemSelector: '.wp_hook'
+//        });
+//    })(jQuery);
+</script>
