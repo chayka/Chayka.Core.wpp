@@ -13,11 +13,15 @@ use Chayka\MVC\Controller;
 class AdminCoreController extends Controller{
 
     public function init(){
-
+        wp_enqueue_script('chayka-options-form');
+        wp_enqueue_style('chayka-options-form');
     }
 
     public function indexAction(){
-        wp_enqueue_script('chayka-options-form');
+    }
+
+    public function phpinfoAction(){
+
     }
 
     public function wpHooksAction(){

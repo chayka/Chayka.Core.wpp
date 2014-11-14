@@ -31,9 +31,9 @@
             <h3 class="hook"><?php echo $tag?></h3>
             <table class="wp_hooks" rules="all">
                 <tr>
-                    <?php foreach ($table[0] as $column=>$value):?>
+                    <?php if(is_array($table[0])): foreach ($table[0] as $column=>$value):?>
                         <td><?php echo $column;?></td>
-                    <?php endforeach;?>
+                    <?php endforeach; endif;?>
                 </tr>
                 <?php foreach ($table as $row):?>
                     <tr>

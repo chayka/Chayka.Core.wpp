@@ -1,18 +1,20 @@
 <h2>Chayka Framework Settings</h2>
 
-<div data-ng-app="chayka-options-form">
+<div data-ng-app="chayka-options-form" data-ng-cloak>
     <div data-ng-controller="optionsForm" data-ng-init="namespace = 'Chayka.WP'">
         <form data-form-validator="validator" novalidate="novalidate">
-            <div class="form_field" data-form-field="Locale">
-                <label>Locale</label><select data-ng-init="options.Locale='auto'; localeOptions = {'auto': 'Browser', 'en-US': 'English', 'ru-RU': 'Русский'}" data-ng-options="key as value for (key, value) in localeOptions" data-ng-model="options.Locale"></select>
+            <div class="form_field stretch" data-form-field="Locale">
+                <label class="width50">Locale</label><select data-ng-init="options.Locale='auto'; localeOptions = {'auto': 'Browser', 'en-US': 'English', 'ru-RU': 'Русский'}" data-ng-options="key as value for (key, value) in localeOptions" data-ng-model="options.Locale" title="Locale"></select>
             </div>
-            <div class="form_field" data-form-field="SingleDomain">
-                <label>Single Domain</label><select data-ng-init="options.SingleDomain=''; domainOptions = {'': 'Ignore', 'no-www': '<?php echo $server= \Chayka\Helpers\Util::serverName();?>'}" data-ng-options="key as value for (key, value) in domainOptions" data-ng-model="options.SingleDomain"></select>
+            <div class="form_field stretch" data-form-field="SingleDomain">
+                <label class="width50">Single Domain</label><select data-ng-init="options.SingleDomain=''; domainOptions = {'': 'Ignore', 'no-www': '<?php echo $server= \Chayka\Helpers\Util::serverName();?>'}" data-ng-options="key as value for (key, value) in domainOptions" data-ng-model="options.SingleDomain" title="Single domain"></select>
             </div>
-            <div class="form_field" data-form-field="MinimizeMedia">
-                <label>Minimize Media</label><select data-ng-init="options.MinimizeMedia='0'; minOptions = {'0': 'No', '1': 'Yes'}" data-ng-options="key as value for (key, value) in minOptions" data-ng-model="options.MinimizeMedia"></select>
+            <div class="form_field stretch" data-form-field="MinimizeMedia">
+                <label class="width50">Minimize Media</label><select data-ng-init="options.MinimizeMedia='0'; minOptions = {'0': 'No', '1': 'Yes'}" data-ng-options="key as value for (key, value) in minOptions" data-ng-model="options.MinimizeMedia" title="Minimize Media"></select>
             </div>
-            <button data-ng-click="saveOptions();">Save</button>
+            <div class="buttons">
+                <button class="button button-primary button-large" data-ng-click="saveOptions();">Save</button>
+            </div>
         </form>
     </div>
 </div>

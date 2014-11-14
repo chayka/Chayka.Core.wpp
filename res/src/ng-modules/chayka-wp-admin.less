@@ -1,0 +1,165 @@
+
+@wp-color-gray-darkest: #464646;
+@wp-color-gray-dark: #808080;
+@wp-color-gray: #cccccc;
+@wp-color-gray-light: #ececec;
+@wp-color-gray-border: #dfdfdf;
+@wp-color-blue: #1a749c;
+@wp-color-yellow: #1a749c;
+@wp-color-yellow-border: #e7dd48;
+
+.form_field{
+    margin-bottom: 1em;
+    > label{
+        padding-top: 4px;
+    }
+}
+#postbox-container-1, #postbox-container-2{
+
+    .postbox{
+        .form_field{
+            > label{
+                cursor: auto;
+            }
+            > label.alignright{
+                text-align: right;
+            }
+            .form_field-input_box{
+                display: block;
+                input[type=text],
+                input[type=password],
+                select{
+
+                }
+                textarea{
+                    resize: vertical;
+                }
+                input[type=radio]{
+
+                }
+                input[type=checkbox]{
+
+                }
+                label{
+                    display: inline;
+                    float: none;
+                    input[type=radio]{
+                        display: inline;
+                        float: none;
+
+                    }
+                }
+                .fullsize{
+                    width: 100%;
+                }
+            }
+            .form_field-tips{
+
+            }
+
+        }
+        .form_field.fullsize{
+            > label{
+                display: block;
+                width: 100%;
+                position: static;
+                float: none;
+            }
+            .form_field-input_box{
+                margin: 0;
+                width: 100%;
+                input[type=text],
+                input[type=password],
+                select{
+                    width: 100%;
+                }
+                textarea{
+                    width: 100%;
+                }
+                input[type=radio]{
+
+                }
+                input[type=checkbox]{
+
+                }
+                label[for]{
+
+                }
+                .ui-datepicker-month, .ui-datepicker-year{
+                    width: auto;
+                }
+            }
+            .form_field-tips{
+
+            }
+        }
+    }
+}
+
+@label-width: 100px;
+
+#side-sortables{
+    .form_field{
+        margin-bottom: 1em;
+        > label{
+            padding-top: 4px;
+        }
+        .form_field-input_box{
+
+            input[type=text],
+            input[type=password],
+            select{
+                width: 100%;
+            }
+            textarea{
+                width: 100%;
+            }
+            input[type=radio]{
+
+            }
+            input[type=checkbox]{
+
+            }
+            label[for]{
+
+            }
+        }
+        .form_field-tips{
+
+        }
+    }
+}
+
+#normal-sortables, #advanced-sortables{
+    .form_field{
+        margin-bottom: 1em;
+        > label{
+            padding-top: 4px;
+        }
+        .form_field-input_box{
+            margin-left: @label-width;
+            display: block;
+
+            input[type=text],
+            input[type=password],
+            select{
+
+            }
+            textarea{
+
+            }
+            input[type=radio]{
+
+            }
+            input[type=checkbox]{
+
+            }
+            label[for]{
+
+            }
+        }
+        .form_field-tips{
+
+        }
+    }
+}

@@ -1,0 +1,93 @@
+.form_field {
+  margin-bottom: 1em;
+}
+.form_field > label {
+  padding-top: 4px;
+}
+#postbox-container-1 .postbox .form_field > label,
+#postbox-container-2 .postbox .form_field > label {
+  cursor: auto;
+}
+#postbox-container-1 .postbox .form_field > label.alignright,
+#postbox-container-2 .postbox .form_field > label.alignright {
+  text-align: right;
+}
+#postbox-container-1 .postbox .form_field .form_field-input_box,
+#postbox-container-2 .postbox .form_field .form_field-input_box {
+  display: block;
+}
+#postbox-container-1 .postbox .form_field .form_field-input_box textarea,
+#postbox-container-2 .postbox .form_field .form_field-input_box textarea {
+  resize: vertical;
+}
+#postbox-container-1 .postbox .form_field .form_field-input_box label,
+#postbox-container-2 .postbox .form_field .form_field-input_box label {
+  display: inline;
+  float: none;
+}
+#postbox-container-1 .postbox .form_field .form_field-input_box label input[type=radio],
+#postbox-container-2 .postbox .form_field .form_field-input_box label input[type=radio] {
+  display: inline;
+  float: none;
+}
+#postbox-container-1 .postbox .form_field .form_field-input_box .fullsize,
+#postbox-container-2 .postbox .form_field .form_field-input_box .fullsize {
+  width: 100%;
+}
+#postbox-container-1 .postbox .form_field.fullsize > label,
+#postbox-container-2 .postbox .form_field.fullsize > label {
+  display: block;
+  width: 100%;
+  position: static;
+  float: none;
+}
+#postbox-container-1 .postbox .form_field.fullsize .form_field-input_box,
+#postbox-container-2 .postbox .form_field.fullsize .form_field-input_box {
+  margin: 0;
+  width: 100%;
+}
+#postbox-container-1 .postbox .form_field.fullsize .form_field-input_box input[type=text],
+#postbox-container-2 .postbox .form_field.fullsize .form_field-input_box input[type=text],
+#postbox-container-1 .postbox .form_field.fullsize .form_field-input_box input[type=password],
+#postbox-container-2 .postbox .form_field.fullsize .form_field-input_box input[type=password],
+#postbox-container-1 .postbox .form_field.fullsize .form_field-input_box select,
+#postbox-container-2 .postbox .form_field.fullsize .form_field-input_box select {
+  width: 100%;
+}
+#postbox-container-1 .postbox .form_field.fullsize .form_field-input_box textarea,
+#postbox-container-2 .postbox .form_field.fullsize .form_field-input_box textarea {
+  width: 100%;
+}
+#postbox-container-1 .postbox .form_field.fullsize .form_field-input_box .ui-datepicker-month,
+#postbox-container-2 .postbox .form_field.fullsize .form_field-input_box .ui-datepicker-month,
+#postbox-container-1 .postbox .form_field.fullsize .form_field-input_box .ui-datepicker-year,
+#postbox-container-2 .postbox .form_field.fullsize .form_field-input_box .ui-datepicker-year {
+  width: auto;
+}
+#side-sortables .form_field {
+  margin-bottom: 1em;
+}
+#side-sortables .form_field > label {
+  padding-top: 4px;
+}
+#side-sortables .form_field .form_field-input_box input[type=text],
+#side-sortables .form_field .form_field-input_box input[type=password],
+#side-sortables .form_field .form_field-input_box select {
+  width: 100%;
+}
+#side-sortables .form_field .form_field-input_box textarea {
+  width: 100%;
+}
+#normal-sortables .form_field,
+#advanced-sortables .form_field {
+  margin-bottom: 1em;
+}
+#normal-sortables .form_field > label,
+#advanced-sortables .form_field > label {
+  padding-top: 4px;
+}
+#normal-sortables .form_field .form_field-input_box,
+#advanced-sortables .form_field .form_field-input_box {
+  margin-left: 100px;
+  display: block;
+}

@@ -228,6 +228,7 @@ class Plugin extends WP\Plugin{
         $this->registerScript('chayka-forms', 'src/ng-modules/chayka-forms.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax'));
         $this->registerStyle('chayka-forms', 'src/ng-modules/chayka-forms.css', array());
         $this->registerScript('chayka-options-form', 'src/ng-modules/chayka-options-form.js', array('chayka-forms'));
+        $this->registerStyle('chayka-options-form', 'src/ng-modules/chayka-options-form.css', array('chayka-forms'));
         $this->registerScript('chayka-modals', 'src/ng-modules/chayka-modals.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-translate', 'chayka-utils'));
         $this->registerStyle('chayka-modals', 'src/ng-modules/chayka-modals.css', array());
 //        $isAdminPost = is_admin() && (strpos($_SERVER['REQUEST_URI'], 'post.php') || strpos($_SERVER['REQUEST_URI'], 'revision.php'));
@@ -283,19 +284,15 @@ class Plugin extends WP\Plugin{
 
     public function registerConsolePages() {
         $this->addConsolePage('Chayka', 'update_core', 'chayka-core', '/admin-core/');
-//
-//        $this->addConsoleSubPage('chayka-core-admin',
-//            'phpinfo()', 'phpinfo()', 'update_core', 'zf-core-phpinfo',
-//            '/admin/phpinfo');
-//
+
+        $this->addConsoleSubPage('chayka-core',
+            'phpinfo()', 'update_core', 'chayka-core-phpinfo',
+            '/admin-core/phpinfo');
+
         $this->addConsoleSubPage('chayka-core',
             'WP Hooks', 'update_core', 'chayka-core-wp-hooks',
             '/admin-core/wp-hooks', '', null);
-//
-//        $this->addConsoleSubPage('chayka-core-admin',
-//            'E-mail', 'E-mail settings', 'update_core', 'zf-core-email',
-//            '/admin/email-options', '', null);
-//
+
 //        $this->addConsoleSubPage('chayka-core-admin',
 //            'Blockade', 'Blockade', 'update_core', 'zf-core-blockade',
 //            '/admin/blockade-options', '', null);
