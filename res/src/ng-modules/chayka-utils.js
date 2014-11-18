@@ -100,6 +100,19 @@ angular.module('chayka-utils', [])
             },
 
             /**
+             * Simple template function, replaces '{{var}}' with var value.
+             *
+             * @param {string} tpl
+             * @param {obj} params
+             * @returns {string}
+             */
+            template: function(tpl, params){
+                return tpl.replace(/{([^}]+)}/g, function(all, param){
+                    return params[param].toString() || '';
+                });
+            },
+
+            /**
              * Bullet proof scope.$apply() caller
              * @param scope
              */
