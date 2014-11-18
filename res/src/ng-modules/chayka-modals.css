@@ -56,6 +56,9 @@
   padding: 20px 10px;
   text-align: left;
 }
+.chayka-modals > .chayka-modals-fader > .chayka-modals-modal > .modal_body > .modal_body-content {
+  white-space: pre-line;
+}
 .chayka-modals > .chayka-modals-fader > .chayka-modals-modal > .modal_buttons {
   border-top: 1px solid #eeeeee;
   padding: 10px;
