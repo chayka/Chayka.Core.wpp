@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('chayka-options-form', ['chayka-forms'])
-    .controller('optionsForm', ['$scope', 'ajax', function($scope, ajax){
+    .controller('optionsForm', ['$scope', '$timeout', 'ajax', function($scope, $timeout, ajax){
+
         $scope.namespace = '';
         $scope.options = {
             site: {}
@@ -36,7 +37,7 @@ angular.module('chayka-options-form', ['chayka-forms'])
                 success: processResponse
             });
         };
-        //$scope.$digest();
-        setTimeout($scope.loadOptions, 0);
-        //();
+
+        $timeout($scope.loadOptions, 0);
+
     }]);

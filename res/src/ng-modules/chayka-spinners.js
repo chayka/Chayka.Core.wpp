@@ -10,7 +10,7 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
                 message: '=?'
             },
             template: '<div class="chayka-spinner" data-ng-show="visible">{{message}}</div>',
-            //replace: true,
+
             controller: function($scope){
                 var ctrl = {};
 

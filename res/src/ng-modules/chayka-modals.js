@@ -6,7 +6,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
         $scope.close = modals.close;
         $scope.queue = modals.queue;
     }])
-    .factory('modals', ['$window', 'utils', function($window, utils){
+    .factory('modals', ['$window', '$translate', 'utils', function($window, $translate, utils){
 
         var modals = utils.ensure('Chayka.Modals', {
             queue: [],
@@ -76,7 +76,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
              *  - width
              *  - height
              *  - buttons
-             * @returns {modal}
+             * @returns {object}
              */
             show: function(options){
                 var m = api.create(options);
@@ -88,42 +88,45 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
              * Shows alert box.
              *
              * @param {String} message
-             * @param {String} title
-             * @param {String} modalClass
+             * @param {String} [title]
+             * @param {String} [modalClass]
+             * @param {Function} [callback]
              */
-            alert: function(message, title, modalClass){
+            alert: function(message, title, modalClass, callback){
                 modalClass = modalClass || 'modal_alert';
                 api.show({
                     content: message,
-                    title: title,
+                    title: title || '',
                     modalClass: modalClass,
-                    //modal: false,
                     buttons: [
-                        {text: 'Ok'/*, click: function() {$(this).dialog("close");}*/}
+                        {text: $translate.instant('Ok'), click: callback}
                     ]
                 });
             },
 
             /**
              * Shows confirm box
-             * @param {type} message
-             * @param {type} callback
-             * @param {type} title
+             * @param {string} message
+             * @param {Function} callback
+             * @param {string} [title]
              * @returns {undefined}
              */
             confirm: function(message, callback, title){
                  api.show({
                     content: message,
-                    title: title || 'Подтверждение',
+                    title: title || '',
                     modalClass: 'modal_confirm',
                     //modal: false,
                     buttons: [
-                        {text: 'Yes', click: callback},
-                        {text: 'No'}
+                        {text: $translate.instant('Yes'), click: callback},
+                        {text: $translate.instant('No')}
                     ]
                 });
             },
 
+            /**
+             * Close current modal
+             */
             close: function(){
                 var m = modals.queue.shift();
                 m.isOpen = false;
@@ -149,21 +152,36 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
 
                 var ctrl = {};
 
+                /**
+                 * Show element within modal popup.
+                 */
                 ctrl.show = function(){
                     scope.isOpen = true;
-                    if(!scope.$$phase){
-                        //scope.$apply();
-                    }
                 };
 
+                /**
+                 * Hide modal popup.
+                 *
+                 * @type {Function}
+                 */
                 ctrl.hide = scope.hide = function(){
                     scope.isOpen = false;
                 };
 
+                /**
+                 * Set popup window.
+                 *
+                 * @param {string} title
+                 */
                 ctrl.setTitle = function(title){
                     scope.title = title;
                 };
 
+                /**
+                 * Set button set.
+                 *
+                 * @param {object|Array} buttons
+                 */
                 ctrl.setButtons = function(buttons){
                     if(buttons && angular.isObject(buttons) && !angular.isArray(buttons)){
                         var btns = [];
@@ -184,5 +202,20 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
             controller: function($scope) {
             }
         };
+    }])
+    .config(['$translateProvider', function($translateProvider) {
+
+        // Adding a translation table for the English language
+        $translateProvider.translations('en-US', {
+            'Yes': 'Yes',
+            'No': 'No',
+            'Ok': 'Ok'
+        });
+
+        $translateProvider.translations('ru-RU', {
+            'Yes': 'Да',
+            'No': 'Нет',
+            'Ok': 'Ok'
+        });
     }])
 ;

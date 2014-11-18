@@ -100,7 +100,7 @@ angular.module('chayka-utils', [])
             },
 
             /**
-             * Simple template function, replaces '{{var}}' with var value.
+             * Simple template function, replaces '{var}' with var value.
              *
              * @param {string} tpl
              * @param {obj} params

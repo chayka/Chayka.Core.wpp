@@ -136,6 +136,71 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 };
 
                 /**
+                 * Check field value range.
+                 *
+                 * @param {$scope} field
+                 * - min
+                 * - minE
+                 * - max
+                 * - maxE
+                 * @returns {boolean}
+                 */
+                ctrl.checkRange = function(field) {
+                    var c = field['checks'].range;
+                    var lower = c.min && (c.minE && field['value'] < c.min || !c.minE && field['value'] <= c.min);
+                    var greater = c.max && (c.maxE && field['value'] > c.max || !c.minE && field['value'] >= c.max);
+                    return !(lower || greater);
+                };
+
+                /**
+                 * Check field value lt (<).
+                 *
+                 * @param {$scope} field
+                 * - max
+                 * @returns {boolean}
+                 */
+                ctrl.checkLt = function(field) {
+                    var c = field['checks'].lt;
+                    return field['value'] < c.max;
+                };
+
+                /**
+                 * Check field value le (<=).
+                 *
+                 * @param {$scope} field
+                 * - max
+                 * @returns {boolean}
+                 */
+                ctrl.checkLe = function(field) {
+                    var c = field['checks'].le;
+                    return field['value'] <= c.max;
+                };
+
+                /**
+                 * Check field value gt (>).
+                 *
+                 * @param {$scope} field
+                 * - min
+                 * @returns {boolean}
+                 */
+                ctrl.checkGt = function(field) {
+                    var c = field['checks'].gt;
+                    return field['value'] > c.min;
+                };
+
+                /**
+                 * Check field value ge (>=).
+                 *
+                 * @param {$scope} field
+                 * - min
+                 * @returns {boolean}
+                 */
+                ctrl.checkGe = function(field) {
+                    var c = field['checks'].ge;
+                    return field['value'] >= c.min;
+                };
+
+                /**
                  * Check field value against regexp.
                  *
                  * @param {$scope} field
@@ -252,6 +317,21 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                             switch(check){
                                 case 'length':
                                     valid = ctrl.checkLength(field);
+                                    break;
+                                case 'range':
+                                    valid = ctrl.checkRange(field);
+                                    break;
+                                case 'lt':
+                                    valid = ctrl.checkLt(field);
+                                    break;
+                                case 'le':
+                                    valid = ctrl.checkLe(field);
+                                    break;
+                                case 'gt':
+                                    valid = ctrl.checkGt(field);
+                                    break;
+                                case 'ge':
+                                    valid = ctrl.checkGe(field);
                                     break;
                                 case 'regexp':
                                     valid = ctrl.checkRegexp(field);
@@ -388,7 +468,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
             }
         };
     }])
-    .directive('formField', ['delayedCall', 'utils', function(delayedCall, utils) {
+    .directive('formField', ['$translate', 'delayedCall', 'utils', function($translate, delayedCall, utils) {
         return {
             require: '^formValidator',
             restrict: 'AE',
@@ -450,6 +530,9 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     //scope.$apply(); // ok
                 });
 
+                /**
+                 * setup data-check-if="condition"
+                 */
                 function setupIf(){
                     if(attrs['checkIf']){
                         scope.$parent.$watch(attrs['checkIf'], function(value){
@@ -458,19 +541,36 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     }
                 }
 
+                /**
+                 * Setup required field check.
+                 *
+                 * Html format:
+                 *      data-required = "This field is required"
+                 */
                 function setupRequired(){
                     scope.checks.required = {
-                        message: attrs['checkRequired'] || 'Required'
+                        message: attrs['checkRequired'] || $translate.instant('message_required')
                     };
                 }
 
+                /**
+                 * Setup field value length check.
+                 *
+                 * Html format:
+                 *      data-check-length = "The length of this value should be between {min} and {max} symbols|0|16"
+                 * or
+                 *      data-check-length-message = "The length of this value should be between {min} and {max} symbols"
+                 *      data-check-length-min = "0"
+                 *      data-check-length-max = "16"
+                 *
+                 */
                 function setupLength(){
-                    var short = attrs['checkLength']; // 'Длина значения должна быть от <%= min %> до <%= max => символов.|0|16'
+                    var short = attrs['checkLength'];
                     var shorts = short?short.split('|'):[];
                     var min = parseInt(shorts[1] || attrs['checkLengthMin'] || 0);
                     var max = parseInt(shorts[2] || attrs['checkLengthMax'] || 0);
                     var messageTemplate = shorts[0] || attrs['checkLengthMessage'] ||
-                        'Длина значения должна быть от {min} до {max} символов.';
+                        $translate.instant('message_length');
                     var message = utils.template(messageTemplate, {min: min, max: max, label: scope.label});
                     scope.checks.length = {
                         message: message,
@@ -479,26 +579,199 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     };
                 }
 
+                /**
+                 * Setup field value range check.
+                 *
+                 * Html format:
+                 *      data-check-range = "The value should be between {min} and {max}|=0|16|int"
+                 * or
+                 *      data-check-range-message = "The value should be between {min} and {max}"
+                 *      data-check-range-min = "=0" ('=' means 'inclusive')
+                 *      data-check-range-max = "16"
+                 *      data-check-range-format = "int"
+                 *
+                 */
                 function setupRange(){
-                    var short = attrs['checkRange']; // 'Значения должна быть от <%= min %> до <%= max =>|0|16'
+                    var short = attrs['checkRange'];
                     var shorts = short?short.split('|'):[];
-                    var min = parseInt(shorts[1] || attrs['checkRangeMin'] || 0);
-                    var max = parseInt(shorts[2] || attrs['checkRangeMax'] || 0);
+                    var minStr = shorts[1] || attrs['checkRangeMin'] || 0;
+                    var minE = !!minStr.match(/^=/);
+                    var min = minE? minStr.substr(1): minStr;
+                    var maxStr = shorts[2] || attrs['checkRangeMax'] || 0;
+                    var maxE = !!maxStr.match(/^=/);
+                    var max = maxE? maxStr.substr(1): maxStr;
+                    var format = shorts[3] || attrs['checkRangeFormat'] || 'int';
+                    switch(format){
+                        case 'int':
+                            min = parseInt(min);
+                            max = parseInt(max);
+                            break;
+                        case 'float':
+                            min = parseFloat(min);
+                            max = parseFloat(max);
+                            break;
+                        default:
+                    }
                     var messageTemplate = shorts[0] || attrs['checkRangeMessage'] ||
-                        'Значение должно быть в диапазоне от {min} до {max}';
+                        $translate.instant('message_range');
                     var message = utils.template(messageTemplate, {min: min, max: max, label: scope.label});
                     scope.checks.range = {
                         message: message,
                         min: min,
+                        minE: minE,
+                        max: max,
+                        maxE: maxE
+                    };
+                }
+
+                /**
+                 * Setup field value 'lower than (<)'.
+                 *
+                 * Html format:
+                 *      data-check-lt = "The value should be lower than {max}|0|int"
+                 * or
+                 *      data-check-lt-message = "The value should be lower than {max}"
+                 *      data-check-lt-max = "0"
+                 *      data-check-lt-format = "int"
+                 */
+                function setupLt(){
+                    var short = attrs['checkLt'];
+                    var shorts = short?short.split('|'):[];
+                    var max = shorts[1] || attrs['checkLtMax'] || 0;
+                    var messageTemplate = shorts[0] || attrs['checkLtMessage'] ||
+                        $translate.instant('message_lt');
+                    var message = utils.template(messageTemplate, {max: max, label: scope.label});
+                    var format = shorts[2] || attrs['checkLtFormat'] || 'int';
+                    switch(format){
+                        case 'int':
+                            max = parseInt(max);
+                            break;
+                        case 'float':
+                            max = parseFloat(max);
+                            break;
+                        default:
+                    }
+                    scope.checks.lt = {
+                        message: message,
                         max: max
                     };
                 }
 
+                /**
+                 * Setup field value 'lower or equal (<=)'.
+                 *
+                 * Html format:
+                 *      data-check-le = "The value should be lower than {max} or equal|0|int"
+                 * or
+                 *      data-check-le-message = "The value should be lower than {max} or equal"
+                 *      data-check-le-max = "0"
+                 *      data-check-le-format = "int"
+                 */
+                function setupLe(){
+                    var short = attrs['checkLe'];
+                    var shorts = short?short.split('|'):[];
+                    var max = shorts[1] || attrs['checkLeMax'] || 0;
+                    var messageTemplate = shorts[0] || attrs['checkLeMessage'] ||
+                        $translate.instant('message_le');
+                    var message = utils.template(messageTemplate, {max: max, label: scope.label});
+                    var format = shorts[2] || attrs['checkLeFormat'] || 'int';
+                    switch(format){
+                        case 'int':
+                            max = parseInt(max);
+                            break;
+                        case 'float':
+                            max = parseFloat(max);
+                            break;
+                        default:
+                    }
+                    scope.checks.le = {
+                        message: message,
+                        max: max
+                    };
+                }
+
+                /**
+                 * Setup field value 'greater than (>)'.
+                 *
+                 * Html format:
+                 *      data-check-gt = "The value should be greater than {min}|0|int"
+                 * or
+                 *      data-check-gt-message = "The value should be greater than {min}"
+                 *      data-check-gt-max = "0"
+                 *      data-check-gt-format = "int"
+                 */
+                function setupGt(){
+                    var short = attrs['checkGt'];
+                    var shorts = short?short.split('|'):[];
+                    var min = shorts[1] || attrs['checkGtMin'] || 0;
+                    var messageTemplate = shorts[0] || attrs['checkGtMessage'] ||
+                        $translate.instant('message_gt');
+                    var message = utils.template(messageTemplate, {min: min, label: scope.label});
+                    var format = shorts[2] || attrs['checkGtFormat'] || 'int';
+                    switch(format){
+                        case 'int':
+                            min = parseInt(min);
+                            break;
+                        case 'float':
+                            min = parseFloat(min);
+                            break;
+                        default:
+                    }
+                    scope.checks.gt = {
+                        message: message,
+                        min: min
+                    };
+                }
+
+                /**
+                 * Setup field value 'greater or equal (<=)'.
+                 *
+                 * Html format:
+                 *      data-check-ge = "The value should be greater than {min} or equal|0|int"
+                 * or
+                 *      data-check-ge-message = "The value should be greater than {min} or equal"
+                 *      data-check-ge-min = "0"
+                 *      data-check-ge-format = "int"
+                 */
+                function setupGe(){
+                    var short = attrs['checkGe'];
+                    var shorts = short?short.split('|'):[];
+                    var min = shorts[1] || attrs['checkGeMin'] || 0;
+                    var messageTemplate = shorts[0] || attrs['checkGeMessage'] ||
+                        $translate.instant('message_ge');
+                    var message = utils.template(messageTemplate, {min: min, label: scope.label});
+                    var format = shorts[2] || attrs['checkGeFormat'] || 'int';
+                    switch(format){
+                        case 'int':
+                            min = parseInt(min);
+                            break;
+                        case 'float':
+                            min = parseFloat(min);
+                            break;
+                        default:
+                    }
+                    scope.checks.ge = {
+                        message: message,
+                        min: min
+                    };
+                }
+
+                /**
+                 * Setup field regexp check.
+                 *
+                 * Html format:
+                 *      data-check-regexp = "Invalid phone format|/\d{7}/i|forbid"
+                 * or
+                 *      data-check-regexp-message = "Invalid phone format"
+                 *      data-check-regexp-pattern = "\d{7}"
+                 *      data-check-regexp-modifiers = "i"
+                 *      data-check-regexp-forbid = "forbid"
+                 */
                 function setupRegExp(){
-                    var short = attrs['checkRegexp']; // 'Неверный формат телефона...|/\d{7}/i|forbid'
+                    var short = attrs['checkRegexp'];
                     var shorts = short?short.split('|'):[];
                     var patternAndModifiers = short && /\/(.*)\/(\w*)$/.exec(shorts[1]) || [];
-                    var message = shorts[0] || attrs['checkRegexpMessage'] || 'Invalid format';
+                    var message = shorts[0] || attrs['checkRegexpMessage'] || $translate.instant('message_regexp');
                     var pattern = patternAndModifiers[1] || attrs['checkRegexpPattern'] || '.*';
                     var modifiers = patternAndModifiers[2] || attrs['checkRegexpModifiers'] || '';
                     var forbid = shorts[2] || attrs['checkRegexpForbid'] || false;
@@ -515,8 +788,14 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                 }
 
+                /**
+                 * Setup email field check.
+                 *
+                 * Html format:
+                 *      data-check-email = "Valid email format: user@domain.com"
+                 */
                 function setupEmail() {
-                    var message = attrs['checkEmail'] || 'Valid email format: user@domain.com';
+                    var message = attrs['checkEmail'] || $translate.instant('message_email');
                     scope.checks.regexp = {
                         message: message,
                         regexp: /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i,
@@ -524,13 +803,22 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     };
                 }
 
+                /**
+                 * Setup password compare check.
+                 *
+                 * Html format:
+                 *      data-check-passwords = "pass1_id|Passwords do not match"
+                 * or
+                 *      data-check-passwords-message = "Invalid phone format"
+                 *      data-check-passwords-repeat = "pass1_id"
+                 */
                 function setupPasswords() {
                     var short = attrs['checkPasswords']; // 'pass1id|Введенные пароли отличаются'
                     var shorts = short?short.split('|'):[];
 
                     var repeat = shorts[0] || attrs['checkPasswordsRepeat'];
 
-                    var message = shorts[1] || attrs['checkPasswordsMessage'] || 'Passwords do not match';
+                    var message = shorts[1] || attrs['checkPasswordsMessage'] || $translate.instant('message_passwords');
 
                     scope.checks.passwords = {
                         message: message,
@@ -538,6 +826,16 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     };
                 }
 
+                /**
+                 * Setup backend api check.
+                 *
+                 * Html format:
+                 *      data-check-api = "/api/check-existing/{name}/{value}|Email exists|500"
+                 * or
+                 *      data-check-api-message = "Invalid phone format"
+                 *      data-check-api-url = "/api/check-existing/{name}/{value}"
+                 *      data-check-api-delay = "500"
+                 */
                 function setupApiCall() {
                     var short = attrs['checkApi']; // '/api/check-existing/{name}/{value}|Email exists|500'
                     var shorts = short?short.split('|'):[];
@@ -546,7 +844,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                     var message = shorts[1] || attrs['checkApiMessage'];
 
-                    var delay = shorts[2] || 0;
+                    var delay = shorts[2] || attrs['checkApiDelay'] || 0;
 
                     scope.checks.api = {
                         message: message,
@@ -571,13 +869,24 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                 }
 
+                /**
+                 * Setup custom check.
+                 *
+                 * Html format:
+                 *      data-check-custom = "validateProjectTitle|Project Title should be sweet"
+                 * or
+                 *      data-check-custom-message = "Project Title should be sweet"
+                 *      data-check-custom-callback = "validateProjectTitle"
+                 *
+                 * callback.call($scope, value) will be called
+                 */
                 function setupCustom() {
-                    var short = attrs['checkCustom']; // 'pass1id|Введенные пароли отличаются'
+                    var short = attrs['checkCustom'];
                     var shorts = short?short.split('|'):[];
 
                     var callback = shorts[0] || attrs['checkCustomCallback'];
 
-                    var message = shorts[1] || attrs['checkCustomMessage'] || 'Invalid';
+                    var message = shorts[1] || attrs['checkCustomMessage'] || $translate.instant('message_custom');
 
                     scope.checks.custom = {
                         message: message,
@@ -598,6 +907,18 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                                 break;
                             case 'Length':
                                 setupLength();
+                                break;
+                            case 'Le':
+                                setupLe();
+                                break;
+                            case 'Lt':
+                                setupLt();
+                                break;
+                            case 'Ge':
+                                setupGe();
+                                break;
+                            case 'Gt':
+                                setupGt();
                                 break;
                             case 'Range':
                                 setupRange();
@@ -678,6 +999,39 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 callback();
             }, delay);
         };
+    }])
+    .config(['$translateProvider', function($translateProvider) {
+
+        // Adding a translation table for the English language
+        $translateProvider.translations('en-US', {
+            'message_required': 'Required Field',
+            'message_length': 'The length of this value should be between {min} and {max} symbols',
+            'message_range': 'The value should be between {min} and {max}',
+            'message_lt': 'The value should be lower than {max}',
+            'message_le': 'The value should be lower than {max} or equal',
+            'message_gt': 'The value should be greater than {min}',
+            'message_ge': 'The value should be greater than {min} or equal',
+            'message_regexp': 'Invalid format',
+            'message_email': 'Valid email format: user@domain.com',
+            'message_passwords': 'Passwords do not match',
+            'message_custom': 'Invalid value'
+
+
+        });
+
+        $translateProvider.translations('ru-RU', {
+            'message_required': 'Обязательное поле',
+            'message_length': 'Длина значения должна быть от {min} до {max} символов',
+            'message_range': 'Значение должно быть в диапазоне от {min} до {max}',
+            'message_lt': 'Значение должно быть меньше {max}',
+            'message_le': 'Значение должно быть меньше или равно {max}',
+            'message_gt': 'Значение должно быть больше {min}',
+            'message_ge': 'Значение должно быть больше или равно {min}',
+            'message_regexp': 'Некорректный формат',
+            'message_email': 'Формат email: user@domain.com',
+            'message_passwords': 'Введенные пароли отличаются',
+            'message_custom': 'Некорректное значение'
+        });
     }])
 ;
 
