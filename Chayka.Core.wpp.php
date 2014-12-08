@@ -231,6 +231,8 @@ class Plugin extends WP\Plugin{
         $this->registerStyle('chayka-options-form', 'src/ng-modules/chayka-options-form.css', array('chayka-forms'));
         $this->registerScript('chayka-modals', 'src/ng-modules/chayka-modals.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-translate', 'chayka-utils'));
         $this->registerStyle('chayka-modals', 'src/ng-modules/chayka-modals.css', array());
+        $this->registerStyle('chayka-wp-admin', 'src/ng-modules/chayka-wp-admin.css', array('chayka-forms'));
+
 //        $isAdminPost = is_admin() && (strpos($_SERVER['REQUEST_URI'], 'post.php') || strpos($_SERVER['REQUEST_URI'], 'revision.php'));
 //
 //        // backbone & underscore

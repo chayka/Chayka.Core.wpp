@@ -758,6 +758,8 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                 /**
                  * Setup field regexp check.
+                 * Heads up: If you need '/' char in a message or '|' char in a pattern,
+                 * You'd better use extended format instead of short one.
                  *
                  * Html format:
                  *      data-check-regexp = "Invalid phone format|/\d{7}/i|forbid"
