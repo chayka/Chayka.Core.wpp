@@ -212,6 +212,8 @@ class Plugin extends WP\Plugin{
         if(empty($_SESSION['timezone'])){
 //            $this->addAction('wp_footer', 'fixTimezone');
         }
+
+        $this->addAction('parse_request', 'checkDomainAndScheme', 1);
     }
 
     public function registerFilters(){
@@ -321,12 +323,42 @@ class Plugin extends WP\Plugin{
         $this->addRoute('default');
     }
 
+    public static function checkDomainAndScheme(){
+        $server = Util::serverName();
+        $scheme = OptionHelper::getOption('SingleScheme');
+        $schemeDiffers = $scheme === 'http' && $_SERVER['HTTPS'] || $scheme === 'https' && !$_SERVER['HTTPS'];
+        if($scheme){
+            $scheme.=':';
+        }
+        switch(OptionHelper::getOption('SingleDomain')){
+            case 'www':
+//                die($_SERVER['SERVER_NAME'].' ! '.$server);
+                if($_SERVER['SERVER_NAME'] !== 'www.'.$server){
+                    header("Location: $scheme//www.".$server.$_SERVER['REQUEST_URI'], true, 301);
+                    die();
+                }
+                break;
+            case 'no-www':
+                if($_SERVER['SERVER_NAME'] === 'www.'.$server){
+                    header("Location: $scheme//".$server.$_SERVER['REQUEST_URI'], true, 301);
+                    die();
+                }
+                break;
+            default :
+                if($schemeDiffers){
+                    header("Location: $scheme//".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'], true, 301);
+                    die();
+                }
+        }
+    }
+
     public function addJsNls(){
         $view = self::getView();
         $this->addAction('wp_head', function() use ($view){
             echo $view->render('chayka-js-nls.phtml');
         });
     }
+
     public function addModals(){
         wp_enqueue_script('chayka-modals');
         wp_enqueue_style('chayka-modals');
@@ -337,6 +369,7 @@ class Plugin extends WP\Plugin{
         $this->addAction('wp_footer', $cb);
         $this->addAction('admin_footer', $cb);
     }
+
     public function addSpinners(){
         wp_enqueue_script('chayka-spinners');
         wp_enqueue_style('chayka-spinners');

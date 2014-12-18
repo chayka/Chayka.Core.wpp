@@ -261,7 +261,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                         errorMessage: c.message,
                         scope: field,
                         success: function(data){
-                            console.dir({'data': data});
+                            //console.dir({'data': data});
                             c.dictionary[value] = 'valid';
                             ctrl.setFieldState(field, 'valid', null);
                         },
@@ -501,7 +501,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     label.remove();
                     //scope.$digest();
                 }
-                console.log('model binding: '+model);
+                //console.log('model binding: '+model);
 
                 //console.dir({'attrs': attrs, element: element, input: input});
 

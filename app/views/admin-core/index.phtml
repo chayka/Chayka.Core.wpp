@@ -9,6 +9,10 @@
             <div class="form_field stretch" data-form-field="SingleDomain">
                 <label class="width50">Single Domain</label><select data-ng-init="options.SingleDomain=''; domainOptions = {'': 'Ignore', 'no-www': '<?php echo $server= \Chayka\Helpers\Util::serverName();?>'}" data-ng-options="key as value for (key, value) in domainOptions" data-ng-model="options.SingleDomain" title="Single domain"></select>
             </div>
+            <div class="form_field stretch" data-form-field="SingleScheme">
+                <label class="width50">Single Scheme</label><select data-ng-init="options.SingleScheme=''; schemeOptions = {'': 'Ignore', 'http': 'http', 'https': 'https'}" data-ng-options="key as value for (key, value) in schemeOptions" data-ng-model="options.SingleScheme" title="Single Scheme"></select>
+                <div><strong>Heads up!</strong> If your server is not setup for https, enabling this feature would force https redirect thus making your server unavailable!</div>
+            </div>
             <div class="form_field stretch" data-form-field="MinimizeMedia">
                 <label class="width50">Minimize Media</label><select data-ng-init="options.MinimizeMedia='0'; minOptions = {'0': 'No', '1': 'Yes'}" data-ng-options="key as value for (key, value) in minOptions" data-ng-model="options.MinimizeMedia" title="Minimize Media"></select>
             </div>

@@ -148,7 +148,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
             },
             template: document.getElementById('chayka-modals-template').innerHTML,
             link: function(scope){
-                console.log('modal.directive');
+                //console.log('modal.directive');
 
                 var ctrl = {};
 
