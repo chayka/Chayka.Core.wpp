@@ -25,7 +25,7 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
 
                 $scope.spinner = $scope;
             }
-        }
+        };
     }])
     .directive('multiSpinner', [function(){
         return {
@@ -63,7 +63,7 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
 
                 $scope.spinner = ctrl;
             }
-        }
+        };
     }])
     .directive('generalSpinner', ['utils', 'generalSpinner', function(utils){
         return {
@@ -88,7 +88,7 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
                     }
                 });
             }
-        }
+        };
     }])
     .factory('generalSpinner', ['utils', function(utils){
         var $ = angular.element;

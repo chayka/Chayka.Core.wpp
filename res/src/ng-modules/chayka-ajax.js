@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
     .factory('ajax', ['$window', '$http', '$timeout', 'modals', 'generalSpinner', 'utils', function($window, $http, $timeout, modals, generalSpinner, utils){
         var $ = angular.element;
@@ -69,7 +71,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                 if(!data){
                     return {'empty_response': 'Empty response'};
                 }
-                if('mass_errors' == data.code){
+                if('mass_errors' === data.code){
                     for(var code in data.message){
                         if(ajax.handleError(code, data.message[code], data.payload)){
                             delete data.message[code];
@@ -241,7 +243,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                     }
                     if(formValidator){
                         formValidator.showErrors(errors);
-                    }else if(!(message === false)){
+                    }else if(message !== false){
                         modals.alert(message);
                     }
 

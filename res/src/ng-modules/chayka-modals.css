@@ -1,6 +1,7 @@
 .chayka-modals {
   text-align: center;
   position: fixed;
+  background-color: #000000;
   background-color: rgba(0, 0, 0, 0.1);
   top: 0;
   left: 0;
@@ -24,8 +25,6 @@
   max-width: 100%;
   margin: 100px auto;
   border: 1px solid gray;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 .chayka-modals > .chayka-modals-fader > .chayka-modals-modal > .modal_header {

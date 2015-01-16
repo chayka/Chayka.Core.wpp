@@ -1,0 +1,44 @@
+{
+  "generator-chayka": {
+    "support": [
+      "UriProcessing",
+      "ConsolePages",
+      "Metaboxes",
+      "PostProcessing"
+    ],
+    "register": [
+      "registerActions",
+      "registerFilters",
+      "registerResources",
+      "registerRoutes",
+      "registerCustomPostTypes",
+      "registerTaxonomies",
+      "registerConsolePages",
+      "registerMetaboxes"
+    ],
+    "appType": "plugin",
+    "appName": "Chayka.Core",
+    "appDescription": "Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications",
+    "appKeywords": "WordPress, Chayka, MVC, OOP",
+    "appVersion": "0.0.1",
+    "packagistVendor": "chayka",
+    "packagistPackage": "core-wpp",
+    "phpNamespace": "Chayka\\Core",
+    "chaykaFramework": "embedded",
+    "chaykaFrameworkDeps": {
+      "helpers": true,
+      "mvc": true,
+      "wp": true
+    },
+    "initDep": false,
+    "gitRemote": "github",
+    "githubUser": "chayka",
+    "gitRemoteRepo": "git@github.com:chayka/Chayka.Core.wpp.git",
+    "gitPush": false,
+    "appAuthor": "Boris Mossounov",
+    "appAuthorEmail": "borix@tut.by",
+    "appAuthorUri": "https://github.com/chayka/",
+    "appLicense": "MIT",
+    "appClass": "Plugin"
+  }
+}

@@ -8,13 +8,12 @@
 
 namespace Chayka\Core;
 
-use Chayka\MVC\Controller;
+use Chayka\WP\MVC\Controller;
 
-class AdminCoreController extends Controller{
+class AdminController extends Controller{
 
     public function init(){
-        wp_enqueue_script('chayka-options-form');
-        wp_enqueue_style('chayka-options-form');
+        $this->enqueueScriptStyle('chayka-options-form');
     }
 
     public function indexAction(){

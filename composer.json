@@ -3,18 +3,23 @@
     "description": "Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications",
     "minimum-stability": "dev",
     "license": "MIT",
+    "version": "0.0.1",
     "authors": [
         {
-            "name": "Boris",
+            "name": "Boris Mossounov",
             "email": "borix@tut.by"
         }
     ],
-
-    "require":{
+    "autoload": {
+        "classmap": [
+            "app/helpers",
+            "app/models",
+            "Plugin.php"
+        ]
+    },
+    "require": {
         "chayka/wp": "dev-master"
     },
-    "suggest":{
-        "chayka/email-wpp": "dev-master",
-        "chayka/auth-wpp": "dev-master"
-    }
+    "requireDev": {},
+    "suggest": {}
 }

@@ -1,0 +1,25 @@
+{
+    "name": "Chayka.Core",
+    "description": "Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications",
+    "version": "0.0.1",
+    "author": "Boris Mossounov <borix@tut.by>",
+    "dependencies": {},
+    "devDependencies": {
+        "grunt": "*",
+        "grunt-autoprefixer": "*",
+        "grunt-contrib-clean": "*",
+        "grunt-contrib-concat": "*",
+        "grunt-contrib-csslint": "*",
+        "grunt-contrib-cssmin": "*",
+        "grunt-contrib-imagemin": "*",
+        "grunt-contrib-jshint": "*",
+        "grunt-contrib-less": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-contrib-watch": "*",
+        "load-grunt-tasks": "*"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:chayka/Chayka.Core.wpp.git"
+    }
+}

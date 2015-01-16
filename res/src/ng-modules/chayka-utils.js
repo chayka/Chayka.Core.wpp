@@ -118,7 +118,7 @@ angular.module('chayka-utils', [])
              */
             patchScope: function(scope){
                 if(scope && angular.isFunction(scope.$apply)){
-                    $timeout(function(){scope.$apply()}, 0);
+                    $timeout(function(){scope.$apply();}, 0);
                 }
 
             }

@@ -84,7 +84,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     if(angular.isString(field)){
                         field = fields[field];
                         if(!field){
-                            return
+                            return;
                         }
                     }
                     field['valid'] = state === 'valid' || state === 'clean';
