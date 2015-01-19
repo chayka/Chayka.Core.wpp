@@ -10,16 +10,11 @@
             "email": "borix@tut.by"
         }
     ],
-    "autoload": {
-        "classmap": [
-            "app/helpers",
-            "app/models",
-            "Plugin.php"
-        ]
-    },
     "require": {
         "chayka/wp": "dev-master"
     },
-    "requireDev": {},
-    "suggest": {}
+    "suggest":{
+        "chayka/email-wpp": "dev-master",
+        "chayka/auth-wpp": "dev-master"
+    }
 }
