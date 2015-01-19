@@ -3,7 +3,6 @@
     "description": "Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications",
     "minimum-stability": "dev",
     "license": "MIT",
-    "version": "0.0.1",
     "authors": [
         {
             "name": "Boris Mossounov",
