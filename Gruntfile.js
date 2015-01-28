@@ -9,23 +9,28 @@ module.exports = function(grunt) {
         img: ['res/src/js/**/*.{png,jpg,gif}'],
 
         lessNg: ['res/src/ng-modules/**/*.less'],
-        cssNg: [
+        cssCore: [
             'res/src/ng-modules/chayka-spinners.css',
             'res/src/ng-modules/chayka-modals.css',
             'res/src/ng-modules/chayka-forms.css',
-            'res/src/ng-modules/chayka-options-form.css',
-            'res/src/ng-modules/chayka-wp-admin.css'
+            'res/src/ng-modules/chayka-pagination.css'
         ],
-        jsNg: [
+        jsCore: [
             'res/src/ng-modules/chayka-utils.js',
             'res/src/ng-modules/chayka-translate.js',
             'res/src/ng-modules/chayka-spinners.js',
             'res/src/ng-modules/chayka-ajax.js',
             'res/src/ng-modules/chayka-modals.js',
             'res/src/ng-modules/chayka-forms.js',
+            'res/src/ng-modules/chayka-pagination.js'
+        ],
+        cssAdmin: [
+            'res/src/ng-modules/chayka-options-form.css',
+            'res/src/ng-modules/chayka-wp-admin.css'
+        ],
+        jsAdmin: [
             'res/src/ng-modules/chayka-options-form.js',
-            'res/src/ng-modules/chayka-pagination.js',
-            'res/src/ng-modules/chayka-wp-admin.js',
+            'res/src/ng-modules/chayka-wp-admin.js'
         ]
     };
 
@@ -42,12 +47,17 @@ module.exports = function(grunt) {
                     'res/tmp/css/less.css': resFiles.less
                 }
             },
-            developmentNg:{
+            developmentCore:{
                 files:{
                     'res/src/ng-modules/chayka-forms.css': 'res/src/ng-modules/chayka-forms.less',
                     'res/src/ng-modules/chayka-modals.css': 'res/src/ng-modules/chayka-modals.less',
-                    'res/src/ng-modules/chayka-options-form.css': 'res/src/ng-modules/chayka-options-form.less',
                     'res/src/ng-modules/chayka-spinners.css': 'res/src/ng-modules/chayka-spinners.less',
+                    'res/src/ng-modules/chayka-pagination.css': 'res/src/ng-modules/chayka-pagination.less'
+                }
+            },
+            developmentAdmin:{
+                files:{
+                    'res/src/ng-modules/chayka-options-form.css': 'res/src/ng-modules/chayka-options-form.less',
                     'res/src/ng-modules/chayka-wp-admin.css': 'res/src/ng-modules/chayka-wp-admin.less'
                 }
             }
@@ -57,7 +67,7 @@ module.exports = function(grunt) {
                 browsers: ['last 2 versions']
             },
             development: {
-                src: resFiles.css.concat(resFiles.cssNg)
+                src: resFiles.css.concat(resFiles.cssCore).concat(resFiles.cssAdmin)
             }
         },
         csslint: {
@@ -65,7 +75,7 @@ module.exports = function(grunt) {
                 csslintrc: '.csslintrc'
             },
             development: {
-                src: resFiles.css.concat(resFiles.cssNg)
+                src: resFiles.css.concat(resFiles.cssCore).concat(resFiles.cssAdmin)
             }
         },
         cssmin: {
@@ -81,7 +91,16 @@ module.exports = function(grunt) {
             },
             ng: {
                 files: {
-                    'res/dist/ng-modules/chayka-core.min.css': ['res/src/ng-modules/*.css']
+                    'res/dist/ng-modules/chayka-core.css': [
+                        'res/src/ng-modules/chayka-forms.css',
+                        'res/src/ng-modules/chayka-modals.css',
+                        'res/src/ng-modules/chayka-spinners.css',
+                        'res/src/ng-modules/chayka-pagination.css'
+                    ],
+                    'res/dist/ng-modules/chayka-admin.css': [
+                        'res/src/ng-modules/chayka-options-form.css',
+                        'res/src/ng-modules/chayka-wp-admin.css'
+                    ]
                 }
             }
         },
@@ -107,7 +126,7 @@ module.exports = function(grunt) {
                 jshintrc: true
             },
             all: {
-                src: resFiles.js.concat(resFiles.jsNg).concat('Gruntfile.js')
+                src: resFiles.js.concat(resFiles.jsCore).concat(resFiles.jsAdmin).concat('Gruntfile.js')
             }
         },
         uglify: {
@@ -117,7 +136,8 @@ module.exports = function(grunt) {
                 },
                 files: {
                     //'res/dist/js/application.js': resFiles.js,
-                    'res/dist/ng-modules/chayka-core.min.js': resFiles.jsNg
+                    'res/dist/ng-modules/chayka-core.js': resFiles.jsCore,
+                    'res/dist/ng-modules/chayka-admin.js': resFiles.jsAdmin
                 }
             }
         },
@@ -143,11 +163,11 @@ module.exports = function(grunt) {
         },
         watch: {
             js: {
-                files: resFiles.js,
+                files: resFiles.js.concat(resFiles.jsCore).concat(resFiles.jsAdmin),
                 tasks: ['js']
             },
             less: {
-                files:  resFiles.less,
+                files:  resFiles.less.concat(resFiles.lessNg),
                 tasks: ['css']
             },
             img: {

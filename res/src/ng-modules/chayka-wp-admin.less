@@ -163,3 +163,129 @@
         }
     }
 }
+
+/* Job Control */
+.chayka-job_control{
+
+    border: 1px solid gray;
+    box-sizing: border-box;
+
+    > .box_controls{
+        margin: 0 1em 1em;
+        height: 30px;
+
+        > button.dashicons-before{
+            line-height: normal !important;
+            padding: 0 4px !important;
+            margin-right: 1ex;
+        }
+        .button_start{
+
+        }
+        .button_pause{
+        }
+        .button_resume{
+        }
+        .button_stop{
+
+        }
+        .field_items_per_iteration{
+            float: right;
+            label{
+
+            }
+            input{
+                width: 50px;
+            }
+        }
+    }
+
+    .progressbar{
+        margin: 1em 1em 1em;
+        height: 30px;
+        border: 1px solid gray;
+        box-sizing: border-box;
+
+        .progress_label{
+            float: left;
+            width: 100%;
+            margin-top: 5px;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #fff;
+            text-align: center;
+        }
+    }
+
+    .progress_spinner{
+        margin: 0 1em 1em;
+        display: none;
+    }
+
+    .box_output{
+        clear: both;
+        margin: 0 1em 1em;
+        height: 160px;
+        overflow-y: scroll;
+        border: 1px solid gray;
+        box-sizing: border-box;
+
+        .message{
+            padding: 0.5ex;
+            border-bottom: 1px dashed #aaa;
+            font-size: 13px;
+        }
+        .message:last-child{
+            border-bottom: none;
+        }
+    }
+
+//    &.running{
+//
+//        .box_buttons{
+//            .button_start{
+//                display: inline;
+//            }
+//            .button_pause{
+//                display: inline;
+//
+//            }
+//            .button_resume{
+//                display: none;
+//            }
+//            .button_stop{
+//                display: inline;
+//
+//            }
+//        }
+//        .processor{
+//            .progress_spinner{
+//                display: block;
+//            }
+//        }
+//    }
+//
+//    &.paused{
+//
+//        .box_buttons{
+//            .button_start{
+//                display: none;
+//            }
+//            .button_pause{
+//                display: none;
+//            }
+//            .button_resume{
+//                display: inline;
+//            }
+//            .button_stop{
+//                display: inline;
+//            }
+//        }
+//    }
+//
+//    &.finished{
+//
+//        .box_buttons{
+//            display: none;
+//        }
+//    }
+}

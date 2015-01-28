@@ -1,0 +1,123 @@
+<?php
+use Chayka\Helpers\Util;
+
+$this->declareVars(array(
+    'js' => false,
+    'attributes' => array(),
+    'cssClass' => '',
+    'model' => $this->getPagination(),
+    'order' => $this->getPagination()->getItemsOrder(), //'previous first rewind pages forward last next'
+));
+
+Chayka\WP\Helpers\ResourceHelper::enqueueStyle('chayka-pagination');
+
+?>
+<div class="<?php echo $this->cssClass?> chayka-pagination"
+    <?php if($this->js): Chayka\WP\Helpers\ResourceHelper::enqueueScript('chayka-pagination'); ?>
+        data-pagination="<?php echo $this->js;?>"
+        data-current-page="<?php echo $this->model->getCurrentPage();?>"
+        data-total-pages="<?php echo $this->model->getTotalPages();?>"
+        data-pack-size="<?php echo $this->model->getPackSize();?>"
+        data-href-template="<?php echo str_replace('.page.', '{page}>', $this->model->getPageLinkPattern());?>"
+        data-order="<?php echo $this->order;?>"
+        data-ng-show="totalPages > 1"
+    <?php else: $this->hidden($this->model->getTotalPages()<=1);?>
+    <?php endif;?>
+    <?php foreach($this->attributes as $key=>$value){
+        printf('%s="%s" ', $key, $this->escape($value));
+    }?>>
+    <ul>
+        <?php if (!$this->js):
+            /**
+             * Default links order:
+             * <- 1 ... 21 22 23 24 25 26 27 28 29 30 ... 1000 ->
+             * previous: <-
+             * first:    1
+             * rewind:   ...
+             * pages:    21 22 23 24 25 26 27 28 29 30
+             * forward:  ...
+             * last:     1000
+             * next:     ->
+             */
+            $order = preg_split('%\s+%', $this->order);
+            $links = array();
+
+            foreach ($order as $item) {
+                switch ($item) {
+                    /**
+                     *  Previous page link '<-'
+                     */
+                    case 'previous':
+                        $links[] = array('text' => '&larr;', 'link' => $this->model->getPreviousPageLink() ? $this->model->getPreviousPageLink() : '#', 'class' => 'prev');
+                        break;
+
+                    /**
+                     * Next page link '->'
+                     */
+                    case 'next':
+                        $links[] = array('text' => '&rarr;', 'link' => $this->model->getNextPageLink() ? $this->model->getNextPageLink() : '#', 'class' => 'next');
+                        break;
+
+                    /**
+                     *  First page link '1'
+                     */
+                    case 'first':
+                        if ($this->model->getPackFirstPage() > 1) {
+                            $links[] = array('text' => '1', 'link' => $this->model->getPageLink(1));
+                        }
+                        break;
+
+                    /**
+                     * Last page link '1000'
+                     */
+                    case 'last':
+                        if ($this->model->getPackLastPage() < $this->model->getTotalPages()) {
+                            $links[] = array('text' => $this->model->getTotalPages(), 'link' => $this->model->getPageLink($this->model->getTotalPages()));
+                        }
+                        break;
+
+                    /**
+                     *  Previous pack link '...'
+                     */
+                    case 'rewind':
+                        if ($this->model->getPackFirstPage() > 2) {
+                            $links[] = array('text' => '...', 'link' => $this->model->getPreviousPackLink(), 'class' => 'dots');
+                        }
+                        break;
+
+                    /**
+                     * Next pack link '...'
+                     */
+                    case 'forward':
+                        if ($this->model->getPackLastPage() < $this->model->getTotalPages() - 2) {
+                            $links[] = array('text' => '...', 'link' => $this->model->getNextPackLink(), 'class' => 'dots');
+                        }
+                        break;
+
+                    /**
+                     * Pages pack '1 2 3 4 5 6 7 8 9 10'
+                     */
+                    case 'pages':
+                        for ($i = $this->model->getPackFirstPage(); $i <= $this->model->getPackLastPage(); $i++) {
+                            $links[] = array('text' => $i, 'link' => $this->model->getPageLink($i));
+                        }
+                        break;
+                }
+            }
+
+            /**
+             * Outputting all the links
+             */
+            foreach ($links as $link): if ($link['link']):
+                    $pageNum = intval($link['text']);
+                    $classes = $pageNum && $pageNum == $this->model->getCurrentPage() ? 'active ' : '';
+                    $classes .= $link['link'] == '#' ? 'disabled ' : '';
+                    $classes .= Util::getItem($link, 'class') . ' ';
+                    ?>
+                    <li class="<?php echo $classes;?>"><a href="<?php echo $link['link'];?>"><?php echo $link['text'];?></a></li>
+            <?php endif; endforeach;
+        else: ?>
+            <li data-ng-repeat="item in getItems()" class="{{item.cls}}"><a href="{{item.href}}" data-ng-click="item.click">{{item.text}}</a></li>
+        <?php endif; ?>
+    </ul>
+</div>

@@ -91,3 +91,57 @@
   margin-left: 100px;
   display: block;
 }
+/* Job Control */
+.chayka-job_control {
+  border: 1px solid gray;
+  box-sizing: border-box;
+}
+.chayka-job_control > .box_controls {
+  margin: 0 1em 1em;
+  height: 30px;
+}
+.chayka-job_control > .box_controls > button.dashicons-before {
+  line-height: normal !important;
+  padding: 0 4px !important;
+  margin-right: 1ex;
+}
+.chayka-job_control > .box_controls .field_items_per_iteration {
+  float: right;
+}
+.chayka-job_control > .box_controls .field_items_per_iteration input {
+  width: 50px;
+}
+.chayka-job_control .progressbar {
+  margin: 1em 1em 1em;
+  height: 30px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+}
+.chayka-job_control .progressbar .progress_label {
+  float: left;
+  width: 100%;
+  margin-top: 5px;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #fff;
+  text-align: center;
+}
+.chayka-job_control .progress_spinner {
+  margin: 0 1em 1em;
+  display: none;
+}
+.chayka-job_control .box_output {
+  clear: both;
+  margin: 0 1em 1em;
+  height: 160px;
+  overflow-y: scroll;
+  border: 1px solid gray;
+  box-sizing: border-box;
+}
+.chayka-job_control .box_output .message {
+  padding: 0.5ex;
+  border-bottom: 1px dashed #aaa;
+  font-size: 13px;
+}
+.chayka-job_control .box_output .message:last-child {
+  border-bottom: none;
+}
