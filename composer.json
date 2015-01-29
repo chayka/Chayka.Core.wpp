@@ -26,7 +26,6 @@
             "chmod +x update.sh"
         ],
         "post-update-cmd": [
-            "./update.sh"
         ]
 
     }
