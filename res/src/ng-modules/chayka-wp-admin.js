@@ -27,7 +27,7 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
             '</div>' +
             '<div data-spinner="spinner"></div>' +
             '<div class="box_output">' +
-            '<div data-ng-repeat="message in log" class="message">{{message}}</div>' +
+            '<div data-ng-repeat="message in log track by $index" class="message">{{message}}</div>' +
             '</div>' +
             '</div>',
 
