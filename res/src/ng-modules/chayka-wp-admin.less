@@ -24,7 +24,7 @@
             > label.alignright{
                 text-align: right;
             }
-            .form_field-input_box{
+            > .input{
                 display: block;
                 input[type=text],
                 input[type=password],
@@ -40,23 +40,34 @@
                 input[type=checkbox]{
 
                 }
-                label{
+                .fullsize{
+                    width: 100%;
+                }
+            }
+            > .message{
+
+            }
+
+        }
+        .form_field.radio{
+            > .input {
+                padding-top: 5px;
+                label {
                     display: inline;
                     float: none;
-                    input[type=radio]{
+                    font-size: 16px;
+                    line-height: 32px;
+                    min-height: 32px;
+                    white-space: nowrap;
+                    padding-right: 1em;
+
+                    input[type=radio] {
                         display: inline;
                         float: none;
 
                     }
                 }
-                .fullsize{
-                    width: 100%;
-                }
             }
-            .form_field-tips{
-
-            }
-
         }
         .form_field.fullsize{
             > label{
@@ -65,7 +76,7 @@
                 position: static;
                 float: none;
             }
-            .form_field-input_box{
+            > .input{
                 margin: 0;
                 width: 100%;
                 input[type=text],
@@ -89,7 +100,7 @@
                     width: auto;
                 }
             }
-            .form_field-tips{
+            > .message{
 
             }
         }
@@ -104,7 +115,7 @@
         > label{
             padding-top: 4px;
         }
-        .form_field-input_box{
+        > .input{
 
             input[type=text],
             input[type=password],
@@ -124,7 +135,7 @@
 
             }
         }
-        .form_field-tips{
+        > .message{
 
         }
     }
@@ -136,7 +147,7 @@
         > label{
             padding-top: 4px;
         }
-        .form_field-input_box{
+        > .input{
             margin-left: @label-width;
             display: block;
 
@@ -158,7 +169,7 @@
 
             }
         }
-        .form_field-tips{
+        > .message{
 
         }
     }
