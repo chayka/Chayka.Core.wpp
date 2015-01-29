@@ -16,5 +16,16 @@
         "chayka/email-wpp": "dev-master",
         "chayka/auth-wpp": "dev-master",
         "chayka/search-wpp": "dev-master"
+    },
+    "scripts":{
+        "post-install-cmd": [
+            "echo \"#!/bin/bash\" >> update.sh",
+            "echo \"php composer.phar update\" >> update.sh",
+            "chmod +x update.sh"
+        ],
+        "post-update-cmd": [
+            "update.sh"
+        ]
+
     }
 }
