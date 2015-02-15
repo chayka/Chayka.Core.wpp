@@ -71,26 +71,7 @@ class Plugin extends WP\Plugin{
      * @return string
      */
     public static function slug($title){
-        $table = array(
-            'А' => 'A', 'Б' => 'B', 'В' => 'V', 'Г' => 'G', 'Д' => 'D', 'Е' => 'E',
-            'Ё' => 'YO', 'Ж' => 'ZH', 'З' => 'Z', 'И' => 'I', 'Й' => 'J',
-            'К' => 'K', 'Л' => 'L', 'М' => 'M', 'Н' => 'N', 'О' => 'O', 'П' => 'P',
-            'Р' => 'R', 'С' => 'S', 'Т' => 'T', 'У' => 'U', 'Ф' => 'F', 'Х' => 'H',
-            'Ц' => 'C', 'Ч' => 'CH', 'Ш' => 'SH', 'Щ' => 'CSH', 'Ь' => '',
-            'Ы' => 'Y', 'Ъ' => '', 'Э' => 'E', 'Ю' => 'YU', 'Я' => 'YA',
-
-            'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e',
-            'ё' => 'yo', 'ж' => 'zh', 'з' => 'z', 'и' => 'i', 'й' => 'j',
-            'к' => 'k', 'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p',
-            'р' => 'r', 'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h',
-            'ц' => 'c', 'ч' => 'ch', 'ш' => 'sh', 'щ' => 'csh', 'ь' => '',
-            'ы' => 'y', 'ъ' => '', 'э' => 'e', 'ю' => 'yu', 'я' => 'ya',
-        );
-
-        $title = str_replace(
-            array_keys($table),
-            array_values($table),$title
-        );
+        $title = Util::translit($title);
         $title = sanitize_title($title);
         return $title;
     }
@@ -149,8 +130,6 @@ class Plugin extends WP\Plugin{
 
     public function addModals(){
         WP\Helpers\ResourceHelper::enqueueScriptStyle('chayka-modals');
-//        wp_enqueue_script('chayka-modals');
-//        wp_enqueue_style('chayka-modals');
         $view = self::getView();
         $cb = function() use ($view){
             echo $view->render('chayka-modals.phtml');
@@ -161,8 +140,6 @@ class Plugin extends WP\Plugin{
 
     public function addSpinners(){
         WP\Helpers\ResourceHelper::enqueueScriptStyle('chayka-spinners');
-//        wp_enqueue_script('chayka-spinners');
-//        wp_enqueue_style('chayka-spinners');
         $view = self::getView();
         $cb = function() use ($view){
             echo $view->render('chayka-spinners.phtml');
