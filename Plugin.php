@@ -181,6 +181,14 @@ class Plugin extends WP\Plugin{
     public function registerResources($minimize = false) {
 
         $this->registerBowerResources(true);
+	    $this->setScriptLocation('angular', false);
+	    $this->setScriptLocation('angular-sanitize', true);
+	    $this->setScriptLocation('angular-translate', true);
+//		$this->addAction('wp_footer', function(){
+//			global $wp_scripts;
+//			Util::print_r($wp_scripts);
+//
+//		});
 
         $this->setResSrcDir('src/');
         $this->setResDistDir('dist/');
