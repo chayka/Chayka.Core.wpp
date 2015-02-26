@@ -54,7 +54,7 @@ class Plugin extends WP\Plugin{
      */
     public function thisPluginGoesFirst() {
         // ensure path to this file is via main wp plugin path
-        $wpPathToThisFile = preg_replace('/(.*)plugins\/(.*)$/', WP_PLUGIN_DIR . "/$2", __FILE__);
+        $wpPathToThisFile = preg_replace('/(.*)plugins\/(.*)Plugin$/', WP_PLUGIN_DIR . "/$2Chayka.Core.wpp", __FILE__);
         $thisPlugin = plugin_basename(trim($wpPathToThisFile));
         $activePlugins = get_option('active_plugins');
         $thisPluginKey = array_search($thisPlugin, $activePlugins);
@@ -184,11 +184,6 @@ class Plugin extends WP\Plugin{
 	    $this->setScriptLocation('angular', false);
 	    $this->setScriptLocation('angular-sanitize', true);
 	    $this->setScriptLocation('angular-translate', true);
-//		$this->addAction('wp_footer', function(){
-//			global $wp_scripts;
-//			Util::print_r($wp_scripts);
-//
-//		});
 
         $this->setResSrcDir('src/');
         $this->setResDistDir('dist/');
