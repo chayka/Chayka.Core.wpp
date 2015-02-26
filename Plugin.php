@@ -54,7 +54,8 @@ class Plugin extends WP\Plugin{
      */
     public function thisPluginGoesFirst() {
         // ensure path to this file is via main wp plugin path
-        $wpPathToThisFile = preg_replace('/(.*)plugins\/(.*)Plugin$/', WP_PLUGIN_DIR . "/$2Chayka.Core.wpp", __FILE__);
+        //$wpPathToThisFile = preg_replace('/(.*)plugins\/(.*)Plugin$/', WP_PLUGIN_DIR . "/$2Chayka.Core.wpp", __FILE__);
+	    $wpPathToThisFile = $this->basePath.'Chayka.Core.wpp.php';
         $thisPlugin = plugin_basename(trim($wpPathToThisFile));
         $activePlugins = get_option('active_plugins');
         $thisPluginKey = array_search($thisPlugin, $activePlugins);
