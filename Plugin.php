@@ -163,6 +163,9 @@ class Plugin extends WP\Plugin{
         if(empty($_SESSION['timezone'])){
 //            $this->addAction('wp_footer', 'fixTimezone');
         }
+	    $this->addAction('wp_footer', function(){
+		    wp_print_scripts(['jquery', 'angular']);
+	    }, 1);
     	/* chayka: registerActions */
     }
 
@@ -182,9 +185,9 @@ class Plugin extends WP\Plugin{
     public function registerResources($minimize = false) {
 
         $this->registerBowerResources(true);
-	    $this->setScriptLocation('angular', false);
-	    $this->setScriptLocation('angular-sanitize', true);
-	    $this->setScriptLocation('angular-translate', true);
+//	    $this->setScriptLocation('angular', false);
+//	    $this->setScriptLocation('angular-sanitize', true);
+//	    $this->setScriptLocation('angular-translate', true);
 
         $this->setResSrcDir('src/');
         $this->setResDistDir('dist/');
@@ -214,6 +217,8 @@ class Plugin extends WP\Plugin{
         $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', array('chayka-forms'));
 
         $this->registerMinimizedScript('chayka-core', 'ng-modules/chayka-core.js', array(
+	        'angular-translate',
+	        'angular-sanitize',
             'chayka-translate',
             'chayka-utils',
             'chayka-spinners',

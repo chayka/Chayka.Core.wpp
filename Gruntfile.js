@@ -117,6 +117,15 @@ module.exports = function(grunt) {
                         'res/tmp/css/min.css'
                     ]
                 }
+            },
+            core: {
+                files: {
+                    'res/dist/ng-modules/chayka-core.js': [
+                        'res/lib/angular-translate/angular-translate.min.js',
+                        'res/lib/angular-sanitize/angular-sanitize.min.js',
+                        'res/dist/ng-modules/chayka-core.js'
+                    ]
+                }
             }
         },
 
@@ -136,7 +145,10 @@ module.exports = function(grunt) {
                 },
                 files: {
                     //'res/dist/js/application.js': resFiles.js,
-                    'res/dist/ng-modules/chayka-core.js': resFiles.jsCore,
+                    'res/dist/ng-modules/chayka-core.js': [
+                        //'res/lib/angular-translate/angular-translate.js',
+                        //'res/lib/angular-sanitize/angular-sanitize.js'
+                    ].concat(resFiles.jsCore),
                     'res/dist/ng-modules/chayka-admin.js': resFiles.jsAdmin
                 }
             }
@@ -189,7 +201,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('css', isPlugin?['css-plugin']:['css-theme']);
 
-    grunt.registerTask('js', ['jshint', 'uglify', 'clean:js']);
+    grunt.registerTask('js', ['jshint', 'uglify', 'concat:core', 'clean:js']);
 
     grunt.registerTask('img', ['imagemin']);
 
