@@ -135,8 +135,8 @@ class Plugin extends WP\Plugin{
         $cb = function() use ($view){
             echo $view->render('chayka-modals.phtml');
         };
-        $this->addAction('wp_footer', $cb);
-        $this->addAction('admin_footer', $cb);
+        $this->addAction('wp_footer', $cb, 1000);
+        $this->addAction('admin_footer', $cb, 1000);
     }
 
     public function addSpinners(){
@@ -145,8 +145,8 @@ class Plugin extends WP\Plugin{
         $cb = function() use ($view){
             echo $view->render('chayka-spinners.phtml');
         };
-        $this->addAction('wp_footer', $cb);
-        $this->addAction('admin_footer', $cb);
+        $this->addAction('wp_footer', $cb, 1000);
+        $this->addAction('admin_footer', $cb, 1000);
     }
 
     public function addPagination(){
