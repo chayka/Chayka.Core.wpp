@@ -32,8 +32,8 @@ class Plugin extends WP\Plugin{
             $locale = OptionHelper::getOption('Locale', 'auto');
 
             NlsHelper::setLocale($locale);
-
-            $app->addJsNls();
+			$app->addAngular();
+//            $app->addJsNls();
 
             $app->addSupport_ConsolePages();
             $app->addSupport_Metaboxes();
@@ -42,8 +42,8 @@ class Plugin extends WP\Plugin{
 
             $app->registerComposerPlugins();
 
-            $app->addModals();
-            $app->addSpinners();
+//            $app->addModals();
+//            $app->addSpinners();
             $app->addPagination();
             /* chayka: init-addSupport */
         }
@@ -120,6 +120,15 @@ class Plugin extends WP\Plugin{
         }
     }
 
+	public function addAngular(){
+		$view = self::getView();
+		$cb   = function () use ( $view ) {
+			echo $view->render( 'chayka-ng.phtml' );
+		};
+		$this->addAction( 'wp_footer', $cb, 1000 );
+		$this->addAction( 'admin_footer', $cb, 1000 );
+	}
+
     public function addJsNls(){
         $view = self::getView();
         $cb = function() use ($view){
@@ -192,31 +201,52 @@ class Plugin extends WP\Plugin{
         $this->setResSrcDir('src/');
         $this->setResDistDir('dist/');
 
-        $this->registerScript('chayka-translate', 'ng-modules/chayka-translate.js', array('jquery', 'angular', 'angular-translate'));
+	    $this->registerNgScript('chayka-translate', 'ng-modules/chayka-translate.js', ['jquery', 'angular', 'angular-translate'], function(){
+		    $view = self::getView();
+		    $cb = function() use ($view){
+			    echo $view->render('chayka-js-nls.phtml');
+		    };
+		    $this->addAction('wp_head', $cb);
+		    $this->addAction('admin_head', $cb);
+	    });
 
-        $this->registerScript('chayka-utils', 'ng-modules/chayka-utils.js', array('jquery', 'angular'));
+	    $this->registerNgScript('chayka-utils', 'ng-modules/chayka-utils.js',['jquery', 'angular']);
 
-        $this->registerScript('chayka-spinners', 'ng-modules/chayka-spinners.js', array('jquery', 'angular', 'chayka-translate', 'chayka-utils'));
-        $this->registerStyle('chayka-spinners', 'ng-modules/chayka-spinners.css', array());
+	    $this->registerNgScript('chayka-spinners', 'ng-modules/chayka-spinners.js', ['jquery', 'angular', 'chayka-translate', 'chayka-utils'], function(){
+		    $view = self::getView();
+		    $cb = function() use ($view){
+			    echo $view->render('chayka-spinners.phtml');
+		    };
+		    $this->addAction('wp_footer', $cb, 1000);
+		    $this->addAction('admin_footer', $cb, 1000);
+	    });
+        $this->registerStyle('chayka-spinners', 'ng-modules/chayka-spinners.css', []);
 
-        $this->registerScript('chayka-modals', 'ng-modules/chayka-modals.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-translate', 'chayka-utils'));
-        $this->registerStyle('chayka-modals', 'ng-modules/chayka-modals.css', array());
+	    $this->registerNgScript('chayka-modals', 'ng-modules/chayka-modals.js', ['jquery', 'angular', 'angular-sanitize', 'chayka-translate', 'chayka-utils'], function(){
+		    $view = self::getView();
+		    $cb = function() use ($view){
+			    echo $view->render('chayka-modals.phtml');
+		    };
+		    $this->addAction('wp_footer', $cb, 1000);
+		    $this->addAction('admin_footer', $cb, 1000);
+	    });
+        $this->registerStyle('chayka-modals', 'ng-modules/chayka-modals.css', []);
 
-        $this->registerScript('chayka-ajax', 'ng-modules/chayka-ajax.js', array('jquery', 'angular', 'chayka-spinners'));
+	    $this->registerNgScript('chayka-ajax', 'ng-modules/chayka-ajax.js', ['jquery', 'angular', 'chayka-spinners']);
 
-        $this->registerScript('chayka-forms', 'ng-modules/chayka-forms.js', array('jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax'));
-        $this->registerStyle('chayka-forms', 'ng-modules/chayka-forms.css', array());
+	    $this->registerNgScript('chayka-forms', 'ng-modules/chayka-forms.js', ['jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax']);
+        $this->registerStyle('chayka-forms', 'ng-modules/chayka-forms.css', ['chayka-spinners']);
 
-        $this->registerScript('chayka-options-form', 'ng-modules/chayka-options-form.js', array('chayka-forms'));
-        $this->registerStyle('chayka-options-form', 'ng-modules/chayka-options-form.css', array('chayka-forms'));
+        $this->registerNgScript('chayka-options-form', 'ng-modules/chayka-options-form.js', ['chayka-forms']);
+        $this->registerStyle('chayka-options-form', 'ng-modules/chayka-options-form.css', ['chayka-forms']);
 
-        $this->registerScript('chayka-pagination', 'ng-modules/chayka-pagination.js', array('chayka-utils', 'chayka-translate'));
-        $this->registerStyle('chayka-pagination', 'ng-modules/chayka-pagination.css', array());
+	    $this->registerNgScript('chayka-pagination', 'ng-modules/chayka-pagination.js', ['chayka-utils', 'chayka-translate']);
+        $this->registerStyle('chayka-pagination', 'ng-modules/chayka-pagination.css', []);
 
-        $this->registerScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', array('chayka-spinners', 'chayka-translate', 'chayka-utils'));
-        $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', array('chayka-forms'));
+        $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-translate', 'chayka-utils']);
+        $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['chayka-forms']);
 
-        $this->registerMinimizedScript('chayka-core', 'ng-modules/chayka-core.js', array(
+        $this->registerMinimizedScript('chayka-core', 'ng-modules/chayka-core.js', [
 	        'angular-translate',
 	        'angular-sanitize',
             'chayka-translate',
@@ -226,24 +256,24 @@ class Plugin extends WP\Plugin{
             'chayka-ajax',
             'chayka-forms',
             'chayka-pagination',
-        ));
+        ]);
 
-        $this->registerMinimizedStyle('chayka-core', 'ng-modules/chayka-core.css', array(
+        $this->registerMinimizedStyle('chayka-core', 'ng-modules/chayka-core.css', [
             'chayka-spinners',
             'chayka-modals',
             'chayka-forms',
             'chayka-pagination',
-        ));
+        ]);
 
-        $this->registerMinimizedScript('chayka-admin', 'ng-modules/chayka-admin.js', array(
+        $this->registerMinimizedScript('chayka-admin', 'ng-modules/chayka-admin.js', [
             'chayka-options-form',
             'chayka-wp-admin',
-        ));
+        ]);
 
-        $this->registerMinimizedStyle('chayka-admin', 'ng-modules/chayka-admin.css', array(
+        $this->registerMinimizedStyle('chayka-admin', 'ng-modules/chayka-admin.css', [
             'chayka-options-form',
             'chayka-wp-admin',
-        ));
+        ]);
 
 		/* chayka: registerResources */
     }

@@ -13,7 +13,7 @@ use Chayka\WP\MVC\Controller;
 class AdminController extends Controller{
 
     public function init(){
-        $this->enqueueScriptStyle('chayka-options-form');
+        $this->enqueueNgScriptStyle('chayka-options-form');
     }
 
     public function indexAction(){
