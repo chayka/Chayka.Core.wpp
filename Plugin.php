@@ -129,34 +129,34 @@ class Plugin extends WP\Plugin{
 		$this->addAction( 'admin_footer', $cb, 1000 );
 	}
 
-    public function addJsNls(){
-        $view = self::getView();
-        $cb = function() use ($view){
-            echo $view->render('chayka-js-nls.phtml');
-        };
-        $this->addAction('wp_head', $cb);
-        $this->addAction('admin_head', $cb);
-    }
-
-    public function addModals(){
-        WP\Helpers\ResourceHelper::enqueueScriptStyle('chayka-modals');
-        $view = self::getView();
-        $cb = function() use ($view){
-            echo $view->render('chayka-modals.phtml');
-        };
-        $this->addAction('wp_footer', $cb, 1000);
-        $this->addAction('admin_footer', $cb, 1000);
-    }
-
-    public function addSpinners(){
-        WP\Helpers\ResourceHelper::enqueueScriptStyle('chayka-spinners');
-        $view = self::getView();
-        $cb = function() use ($view){
-            echo $view->render('chayka-spinners.phtml');
-        };
-        $this->addAction('wp_footer', $cb, 1000);
-        $this->addAction('admin_footer', $cb, 1000);
-    }
+//    public function addJsNls(){
+//        $view = self::getView();
+//        $cb = function() use ($view){
+//            echo $view->render('chayka-js-nls.phtml');
+//        };
+//        $this->addAction('wp_head', $cb);
+//        $this->addAction('admin_head', $cb);
+//    }
+//
+//    public function addModals(){
+//        WP\Helpers\ResourceHelper::enqueueScriptStyle('chayka-modals');
+//        $view = self::getView();
+//        $cb = function() use ($view){
+//            echo $view->render('chayka-modals.phtml');
+//        };
+//        $this->addAction('wp_footer', $cb, 1000);
+//        $this->addAction('admin_footer', $cb, 1000);
+//    }
+//
+//    public function addSpinners(){
+//        WP\Helpers\ResourceHelper::enqueueScriptStyle('chayka-spinners');
+//        $view = self::getView();
+//        $cb = function() use ($view){
+//            echo $view->render('chayka-spinners.phtml');
+//        };
+//        $this->addAction('wp_footer', $cb, 1000);
+//        $this->addAction('admin_footer', $cb, 1000);
+//    }
 
     public function addPagination(){
         Pagination::getInstance()->setViewTemplate($this->getPath('app/views/chayka-pagination.phtml'));
