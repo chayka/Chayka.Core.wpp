@@ -15,7 +15,7 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                 order: '@'
             },
 
-            link: function($scope){
+            controller: function($scope){
 
                 $scope.state = '';
                 $scope.currentPage = $scope.currentPage || 1;
