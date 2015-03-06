@@ -118,8 +118,8 @@ Chayka\WP\Helpers\ResourceHelper::enqueueStyle('chayka-pagination');
         <?php endif; endforeach;?>
 		</ul>
         <?php else: ?>
-		<ul data-ng-show="totalPages > 1">
-            <li data-ng-repeat="item in getItems()" class="{{item.cls}}"><a href="{{item.href}}" data-ng-click="item.click">{{item.text}}</a></li>
+		<ul data-ng-show="<?php echo $this->js;?>.totalPages > 1">
+            <li data-ng-repeat="item in <?php echo $this->js;?>.getItems()" class="{{item.cls}}"><a href="{{item.href}}" data-ng-click="item.click">{{item.text}}</a></li>
 		</ul>
         <?php endif; ?>
 </div>
