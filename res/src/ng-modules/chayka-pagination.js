@@ -7,7 +7,7 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
             restrict: 'AE',
             template:
             '<ul data-ng-show="totalPages > 1">' +
-                '<li data-ng-repeat="item in items" class="{{item.cls}}"><a href="{{item.href}}" data-ng-click="item.click">{{item.text}}</a></li>'+
+                '<li data-ng-repeat="item in items" class="{{item.cls}}"><a href="{{item.href}}" data-ng-click="click(item.page);">{{item.text}}</a></li>'+
             '</ul>',
             scope:{
                 pagination: '=',
@@ -103,11 +103,11 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                         page: page,
                         text: text,
                         href: this.getHref(page),
-                        cls: cls,
-                        click: function(e) {
-                            e.preventDefault();
-                            $scope.click(page);
-                        }
+                        cls: cls
+                        //click: function(e) {
+                        //    e.preventDefault();
+                        //    $scope.click(page);
+                        //}
                     };
                 };
 
