@@ -6,6 +6,9 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
         return {
             restrict: 'AE',
             scope:{
+                template:   '<ul data-ng-show="totalPages > 1">' +
+                                '<li data-ng-repeat="item in getItems()" class="{{item.cls}}"><a href="{{item.href}}" data-ng-click="item.click">{{item.text}}</a></li>'+
+                            '</ul>',
                 pagination: '=',
                 currentPage: '=?',
                 totalPages: '=?',
