@@ -7,7 +7,7 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
             restrict: 'AE',
             template:
             '<ul data-ng-show="totalPages > 1">' +
-                '<li data-ng-repeat="item in getItems()" class="{{item.cls}}"><a href="{{item.href}}" data-ng-click="item.click">{{item.text}}</a></li>'+
+                '<li data-ng-repeat="item in items" class="{{item.cls}}"><a href="{{item.href}}" data-ng-click="item.click">{{item.text}}</a></li>'+
             '</ul>',
             scope:{
                 pagination: '=',
@@ -26,6 +26,7 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                 $scope.totalPages = $scope.totalPages || 0;
                 $scope.packSize = $scope.packSize || 10;
                 $scope.hrefTemplate = $scope.hrefTemplate || '/page/<%= page %>';
+                $scope.items = [];
                 //$scope.order = $scope.order?
                 //    $scope.order.split(/\s+/):
                 //    ['previous', 'first', 'rewind', 'pages', 'forward', 'last', 'next'];
@@ -39,6 +40,7 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
 
                 $scope.setCurrentPage = function(val){
                     $scope.currentPage = val;
+                    $scope.items = $scope.getItems();
                     return $scope;
                 };
 
@@ -48,6 +50,7 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
 
                 $scope.setTotalPages = function(val){
                     $scope.totalPages = val;
+                    $scope.items = $scope.getItems();
                     return $scope;
                 };
 
