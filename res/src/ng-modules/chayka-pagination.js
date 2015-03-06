@@ -2,6 +2,9 @@
 
 angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
     .directive('pagination', ['utils', function(utils){
+
+        var onClick = null,
+            order = ['previous', 'first', 'rewind', 'pages', 'forward', 'last', 'next'];
         return {
             restrict: 'AE',
             scope:{
@@ -14,7 +17,7 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                 order: '@'
             },
 
-            controller: function($scope){
+            link: function($scope){
 
                 $scope.state = '';
                 $scope.currentPage = $scope.currentPage || 1;
