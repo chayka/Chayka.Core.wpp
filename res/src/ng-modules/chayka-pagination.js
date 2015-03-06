@@ -24,9 +24,9 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                 $scope.totalPages = $scope.totalPages || 0;
                 $scope.packSize = $scope.packSize || 10;
                 $scope.hrefTemplate = $scope.hrefTemplate || '/page/<%= page %>';
-                $scope.order = $scope.order?
-                    $scope.order.split(/\s+/):
-                    ['previous', 'first', 'rewind', 'pages', 'forward', 'last', 'next'];
+                //$scope.order = $scope.order?
+                //    $scope.order.split(/\s+/):
+                //    ['previous', 'first', 'rewind', 'pages', 'forward', 'last', 'next'];
 
                 $scope.click = $scope.click || function(page){
                     $scope.$emit('Pagination.currentPage', page);
@@ -129,7 +129,7 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     /**
                      *  ['previous', 'first', 'rewind', 'pages', 'forward', 'last', 'next'];
                      */
-                    $scope.order.forEach(function(item){
+                    $scope.order.split(/\s+/).forEach(function(item){
                         switch(item){
                             case 'previous':
                                 //ul.append(this.renderItem(current-1, '&larr;'));
