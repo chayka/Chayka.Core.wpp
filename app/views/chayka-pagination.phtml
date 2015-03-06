@@ -24,7 +24,7 @@ Chayka\WP\Helpers\ResourceHelper::enqueueStyle('chayka-pagination');
     <?php else: $this->hidden($this->model->getTotalPages()<=1);?>
     <?php endif;?>
     <?php foreach($this->attributes as $key=>$value){
-        printf('%s="%s" ', $key, $this->escape($value));
+        printf('%s="%s" ', $key, $this->escape($value, false));
     }?>>
     <ul>
         <?php if (!$this->js):
