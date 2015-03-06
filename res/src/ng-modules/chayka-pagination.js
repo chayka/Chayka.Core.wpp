@@ -38,6 +38,13 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     }
                 };
 
+                /**
+                 * Set current page
+                 *
+                 * @param {int} val
+                 * @param {bool} render
+                 * @returns {*}
+                 */
                 $scope.setCurrentPage = function(val, render){
                     $scope.currentPage = val;
                     if(render){
@@ -46,10 +53,22 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     return $scope;
                 };
 
+                /**
+                 * Get current page
+                 *
+                 * @returns {*|number}
+                 */
                 $scope.getCurrentPage = function(){
                     return $scope.currentPage;
                 };
 
+                /**
+                 * Set total amount of pages
+                 *
+                 * @param val
+                 * @param render
+                 * @returns {*}
+                 */
                 $scope.setTotalPages = function(val, render){
                     $scope.totalPages = val;
                     if(render){
@@ -58,10 +77,22 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     return $scope;
                 };
 
+                /**
+                 * Get total amount of pages
+                 *
+                 * @returns {*|number}
+                 */
                 $scope.getTotalPages = function(){
                     return $scope.totalPages;
                 };
 
+                /**
+                 * Set number of pages between [...]
+                 *
+                 * @param val
+                 * @param render
+                 * @returns {*}
+                 */
                 $scope.setPackSize = function(val, render){
                     $scope.packSize = val;
                     if(render){
@@ -70,10 +101,21 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     return $scope;
                 };
 
+                /**
+                 * Get number of pages between [...]
+                 * @returns {*|number}
+                 */
                 $scope.getPackSize = function(){
                     return $scope.packSize;
                 };
 
+                /**
+                 * Set href template
+                 *
+                 * @param val
+                 * @param render
+                 * @returns {*}
+                 */
                 $scope.setHrefTemplate = function(val, render){
                     $scope.hrefTemplate = val;
                     if(render){
@@ -82,10 +124,21 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     return $scope;
                 };
 
+                /**
+                 * Get href template
+                 *
+                 * @returns {*|string}
+                 */
                 $scope.getHrefTemplate = function(){
                     return $scope.hrefTemplate;
                 };
 
+                /**
+                 * Get page href
+                 *
+                 * @param page
+                 * @returns {*}
+                 */
                 $scope.getHref = function(page){
 
                     if(page >= 1 && page <= this.getTotalPages() && this.getHrefTemplate()){
@@ -96,16 +149,23 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
 
                 };
 
+                /**
+                 * Generate page nav link item
+                 *
+                 * @param page
+                 * @param text
+                 * @returns {{page: Number, text: *, href: *, cls: string, click: Function}}
+                 */
                 $scope.getItem = function(page, text){
 
                     page = parseInt(page);
                     text = text || page;
 
                     var cls = '';
-                    if(page === this.getCurrentPage()){
+                    if(page === $scope.getCurrentPage()){
                         cls = 'active';
                     }
-                    if(page < 1 || page > this.getTotalPages()){
+                    if(page < 1 || page > $scope.getTotalPages()){
                         cls = 'disabled';
                     }
 
@@ -115,12 +175,19 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                         href: this.getHref(page),
                         cls: cls,
                         click: function() {
-                            $scope.click(page);
+                            if(page > 0 && page <= $scope.totalPages){
+                                $scope.click(page);
+                            }
                             return false;
                         }
                     };
                 };
 
+                /**
+                 * Generate page nav link items
+                 *
+                 * @returns {Array}
+                 */
                 $scope.getItems = function(){
                     var current = this.getCurrentPage();
                     var packSize = this.getPackSize();
@@ -193,6 +260,9 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     return items;
                 };
 
+                /**
+                 * Render pagination
+                 */
                 $scope.render = function(){
                     $scope.items = $scope.getItems();
                 };
