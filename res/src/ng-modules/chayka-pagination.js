@@ -3,8 +3,6 @@
 angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
     .directive('pagination', ['utils', function(utils){
 
-        var onClick = null,
-            order = ['previous', 'first', 'rewind', 'pages', 'forward', 'last', 'next'];
         return {
             restrict: 'AE',
             scope:{
@@ -99,7 +97,9 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                         text: text,
                         href: this.getHref(page),
                         cls: cls,
-                        click: $scope.click(page)
+                        click: function() {
+                            $scope.click(page);
+                        }
                     };
                 };
 
