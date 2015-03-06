@@ -18,7 +18,7 @@ Chayka\WP\Helpers\ResourceHelper::enqueueStyle('chayka-pagination');
         data-current-page="<?php echo $this->model->getCurrentPage();?>"
         data-total-pages="<?php echo $this->model->getTotalPages();?>"
         data-pack-size="<?php echo $this->model->getPackSize();?>"
-        data-href-template="<?php echo str_replace('.page.', '{page}>', $this->model->getPageLinkPattern());?>"
+        data-href-template="<?php echo str_replace('.page.', '{page}', $this->model->getPageLinkPattern());?>"
         data-order="<?php echo $this->order;?>"
         data-ng-show="totalPages > 1"
     <?php else: $this->hidden($this->model->getTotalPages()<=1);?>

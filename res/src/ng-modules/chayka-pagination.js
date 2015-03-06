@@ -9,7 +9,7 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                 currentPage: '=?',
                 totalPages: '=?',
                 packSize: '=?',
-                hrefTemplate: '=?',
+                hrefTemplate: '@?',
                 click: '=?',
                 order: '@'
             },
