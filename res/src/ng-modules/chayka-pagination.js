@@ -38,9 +38,11 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     }
                 };
 
-                $scope.setCurrentPage = function(val){
+                $scope.setCurrentPage = function(val, render){
                     $scope.currentPage = val;
-                    $scope.items = $scope.getItems();
+                    if(render){
+                        $scope.render();
+                    }
                     return $scope;
                 };
 
@@ -48,9 +50,11 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     return $scope.currentPage;
                 };
 
-                $scope.setTotalPages = function(val){
+                $scope.setTotalPages = function(val, render){
                     $scope.totalPages = val;
-                    $scope.items = $scope.getItems();
+                    if(render){
+                        $scope.render();
+                    }
                     return $scope;
                 };
 
@@ -58,8 +62,11 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     return $scope.totalPages;
                 };
 
-                $scope.setPackSize = function(val){
+                $scope.setPackSize = function(val, render){
                     $scope.packSize = val;
+                    if(render){
+                        $scope.render();
+                    }
                     return $scope;
                 };
 
@@ -67,8 +74,11 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     return $scope.packSize;
                 };
 
-                $scope.setHrefTemplate = function(val){
+                $scope.setHrefTemplate = function(val, render){
                     $scope.hrefTemplate = val;
+                    if(render){
+                        $scope.render();
+                    }
                     return $scope;
                 };
 
@@ -181,6 +191,10 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                     });
 
                     return items;
+                };
+
+                $scope.render = function(){
+                    $scope.items = $scope.getItems();
                 };
 
                 $scope.pagination = $scope;
