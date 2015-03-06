@@ -104,7 +104,8 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
                         text: text,
                         href: this.getHref(page),
                         cls: cls,
-                        click: function() {
+                        click: function(e) {
+                            e.preventDefault();
                             $scope.click(page);
                         }
                     };
