@@ -1,30 +1,31 @@
 {
-    "name": "Chayka.Core",
-    "description": "Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications",
-    "version": "0.0.1",
-    "license": "MIT",
-    "authors": [
-        "Boris Mossounov <borix@tut.by>"
-    ],
-    "keywords": [
-        "WordPress",
-        "Chayka",
-        "MVC",
-        "OOP"
-    ],
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "res/lib",
-        "test",
-        "tests"
-    ],
-    "dependencies": {
-        "backbone": "~1.1.2",
-        "angular": "~1.3.0",
-        "angular-sanitize": "~1.3.0",
-        "angular-translate": "~2.4.2",
-        "lesshat": "~3.0.2"
-    }
+  "name": "Chayka.Core",
+  "description": "Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications",
+  "version": "0.0.1",
+  "license": "MIT",
+  "authors": [
+    "Boris Mossounov <borix@tut.by>"
+  ],
+  "keywords": [
+    "WordPress",
+    "Chayka",
+    "MVC",
+    "OOP"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "res/lib",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "~1.1.2",
+    "angular": "~1.3.0",
+    "angular-sanitize": "~1.3.0",
+    "angular-translate": "~2.4.2",
+    "lesshat": "~3.0.2",
+    "angular-md5": "~0.1.7"
+  }
 }

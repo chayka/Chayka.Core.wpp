@@ -92,6 +92,7 @@ module.exports = function(grunt) {
             ng: {
                 files: {
                     'res/dist/ng-modules/chayka-core.css': [
+                        'res/lib/angular/angular-csp.css',
                         'res/src/ng-modules/chayka-forms.css',
                         'res/src/ng-modules/chayka-modals.css',
                         'res/src/ng-modules/chayka-spinners.css',
