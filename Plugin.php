@@ -220,7 +220,6 @@ class Plugin extends WP\Plugin{
         $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['angular', 'chayka-forms']);
 
         $this->registerMinimizedScript('chayka-core', 'ng-modules/chayka-core.js', [
-	        'angular',
 	        'angular-translate',
 	        'angular-sanitize',
             'chayka-translate',
@@ -233,6 +232,7 @@ class Plugin extends WP\Plugin{
         ]);
 
         $this->registerMinimizedStyle('chayka-core', 'ng-modules/chayka-core.css', [
+	        'angular',
             'chayka-spinners',
             'chayka-modals',
             'chayka-forms',
