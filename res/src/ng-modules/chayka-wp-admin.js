@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayka-utils'])
+angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-modals'])
     .directive('jobControl', [function(){
         return {
             restrict: 'AE',
@@ -144,7 +144,7 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
             }
         };
     }])
-    .config(['$translateProvider', function($translateProvider) {
+    .config(['$translateProvider', 'modalsProvider', function($translateProvider, modalsProvider) {
 
         // Adding a translation table for the English language
         $translateProvider.translations('en-US', {
@@ -162,5 +162,7 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
             'btn_resume': 'Возобновить',
             'label_per_iteration': 'За итерацию'
         });
+
+        modalsProvider.setButtonClass('button');
     }])
 ;

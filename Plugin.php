@@ -216,8 +216,8 @@ class Plugin extends WP\Plugin{
 	    $this->registerNgScript('chayka-pagination', 'ng-modules/chayka-pagination.js', ['chayka-utils', 'chayka-translate']);
         $this->registerStyle('chayka-pagination', 'ng-modules/chayka-pagination.css', ['angular']);
 
-        $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-translate', 'chayka-utils']);
-        $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['angular', 'chayka-forms']);
+        $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-modals']);
+        $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['angular', 'chayka-forms', 'chayka-modals']);
 
         $this->registerMinimizedScript('chayka-core', 'ng-modules/chayka-core.js', [
 	        'angular-translate',
