@@ -9,7 +9,7 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
                 visible: '=?',
                 message: '=?'
             },
-            template: '<div class="chayka-spinner" data-ng-show="visible">{{message}}</div>',
+            template: '<div class="chayka-spinner" data-ng-show="visible" data-ng-bind-html="message"></div>',
 
             controller: function($scope){
                 var ctrl = {};
