@@ -143,9 +143,6 @@ class Plugin extends WP\Plugin{
         if(empty($_SESSION['timezone'])){
 //            $this->addAction('wp_footer', 'fixTimezone');
         }
-	    $this->addAction('wp_footer', function(){
-		    wp_print_scripts(['jquery', 'angular']);
-	    }, 1);
     	/* chayka: registerActions */
     }
 
