@@ -5,8 +5,8 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
         modals.setQueueScope($scope);
         $scope.close = modals.close;
         $scope.queue = modals.queue;
-        $scope.getButtonClass = function(){
-            return modals.getButtonClass();
+        $scope.getButtonClass = function(button){
+            return modals.getButtonClass(button);
         };
     }])
     //.factory('modals', ['$window', '$translate', 'utils', function($window, $translate, utils){
@@ -159,11 +159,20 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
 
                 /**
                  * Get button class
+                 * @param {{text: string, click: function, cls: string}} button
                  *
                  * @return {string}
                  */
-                getButtonClass: function(){
-                    return buttonClass;
+                getButtonClass: function(button){
+                    //return buttonClass;
+                    var cls = [];
+                    if(buttonClass){
+                        cls.push(buttonClass);
+                    }
+                    if(button && button.cls){
+                        cls.push(button.cls);
+                    }
+                    return cls.join(' ');
                 }
             };
 
@@ -178,8 +187,10 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
             transclude: true,
             scope: {
                 modal: '=modal',
-                title: '=?modalTitle',
-                show: '@modalShow'
+                title: '@?modalTitle',
+                show: '@modalShow',
+                buttons: '=?modalButtons'
+
             },
             template: document.getElementById('chayka-modals-template').innerHTML,
             link: function(scope){
@@ -228,6 +239,19 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
                     }
                     scope.buttons = buttons;
                 };
+
+                /**
+                 *
+                 * @param button
+                 * @return {string}
+                 */
+                scope.getButtonClass = function(button){
+                    return modals.getButtonClass(button);
+                };
+
+                if(scope.buttons){
+                    ctrl.setButtons(scope.buttons);
+                }
 
                 scope.modal = ctrl;
                 if(scope.show){
