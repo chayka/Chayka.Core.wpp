@@ -212,7 +212,9 @@ class Plugin extends WP\Plugin{
 	    });
         $this->registerStyle('chayka-spinners', 'ng-modules/chayka-spinners.css', ['angular']);
 
-	    $this->registerNgScript('chayka-modals', 'ng-modules/chayka-modals.js', ['jquery', 'angular', 'angular-sanitize', 'chayka-translate', 'chayka-utils'], function(){
+	    $this->registerNgScript('chayka-buttons', 'ng-modules/chayka-buttons.js', ['angular']);
+
+	    $this->registerNgScript('chayka-modals', 'ng-modules/chayka-modals.js', ['jquery', 'angular', 'chayka-buttons', 'angular-sanitize', 'chayka-translate', 'chayka-utils'], function(){
 		    $view = self::getView();
 		    $cb = function() use ($view){
 			    echo $view->render('chayka-modals.phtml');

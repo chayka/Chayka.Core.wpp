@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
-    .controller('modalCtrl', ['$scope', 'modals', function($scope, modals){
+angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-utils'])
+    .controller('modalCtrl', ['$scope', 'modals', 'buttons', function($scope, modals){
         modals.setQueueScope($scope);
         $scope.close = modals.close;
         $scope.queue = modals.queue;
@@ -12,17 +12,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
     //.factory('modals', ['$window', '$translate', 'utils', function($window, $translate, utils){
     .provider('modals', function(){
 
-        var buttonClass = '';
-
-        /**
-         * Set button class
-         * @param {string} cls
-         */
-        this.setButtonClass = function(cls){
-            buttonClass = cls;
-        };
-
-        this.$get = ['$window', '$translate', 'utils', function($window, $translate, utils){
+        this.$get = ['$window', '$translate', 'buttons', 'utils', function($window, $translate, btn, utils){
 
             var modals = utils.ensure('Chayka.Modals', {
                 queue: [],
@@ -66,6 +56,14 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
                 create: function(options){
                     if(options.buttons && angular.isObject(options.buttons) && !angular.isArray(options.buttons)){
                         var buttons = [];
+                        /**
+                         * @var {{
+                         *  text: string,
+                         *  click: function,
+                         *  persist: boolean,
+                         *  cls: string
+                         * }} button
+                         */
                         angular.forEach(options.buttons, function(button, text){
                             button.text = text;
                             buttons.push(button);
@@ -149,15 +147,6 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
                 },
 
                 /**
-                 * Set button class
-                 *
-                 * @param {string} cls
-                 */
-                setButtonClass: function(cls){
-                    buttonClass = cls;
-                },
-
-                /**
                  * Get button class
                  * @param {{text: string, click: function, cls: string}} button
                  *
@@ -166,6 +155,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-utils'])
                 getButtonClass: function(button){
                     //return buttonClass;
                     var cls = [];
+                    var buttonClass = btn.getButtonClass();
                     if(buttonClass){
                         cls.push(buttonClass);
                     }

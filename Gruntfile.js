@@ -20,6 +20,7 @@ module.exports = function(grunt) {
             'res/src/ng-modules/chayka-translate.js',
             'res/src/ng-modules/chayka-spinners.js',
             'res/src/ng-modules/chayka-ajax.js',
+            'res/src/ng-modules/chayka-buttons.js',
             'res/src/ng-modules/chayka-modals.js',
             'res/src/ng-modules/chayka-forms.js',
             'res/src/ng-modules/chayka-pagination.js'
