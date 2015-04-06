@@ -244,6 +244,7 @@ class Plugin extends WP\Plugin{
             'chayka-translate',
             'chayka-utils',
             'chayka-spinners',
+	        'chayka-buttons',
             'chayka-modals',
             'chayka-ajax',
             'chayka-forms',
