@@ -12,9 +12,11 @@
   line-height: 32px;
   font-size: 16px;
   border: 1px transparent solid;
+  box-sizing: border-box;
 }
 .form_field > label.alignright {
   text-align: right;
+  padding-right: 1em;
 }
 .form_field > .input {
   margin-left: 120px;
@@ -177,6 +179,14 @@
 .form_field > label.width95 + .input {
   margin-left: 95%;
 }
+.labels-right .form_field > label {
+  text-align: right;
+  padding-right: 1em;
+}
+.form_field.label-right > label {
+  text-align: right;
+  padding-right: 1em;
+}
 .form_field.fullsize > label {
   display: block;
   width: 100%;
@@ -208,4 +218,635 @@
 .form_field.stretch .input select,
 .form_field.stretch .input textarea {
   width: 100%;
+}
+/* grid */
+.field_set {
+  margin-right: -20px;
+  margin-left: -20px;
+  clear: both;
+}
+.field_set::after {
+  content: '';
+  clear: both;
+  display: block;
+  visibility: hidden;
+  height: 0;
+}
+.field_set .form_field,
+.field_set .col {
+  margin-right: 20px;
+  margin-left: 20px;
+  float: left;
+}
+.field_set .form_field.width1,
+.field_set .col.width1 {
+  width: calc( 8.33333333%  -  40px );
+}
+.field_set .form_field.offset1,
+.field_set .col.offset1 {
+  margin-left: calc( 8.33333333%  +  20px );
+}
+.field_set .form_field.space1,
+.field_set .col.offset1 {
+  margin-right: calc( 8.33333333%  +  20px );
+}
+.field_set .form_field.width1.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width1.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width2,
+.field_set .col.width2 {
+  width: calc( 16.66666667%  -  40px );
+}
+.field_set .form_field.offset2,
+.field_set .col.offset2 {
+  margin-left: calc( 16.66666667%  +  20px );
+}
+.field_set .form_field.space2,
+.field_set .col.offset2 {
+  margin-right: calc( 16.66666667%  +  20px );
+}
+.field_set .form_field.width2.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width2.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width2.label1 > label {
+  width: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width2.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width3,
+.field_set .col.width3 {
+  width: calc( 25%  -  40px );
+}
+.field_set .form_field.offset3,
+.field_set .col.offset3 {
+  margin-left: calc( 25%  +  20px );
+}
+.field_set .form_field.space3,
+.field_set .col.offset3 {
+  margin-right: calc( 25%  +  20px );
+}
+.field_set .form_field.width3.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width3.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width3.label1 > label {
+  width: calc((100% +  40px ) *  0.33333333 );
+}
+.field_set .form_field.width3.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.33333333 );
+}
+.field_set .form_field.width3.label2 > label {
+  width: calc((100% +  40px ) *  0.66666667 );
+}
+.field_set .form_field.width3.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.66666667 );
+}
+.field_set .form_field.width4,
+.field_set .col.width4 {
+  width: calc( 33.33333333%  -  40px );
+}
+.field_set .form_field.offset4,
+.field_set .col.offset4 {
+  margin-left: calc( 33.33333333%  +  20px );
+}
+.field_set .form_field.space4,
+.field_set .col.offset4 {
+  margin-right: calc( 33.33333333%  +  20px );
+}
+.field_set .form_field.width4.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width4.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width4.label1 > label {
+  width: calc((100% +  40px ) *  0.25 );
+}
+.field_set .form_field.width4.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.25 );
+}
+.field_set .form_field.width4.label2 > label {
+  width: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width4.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width4.label3 > label {
+  width: calc((100% +  40px ) *  0.75 );
+}
+.field_set .form_field.width4.label3 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.75 );
+}
+.field_set .form_field.width5,
+.field_set .col.width5 {
+  width: calc( 41.66666667%  -  40px );
+}
+.field_set .form_field.offset5,
+.field_set .col.offset5 {
+  margin-left: calc( 41.66666667%  +  20px );
+}
+.field_set .form_field.space5,
+.field_set .col.offset5 {
+  margin-right: calc( 41.66666667%  +  20px );
+}
+.field_set .form_field.width5.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width5.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width5.label1 > label {
+  width: calc((100% +  40px ) *  0.2 );
+}
+.field_set .form_field.width5.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.2 );
+}
+.field_set .form_field.width5.label2 > label {
+  width: calc((100% +  40px ) *  0.4 );
+}
+.field_set .form_field.width5.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.4 );
+}
+.field_set .form_field.width5.label3 > label {
+  width: calc((100% +  40px ) *  0.6 );
+}
+.field_set .form_field.width5.label3 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.6 );
+}
+.field_set .form_field.width5.label4 > label {
+  width: calc((100% +  40px ) *  0.8 );
+}
+.field_set .form_field.width5.label4 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.8 );
+}
+.field_set .form_field.width6,
+.field_set .col.width6 {
+  width: calc( 50%  -  40px );
+}
+.field_set .form_field.offset6,
+.field_set .col.offset6 {
+  margin-left: calc( 50%  +  20px );
+}
+.field_set .form_field.space6,
+.field_set .col.offset6 {
+  margin-right: calc( 50%  +  20px );
+}
+.field_set .form_field.width6.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width6.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width6.label1 > label {
+  width: calc((100% +  40px ) *  0.16666667 );
+}
+.field_set .form_field.width6.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.16666667 );
+}
+.field_set .form_field.width6.label2 > label {
+  width: calc((100% +  40px ) *  0.33333333 );
+}
+.field_set .form_field.width6.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.33333333 );
+}
+.field_set .form_field.width6.label3 > label {
+  width: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width6.label3 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width6.label4 > label {
+  width: calc((100% +  40px ) *  0.66666667 );
+}
+.field_set .form_field.width6.label4 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.66666667 );
+}
+.field_set .form_field.width6.label5 > label {
+  width: calc((100% +  40px ) *  0.83333333 );
+}
+.field_set .form_field.width6.label5 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.83333333 );
+}
+.field_set .form_field.width7,
+.field_set .col.width7 {
+  width: calc( 58.33333333%  -  40px );
+}
+.field_set .form_field.offset7,
+.field_set .col.offset7 {
+  margin-left: calc( 58.33333333%  +  20px );
+}
+.field_set .form_field.space7,
+.field_set .col.offset7 {
+  margin-right: calc( 58.33333333%  +  20px );
+}
+.field_set .form_field.width7.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width7.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width7.label1 > label {
+  width: calc((100% +  40px ) *  0.14285714 );
+}
+.field_set .form_field.width7.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.14285714 );
+}
+.field_set .form_field.width7.label2 > label {
+  width: calc((100% +  40px ) *  0.28571429 );
+}
+.field_set .form_field.width7.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.28571429 );
+}
+.field_set .form_field.width7.label3 > label {
+  width: calc((100% +  40px ) *  0.42857143 );
+}
+.field_set .form_field.width7.label3 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.42857143 );
+}
+.field_set .form_field.width7.label4 > label {
+  width: calc((100% +  40px ) *  0.57142857 );
+}
+.field_set .form_field.width7.label4 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.57142857 );
+}
+.field_set .form_field.width7.label5 > label {
+  width: calc((100% +  40px ) *  0.71428571 );
+}
+.field_set .form_field.width7.label5 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.71428571 );
+}
+.field_set .form_field.width7.label6 > label {
+  width: calc((100% +  40px ) *  0.85714286 );
+}
+.field_set .form_field.width7.label6 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.85714286 );
+}
+.field_set .form_field.width8,
+.field_set .col.width8 {
+  width: calc( 66.66666667%  -  40px );
+}
+.field_set .form_field.offset8,
+.field_set .col.offset8 {
+  margin-left: calc( 66.66666667%  +  20px );
+}
+.field_set .form_field.space8,
+.field_set .col.offset8 {
+  margin-right: calc( 66.66666667%  +  20px );
+}
+.field_set .form_field.width8.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width8.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width8.label1 > label {
+  width: calc((100% +  40px ) *  0.125 );
+}
+.field_set .form_field.width8.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.125 );
+}
+.field_set .form_field.width8.label2 > label {
+  width: calc((100% +  40px ) *  0.25 );
+}
+.field_set .form_field.width8.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.25 );
+}
+.field_set .form_field.width8.label3 > label {
+  width: calc((100% +  40px ) *  0.375 );
+}
+.field_set .form_field.width8.label3 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.375 );
+}
+.field_set .form_field.width8.label4 > label {
+  width: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width8.label4 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width8.label5 > label {
+  width: calc((100% +  40px ) *  0.625 );
+}
+.field_set .form_field.width8.label5 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.625 );
+}
+.field_set .form_field.width8.label6 > label {
+  width: calc((100% +  40px ) *  0.75 );
+}
+.field_set .form_field.width8.label6 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.75 );
+}
+.field_set .form_field.width8.label7 > label {
+  width: calc((100% +  40px ) *  0.875 );
+}
+.field_set .form_field.width8.label7 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.875 );
+}
+.field_set .form_field.width9,
+.field_set .col.width9 {
+  width: calc( 75%  -  40px );
+}
+.field_set .form_field.offset9,
+.field_set .col.offset9 {
+  margin-left: calc( 75%  +  20px );
+}
+.field_set .form_field.space9,
+.field_set .col.offset9 {
+  margin-right: calc( 75%  +  20px );
+}
+.field_set .form_field.width9.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width9.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width9.label1 > label {
+  width: calc((100% +  40px ) *  0.11111111 );
+}
+.field_set .form_field.width9.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.11111111 );
+}
+.field_set .form_field.width9.label2 > label {
+  width: calc((100% +  40px ) *  0.22222222 );
+}
+.field_set .form_field.width9.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.22222222 );
+}
+.field_set .form_field.width9.label3 > label {
+  width: calc((100% +  40px ) *  0.33333333 );
+}
+.field_set .form_field.width9.label3 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.33333333 );
+}
+.field_set .form_field.width9.label4 > label {
+  width: calc((100% +  40px ) *  0.44444444 );
+}
+.field_set .form_field.width9.label4 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.44444444 );
+}
+.field_set .form_field.width9.label5 > label {
+  width: calc((100% +  40px ) *  0.55555556 );
+}
+.field_set .form_field.width9.label5 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.55555556 );
+}
+.field_set .form_field.width9.label6 > label {
+  width: calc((100% +  40px ) *  0.66666667 );
+}
+.field_set .form_field.width9.label6 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.66666667 );
+}
+.field_set .form_field.width9.label7 > label {
+  width: calc((100% +  40px ) *  0.77777778 );
+}
+.field_set .form_field.width9.label7 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.77777778 );
+}
+.field_set .form_field.width9.label8 > label {
+  width: calc((100% +  40px ) *  0.88888889 );
+}
+.field_set .form_field.width9.label8 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.88888889 );
+}
+.field_set .form_field.width10,
+.field_set .col.width10 {
+  width: calc( 83.33333333%  -  40px );
+}
+.field_set .form_field.offset10,
+.field_set .col.offset10 {
+  margin-left: calc( 83.33333333%  +  20px );
+}
+.field_set .form_field.space10,
+.field_set .col.offset10 {
+  margin-right: calc( 83.33333333%  +  20px );
+}
+.field_set .form_field.width10.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width10.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width10.label1 > label {
+  width: calc((100% +  40px ) *  0.1 );
+}
+.field_set .form_field.width10.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.1 );
+}
+.field_set .form_field.width10.label2 > label {
+  width: calc((100% +  40px ) *  0.2 );
+}
+.field_set .form_field.width10.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.2 );
+}
+.field_set .form_field.width10.label3 > label {
+  width: calc((100% +  40px ) *  0.3 );
+}
+.field_set .form_field.width10.label3 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.3 );
+}
+.field_set .form_field.width10.label4 > label {
+  width: calc((100% +  40px ) *  0.4 );
+}
+.field_set .form_field.width10.label4 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.4 );
+}
+.field_set .form_field.width10.label5 > label {
+  width: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width10.label5 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width10.label6 > label {
+  width: calc((100% +  40px ) *  0.6 );
+}
+.field_set .form_field.width10.label6 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.6 );
+}
+.field_set .form_field.width10.label7 > label {
+  width: calc((100% +  40px ) *  0.7 );
+}
+.field_set .form_field.width10.label7 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.7 );
+}
+.field_set .form_field.width10.label8 > label {
+  width: calc((100% +  40px ) *  0.8 );
+}
+.field_set .form_field.width10.label8 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.8 );
+}
+.field_set .form_field.width10.label9 > label {
+  width: calc((100% +  40px ) *  0.9 );
+}
+.field_set .form_field.width10.label9 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.9 );
+}
+.field_set .form_field.width11,
+.field_set .col.width11 {
+  width: calc( 91.66666667%  -  40px );
+}
+.field_set .form_field.offset11,
+.field_set .col.offset11 {
+  margin-left: calc( 91.66666667%  +  20px );
+}
+.field_set .form_field.space11,
+.field_set .col.offset11 {
+  margin-right: calc( 91.66666667%  +  20px );
+}
+.field_set .form_field.width11.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width11.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width11.label1 > label {
+  width: calc((100% +  40px ) *  0.09090909 );
+}
+.field_set .form_field.width11.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.09090909 );
+}
+.field_set .form_field.width11.label2 > label {
+  width: calc((100% +  40px ) *  0.18181818 );
+}
+.field_set .form_field.width11.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.18181818 );
+}
+.field_set .form_field.width11.label3 > label {
+  width: calc((100% +  40px ) *  0.27272727 );
+}
+.field_set .form_field.width11.label3 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.27272727 );
+}
+.field_set .form_field.width11.label4 > label {
+  width: calc((100% +  40px ) *  0.36363636 );
+}
+.field_set .form_field.width11.label4 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.36363636 );
+}
+.field_set .form_field.width11.label5 > label {
+  width: calc((100% +  40px ) *  0.45454545 );
+}
+.field_set .form_field.width11.label5 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.45454545 );
+}
+.field_set .form_field.width11.label6 > label {
+  width: calc((100% +  40px ) *  0.54545455 );
+}
+.field_set .form_field.width11.label6 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.54545455 );
+}
+.field_set .form_field.width11.label7 > label {
+  width: calc((100% +  40px ) *  0.63636364 );
+}
+.field_set .form_field.width11.label7 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.63636364 );
+}
+.field_set .form_field.width11.label8 > label {
+  width: calc((100% +  40px ) *  0.72727273 );
+}
+.field_set .form_field.width11.label8 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.72727273 );
+}
+.field_set .form_field.width11.label9 > label {
+  width: calc((100% +  40px ) *  0.81818182 );
+}
+.field_set .form_field.width11.label9 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.81818182 );
+}
+.field_set .form_field.width11.label10 > label {
+  width: calc((100% +  40px ) *  0.90909091 );
+}
+.field_set .form_field.width11.label10 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.90909091 );
+}
+.field_set .form_field.width12,
+.field_set .col.width12 {
+  width: calc( 100%  -  40px );
+}
+.field_set .form_field.offset12,
+.field_set .col.offset12 {
+  margin-left: calc( 100%  +  20px );
+}
+.field_set .form_field.space12,
+.field_set .col.offset12 {
+  margin-right: calc( 100%  +  20px );
+}
+.field_set .form_field.width12.label0 > label {
+  width: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width12.label0 > label + .input {
+  margin-left: calc((100% +  40px ) *  0 );
+}
+.field_set .form_field.width12.label1 > label {
+  width: calc((100% +  40px ) *  0.08333333 );
+}
+.field_set .form_field.width12.label1 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.08333333 );
+}
+.field_set .form_field.width12.label2 > label {
+  width: calc((100% +  40px ) *  0.16666667 );
+}
+.field_set .form_field.width12.label2 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.16666667 );
+}
+.field_set .form_field.width12.label3 > label {
+  width: calc((100% +  40px ) *  0.25 );
+}
+.field_set .form_field.width12.label3 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.25 );
+}
+.field_set .form_field.width12.label4 > label {
+  width: calc((100% +  40px ) *  0.33333333 );
+}
+.field_set .form_field.width12.label4 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.33333333 );
+}
+.field_set .form_field.width12.label5 > label {
+  width: calc((100% +  40px ) *  0.41666667 );
+}
+.field_set .form_field.width12.label5 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.41666667 );
+}
+.field_set .form_field.width12.label6 > label {
+  width: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width12.label6 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.5 );
+}
+.field_set .form_field.width12.label7 > label {
+  width: calc((100% +  40px ) *  0.58333333 );
+}
+.field_set .form_field.width12.label7 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.58333333 );
+}
+.field_set .form_field.width12.label8 > label {
+  width: calc((100% +  40px ) *  0.66666667 );
+}
+.field_set .form_field.width12.label8 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.66666667 );
+}
+.field_set .form_field.width12.label9 > label {
+  width: calc((100% +  40px ) *  0.75 );
+}
+.field_set .form_field.width12.label9 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.75 );
+}
+.field_set .form_field.width12.label10 > label {
+  width: calc((100% +  40px ) *  0.83333333 );
+}
+.field_set .form_field.width12.label10 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.83333333 );
+}
+.field_set .form_field.width12.label11 > label {
+  width: calc((100% +  40px ) *  0.91666667 );
+}
+.field_set .form_field.width12.label11 > label + .input {
+  margin-left: calc((100% +  40px ) *  0.91666667 );
 }

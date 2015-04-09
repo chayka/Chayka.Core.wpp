@@ -14,10 +14,12 @@
         line-height: 32px;
         font-size: 16px;
         border: 1px transparent solid;
+        box-sizing: border-box;
 
     }
     > label.alignright{
         text-align: right;
+        padding-right: 1em;
     }
     > .input{
         margin-left: @label-width;
@@ -240,6 +242,19 @@
     }
 
 }
+
+.labels-right{
+    .form_field > label{
+        text-align: right;
+        padding-right: 1em;
+    }
+}
+
+.form_field.label-right > label{
+    text-align: right;
+    padding-right: 1em;
+}
+
 .form_field.fullsize{
     > label{
         display: block;
@@ -281,5 +296,534 @@
         }
     }
 }
+/* grid */
+@form_field_margin_width: 20px;
 
+.calc-grid-field(@index, @total) when (@index <= @total) {
+    .form_field.width@{index}, .col.width@{index} {
+        width: ~'calc('percentage(@index/@total)~' - '(2*@form_field_margin_width)~')';
+    }
+    .form_field.offset@{index}, .col.offset@{index} {
+        margin-left: ~'calc('percentage(@index/@total)~' + '(1*@form_field_margin_width)~')';
+    }
+    .form_field.space@{index}, .col.offset@{index} {
+        margin-right: ~'calc('percentage(@index/@total)~' + '(1*@form_field_margin_width)~')';
+    }
+    .loop-grid-field-labels(@index);
+}
+
+// Basic looping in LESS
+.loop-grid-fields(@total, @index: 1) when (@index <= @total) {
+    .calc-grid-field(@index, @total);
+    // next iteration
+    .loop-grid-fields(@total, (@index + 1));
+}
+
+.calc-grid-field-label(@index, @total) when (@index < @total) {
+    .form_field.width@{total}.label@{index} > label{
+        width: ~'calc((100% + '(2*@form_field_margin_width) ~') * '(@index/@total)~')';
+        & + .input{
+            margin-left: ~'calc((100% + '(2*@form_field_margin_width) ~') * '(@index/@total)~')';
+        }
+    }
+}
+
+// Basic looping in LESS
+.loop-grid-field-labels(@total, @index: 0) when (@index < @total) {
+    .calc-grid-field-label(@index, @total);
+    // next iteration
+    .loop-grid-field-labels(@total, (@index + 1));
+}
+
+
+.field_set{
+    margin-right: -@form_field_margin_width;
+    margin-left: -@form_field_margin_width;
+    clear: both;
+
+    &::after{
+        content: '';
+        clear: both;
+        display: block;
+        visibility: hidden;
+        height: 0;
+    }
+
+    .form_field, .col{
+        margin-right: @form_field_margin_width;
+        margin-left: @form_field_margin_width;
+        float: left;
+    }
+
+    .loop-grid-fields(12);
+//    .form_field.width1 {
+//        width: ~'calc(8.33333% - '(2*@form_field_margin_width)~')';
+//    }
+//    .form_field.width2 {
+//        width: ~'calc(16.66666% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 50%;
+//            & + .input{
+//                margin-left: 50%;
+//            }
+//        }
+//    }
+//    .form_field.width3 {
+//        width: ~'calc(25% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 33.33333%;
+//            & + .input{
+//                margin-left: 33.33333%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 66.66666%;
+//            & + .input{
+//                margin-left: 66.66666%;
+//            }
+//        }
+//    }
+//    .form_field.width4 {
+//        width: ~'calc(33.33333% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 25%;
+//            & + .input{
+//                margin-left: 25%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 50%;
+//            & + .input{
+//                margin-left: 50%;
+//            }
+//        }
+//        &.label3 > label{
+//            width: 75%;
+//            & + .input{
+//                margin-left: 75%;
+//            }
+//        }
+//    }
+//    .form_field.width5 {
+//        width: ~'calc(41.66666% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 20%;
+//            & + .input{
+//                margin-left: 20%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 40%;
+//            & + .input{
+//                margin-left: 40%;
+//            }
+//        }
+//        &.label3 > label{
+//            width: 60%;
+//            & + .input{
+//                margin-left: 60%;
+//            }
+//        }
+//        &.label4 > label{
+//            width: 80%;
+//            & + .input{
+//                margin-left: 80%;
+//            }
+//        }
+//    }
+//    .form_field.width6 {
+//        width: ~'calc(50% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 16.66666%;
+//            & + .input{
+//                margin-left: 16.66666%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 33.33333%;
+//            & + .input{
+//                margin-left: 33.33333%;
+//            }
+//        }
+//        &.label3 > label{
+//            width: 50%;
+//            & + .input{
+//                margin-left: 50%;
+//            }
+//        }
+//        &.label4 > label{
+//            width: 66.66666%;
+//            & + .input{
+//                margin-left: 66.66666%;
+//            }
+//        }
+//        &.label5 > label{
+//            width: 83.33333%;
+//            & + .input{
+//                margin-left: 83.33333%;
+//            }
+//        }
+//    }
+//    .form_field.width7 {
+//        width: ~'calc(58.33333% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 14.28571%;
+//            & + .input{
+//                margin-left: 14.28571%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 28.57142%;
+//            & + .input{
+//                margin-left: 28.57142%;
+//            }
+//        }
+//        &.label3 > label{
+//            width: 42.85714%;
+//            & + .input{
+//                margin-left: 42.85714%;
+//            }
+//        }
+//        &.label4 > label{
+//            width: 57.14285%;
+//            & + .input{
+//                margin-left: 57.14285%;
+//            }
+//        }
+//        &.label5 > label{
+//            width: 71.42857%;
+//            & + .input{
+//                margin-left: 71.42857%;
+//            }
+//        }
+//        &.label6 > label{
+//            width: 85.71428%;
+//            & + .input{
+//                margin-left: 85.71428%;
+//            }
+//        }
+//    }
+//    .form_field.width8 {
+//        width: ~'calc(66.66666% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 12.5%;
+//            & + .input{
+//                margin-left: 12.5%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 25%;
+//            & + .input{
+//                margin-left: 25%;
+//            }
+//        }
+//        &.label3 > label{
+//            width: 37.5%;
+//            & + .input{
+//                margin-left: 37.5%;
+//            }
+//        }
+//        &.label4 > label{
+//            width: 50%;
+//            & + .input{
+//                margin-left: 50%;
+//            }
+//        }
+//        &.label5 > label{
+//            width: 62.5%;
+//            & + .input{
+//                margin-left: 62.5%;
+//            }
+//        }
+//        &.label6 > label{
+//            width: 75%;
+//            & + .input{
+//                margin-left: 75%;
+//            }
+//        }
+//        &.label7 > label{
+//            width: 87.5%;
+//            & + .input{
+//                margin-left: 87.5%;
+//            }
+//        }
+//    }
+//    .form_field.width9 {
+//        width: ~'calc(75% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 11.11111%;
+//            & + .input{
+//                margin-left: 11.11111%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 22.22222%;
+//            & + .input{
+//                margin-left: 22.22222%;
+//            }
+//        }
+//        &.label3 > label{
+//            width: 33.33333%;
+//            & + .input{
+//                margin-left: 33.33333%;
+//            }
+//        }
+//        &.label4 > label{
+//            width: 44.44444%;
+//            & + .input{
+//                margin-left: 44.44444%;
+//            }
+//        }
+//        &.label5 > label{
+//            width: 55.55555%;
+//            & + .input{
+//                margin-left: 55.55555%;
+//            }
+//        }
+//        &.label6 > label{
+//            width: 66.66666%;
+//            & + .input{
+//                margin-left: 50%;
+//            }
+//        }
+//        &.label7 > label{
+//            width: 77.77777%;
+//            & + .input{
+//                margin-left: 77.77777%;
+//            }
+//        }
+//        &.label8 > label{
+//            width: 88.88888%;
+//            & + .input{
+//                margin-left: 88.88888%;
+//            }
+//        }
+//    }
+//    .form_field.width10 {
+//        width: ~'calc(83.33333% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 10%;
+//            & + .input{
+//                margin-left: 10%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 20%;
+//            & + .input{
+//                margin-left: 20%;
+//            }
+//        }
+//        &.label3 > label{
+//            width: 30%;
+//            & + .input{
+//                margin-left: 30%;
+//            }
+//        }
+//        &.label4 > label{
+//            width: 40%;
+//            & + .input{
+//                margin-left: 40%;
+//            }
+//        }
+//        &.label5 > label{
+//            width: 50%;
+//            & + .input{
+//                margin-left: 50%;
+//            }
+//        }
+//        &.label6 > label{
+//            width: 60%;
+//            & + .input{
+//                margin-left: 60%;
+//            }
+//        }
+//        &.label7 > label{
+//            width: 70%;
+//            & + .input{
+//                margin-left: 70%;
+//            }
+//        }
+//        &.label8 > label{
+//            width: 80%;
+//            & + .input{
+//                margin-left: 80%;
+//            }
+//        }
+//        &.label9 > label{
+//            width: 90%;
+//            & + .input{
+//                margin-left: 90%;
+//            }
+//        }
+//    }
+//    .form_field.width11 {
+//        width: ~'calc(91.66666% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 9.09091%;
+//            & + .input{
+//                margin-left: 9.09091%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 18.18182%;
+//            & + .input{
+//                margin-left: 18.18182%;
+//            }
+//        }
+//        &.label3 > label{
+//            width: 27.27273%;
+//            & + .input{
+//                margin-left: 27.27273%;
+//            }
+//        }
+//        &.label4 > label{
+//            width: 36.36364%;
+//            & + .input{
+//                margin-left: 36.36364%;
+//            }
+//        }
+//        &.label5 > label{
+//            width: 45.45455%;
+//            & + .input{
+//                margin-left: 45.45455%;
+//            }
+//        }
+//        &.label6 > label{
+//            width: 54.54545%;
+//            & + .input{
+//                margin-left: 54.54545%;
+//            }
+//        }
+//        &.label7 > label{
+//            width: 63.63636%;
+//            & + .input{
+//                margin-left: 63.63636%;
+//            }
+//        }
+//        &.label8 > label{
+//            width: 72.72727%;
+//            & + .input{
+//                margin-left: 72.72727%;
+//            }
+//        }
+//        &.label9 > label{
+//            width: 81.81818%;
+//            & + .input{
+//                margin-left: 81.81818%;
+//            }
+//        }
+//        &.label10 > label{
+//            width: 90.90909%;
+//            & + .input{
+//                margin-left: 90.90909%;
+//            }
+//        }
+//    }
+//    .form_field.width12 {
+//        width: ~'calc(100% - '(2*@form_field_margin_width)~')';
+//        &.label1 > label{
+//            width: 8.33333%;
+//            & + .input{
+//                margin-left: 8.33333%;
+//            }
+//        }
+//        &.label2 > label{
+//            width: 16.66666%;
+//            & + .input{
+//                margin-left: 16.66666%;
+//            }
+//        }
+//        &.label3 > label{
+//            width: 25%;
+//            & + .input{
+//                margin-left: 25%;
+//            }
+//        }
+//        &.label4 > label{
+//            width: 33.33333%;
+//            & + .input{
+//                margin-left: 33.33333%;
+//            }
+//        }
+//        &.label5 > label{
+//            width: 41.66666%;
+//            & + .input{
+//                margin-left: 41.66666%;
+//            }
+//        }
+//        &.label6 > label{
+//            width: 50%;
+//            & + .input{
+//                margin-left: 50%;
+//            }
+//        }
+//        &.label7 > label{
+//            width: 58.33333%;
+//            & + .input{
+//                margin-left: 58.33333%;
+//            }
+//        }
+//        &.label8 > label{
+//            width: 66.66666%;
+//            & + .input{
+//                margin-left: 66.66666%;
+//            }
+//        }
+//        &.label9 > label{
+//            width: 75%;
+//            & + .input{
+//                margin-left: 75%;
+//            }
+//        }
+//        &.label10 > label{
+//            width: 83.33333%;
+//            & + .input{
+//                margin-left: 83.33333%;
+//            }
+//        }
+//        &.label11 > label{
+//            width: 91.66666%;
+//            & + .input{
+//                margin-left: 91.66666%;
+//            }
+//        }
+//    }
+//
+//    .form_field.offset1 {
+//        margin-left: ~'calc(8.33333% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset2 {
+//        margin-left: ~'calc(16.66666% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset3 {
+//        margin-left: ~'calc(25% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset4 {
+//        margin-left: ~'calc(33.33333% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset5 {
+//        margin-left: ~'calc(41.66666% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset6 {
+//        margin-left: ~'calc(50% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset7 {
+//        margin-left: ~'calc(58.33333% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset8 {
+//        margin-left: ~'calc(66.66666% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset9 {
+//        margin-left: ~'calc(75% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset10 {
+//        margin-left: ~'calc(83.33333% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset11 {
+//        margin-left: ~'calc(91.66666% + '@form_field_margin_width~')';
+//    }
+//    .form_field.offset12 {
+//        margin-left: ~'calc(100% + '@form_field_margin_width~')';
+//    }
+}
 
