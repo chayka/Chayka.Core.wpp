@@ -482,23 +482,23 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 //value: '='
             },
             link: function(scope, element, attrs, formCtrl) {
-                var input = element.find('[ng-model],[data-ng-model]'),
-                    inputType = input.attr('type'),
+                var $input = element.find('[ng-model],[data-ng-model]'),
+                    inputType = $input.attr('type'),
                 //hint = element.find('.message'),
-                    model = input.attr('data-ng-model') || input.attr('ng-model'),
-                    label = element.find('.input > label:first-child'),
-                    $label = element.find('> label');
-                if(!scope.label && inputType !=='checkbox' && inputType !== 'radio'){
+                    model = $input.attr('data-ng-model') || $input.attr('ng-model'),
+                    $oldLabel = element.find('.input > label:first-child'),
+                    $newLabel = element.find('> label');
+                if(!scope.label && inputType !=='checkbox' /*&& inputType !== 'radio'*/){
                     //element.find('> label').remove();
-                    scope.label = label.text().replace(/\s*:\s*$/, '');
-                    angular.forEach(label.attributes, function(i, attr){
+                    scope.label = $oldLabel.text().replace(/\s*:\s*$/, '');
+                    angular.forEach($oldLabel.attributes, function(i, attr){
                         var name = attr.name;
                         var value = attr.value;
-                        $label.attr(name, value);
+                        $newLabel.attr(name, value);
                     });
-                    $label.addClass(label.attr('class'));
-                    $label.text(scope.label);
-                    label.remove();
+                    $newLabel.addClass($oldLabel.attr('class'));
+                    $newLabel.text(scope.label);
+                    $oldLabel.remove();
                     //scope.$digest();
                 }
                 //console.log('model binding: '+model);
@@ -515,12 +515,12 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                 scope.element = element;
 
-                input.focus(function(){
+                $input.focus(function(){
                     //formCtrl.clearFieldError(scope);
                     //formCtrl.setFieldState(field, 'clean');
                 });
 
-                input.blur(function(){
+                $input.blur(function(){
                     //formCtrl.setFieldError(scope, 'error');
                     if(scope.value){
                         //console.log('validating value: '+scope.value);
@@ -855,7 +855,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                         dictionary: {}
                     };
 
-                    input.on('keyup change', function(){
+                    $input.on('keyup change', function(){
                         formCtrl.setFieldState(scope, 'clean');
                         utils.patchScope(scope);
                         //scope.$apply(); // ok

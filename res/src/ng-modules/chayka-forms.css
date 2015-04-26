@@ -8,6 +8,8 @@
   width: 120px;
   position: absolute;
   padding-right: 1ex;
+}
+.form_field label {
   min-height: 32px;
   line-height: 32px;
   font-size: 16px;
@@ -42,6 +44,16 @@
 .form_field > .input textarea {
   resize: vertical;
   line-height: normal;
+}
+.form_field.radio label {
+  white-space: nowrap;
+}
+.form_field.radio .input {
+  padding-top: 1px;
+}
+.form_field.radio .input label {
+  display: inline-block;
+  margin-right: 1ex;
 }
 .form_field.progress > .input input[type=text],
 .form_field.progress > .input input[type=password],
