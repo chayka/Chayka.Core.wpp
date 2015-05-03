@@ -24,25 +24,6 @@
 #postbox-container-2 .postbox .form_field > .input .fullsize {
   width: 100%;
 }
-#postbox-container-1 .postbox .form_field.radio > .input,
-#postbox-container-2 .postbox .form_field.radio > .input {
-  padding-top: 5px;
-}
-#postbox-container-1 .postbox .form_field.radio > .input label,
-#postbox-container-2 .postbox .form_field.radio > .input label {
-  display: inline;
-  float: none;
-  font-size: 16px;
-  line-height: 32px;
-  min-height: 32px;
-  white-space: nowrap;
-  padding-right: 1em;
-}
-#postbox-container-1 .postbox .form_field.radio > .input label input[type=radio],
-#postbox-container-2 .postbox .form_field.radio > .input label input[type=radio] {
-  display: inline;
-  float: none;
-}
 #postbox-container-1 .postbox .form_field.fullsize > label,
 #postbox-container-2 .postbox .form_field.fullsize > label {
   display: block;
@@ -72,6 +53,29 @@
 #postbox-container-1 .postbox .form_field.fullsize > .input .ui-datepicker-year,
 #postbox-container-2 .postbox .form_field.fullsize > .input .ui-datepicker-year {
   width: auto;
+}
+#postbox-container-1 .postbox .form_field.radio > .input,
+#postbox-container-2 .postbox .form_field.radio > .input {
+  padding-top: 5px;
+}
+#postbox-container-1 .postbox .form_field.radio > .input label,
+#postbox-container-2 .postbox .form_field.radio > .input label {
+  display: inline;
+  float: none;
+  font-size: 16px;
+  line-height: 32px;
+  min-height: 32px;
+  white-space: nowrap;
+  padding-right: 1em;
+}
+#postbox-container-1 .postbox .form_field.radio > .input label input[type=radio],
+#postbox-container-2 .postbox .form_field.radio > .input label input[type=radio] {
+  display: inline;
+  float: none;
+}
+#postbox-container-1 .postbox .form_field.checkbox > label,
+#postbox-container-2 .postbox .form_field.checkbox > label {
+  display: none;
 }
 #side-sortables .form_field {
   margin-bottom: 1em;

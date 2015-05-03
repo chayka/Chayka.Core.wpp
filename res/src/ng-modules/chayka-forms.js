@@ -6,7 +6,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
             restrict: 'AE',
             //transclude: true,
             scope: {
-                validator: '=formValidator',
+                validator: '=?formValidator',
                 scrollMargin: '@',
                 scrollDuration: '@'
             },

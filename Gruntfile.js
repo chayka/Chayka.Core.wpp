@@ -141,7 +141,15 @@ module.exports = function(grunt) {
             }
         },
         uglify: {
-            production: {
+            js: {
+                files: [{
+                    expand: true,
+                    cwd: 'res/src/js/',
+                    src: ['**/*.js'],
+                    dest: 'res/dist/js/'
+                }]
+            },
+            ng: {
                 options: {
                     mangle: false
                 },

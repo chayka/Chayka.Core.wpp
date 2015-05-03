@@ -1,6 +1,14 @@
 'use strict';
 
-angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-buttons'])
+angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-buttons', 'chayka-forms'])
+    .controller('metabox', ['$scope', function($scope){
+        $scope.meta = {};
+        $scope.validator = null;
+    }])
+    .controller('sidebar-widget-form', ['$scope', function($scope){
+        $scope.options = {};
+        $scope.validator = null;
+    }])
     .directive('jobControl', [function(){
         return {
             restrict: 'AE',

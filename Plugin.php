@@ -229,13 +229,13 @@ class Plugin extends WP\Plugin{
 	    $this->registerNgScript('chayka-forms', 'ng-modules/chayka-forms.js', ['jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax']);
         $this->registerStyle('chayka-forms', 'ng-modules/chayka-forms.css', ['angular', 'chayka-spinners']);
 
-        $this->registerNgScript('chayka-options-form', 'ng-modules/chayka-options-form.js', ['chayka-forms']);
+	    $this->registerNgScript('chayka-options-form', 'ng-modules/chayka-options-form.js', ['chayka-forms']);
         $this->registerStyle('chayka-options-form', 'ng-modules/chayka-options-form.css', ['angular', 'chayka-forms']);
 
 	    $this->registerNgScript('chayka-pagination', 'ng-modules/chayka-pagination.js', ['chayka-utils', 'chayka-translate']);
         $this->registerStyle('chayka-pagination', 'ng-modules/chayka-pagination.css', ['angular']);
 
-        $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-modals']);
+        $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-modals', 'chayka-forms']);
         $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['angular', 'chayka-forms', 'chayka-modals']);
 
         $this->registerMinimizedScript('chayka-core', 'ng-modules/chayka-core.js', [
