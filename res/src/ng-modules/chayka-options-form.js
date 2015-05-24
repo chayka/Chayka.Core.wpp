@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('chayka-options-form', ['chayka-forms'])
+angular.module('chayka-options-form', ['chayka-forms', 'chayka-wp-admin'])
     .controller('optionsForm', ['$scope', '$timeout', 'ajax', function($scope, $timeout, ajax){
 
         $scope.namespace = '';

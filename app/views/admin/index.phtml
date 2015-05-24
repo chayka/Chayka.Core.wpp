@@ -16,6 +16,13 @@
             <div class="form_field stretch" data-form-field="MinimizeMedia">
                 <label class="width50">Minimize Media</label><select data-ng-init="options.MinimizeMedia='0'; minOptions = {'0': 'No', '1': 'Yes'}" data-ng-options="key as value for (key, value) in minOptions" data-ng-model="options.MinimizeMedia" title="Minimize Media"></select>
             </div>
+	        <div class="form_field fullsize" data-form-field="Logo">
+		        <label>Logo</label>
+		        <input type="hidden" data-ng-init="options.Logo='';"  data-ng-model="options.Logo" title="Minimize Media"/>
+		        <div data-media-picker data-mode="id" data-size="large" data-model="options.Logo" data-picker-button-text="Pick images" data-multiple="true" data-item-width="93px" data-item-mode="contain">
+			        JPG or PNG 100x100
+		        </div>
+	        </div>
 	        <!-- chayka: fields -->
             <div class="buttons">
                 <button class="button button-primary button-large" data-ng-click="saveOptions();">Save</button>

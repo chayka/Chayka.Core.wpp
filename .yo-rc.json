@@ -39,6 +39,12 @@
     "appAuthorEmail": "borix@tut.by",
     "appAuthorUri": "https://github.com/chayka/",
     "appLicense": "MIT",
-    "appClass": "Plugin"
+    "appClass": "Plugin",
+    "controllers": {
+      "PostModel": [],
+      "CommentModel": [],
+      "UserModel": [],
+      "Rest": []
+    }
   }
 }

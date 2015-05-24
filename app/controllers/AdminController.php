@@ -17,6 +17,7 @@ class AdminController extends Controller{
     }
 
     public function indexAction(){
+	    wp_enqueue_media();
     }
 
     public function phpinfoAction(){

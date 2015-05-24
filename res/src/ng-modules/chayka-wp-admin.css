@@ -91,6 +91,106 @@
 #side-sortables .form_field > .input textarea {
   width: 100%;
 }
+body,
+html {
+  height: auto;
+}
+.media_item.as-sortable-item,
+.chayka-media_picker.multiple .media_items .as-sortable-placeholder {
+  margin: 2px;
+  background-size: cover;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  float: left;
+  border: 1px solid #888;
+  box-sizing: border-box;
+}
+.media_item.as-sortable-item > .sortable-handle {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.media_item.as-sortable-item > .sortable-handle > .btn_remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  cursor: pointer;
+  color: white;
+  background-color: maroon;
+  border: none;
+  border-radius: 3px;
+  line-height: 8px;
+  padding: 4px;
+}
+.media_item.contain {
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.chayka-media_picker {
+  position: relative;
+  border: 1px dashed #888;
+  text-align: center;
+  min-height: 100px;
+  padding: 0;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.05);
+  line-height: normal;
+}
+.chayka-media_picker > img {
+  max-width: 100%;
+  padding: 0;
+  margin: 0 0 -4px;
+  height: auto;
+  width: auto;
+  cursor: pointer;
+}
+.chayka-media_picker.multiple {
+  padding: 2px;
+  position: static;
+}
+.chayka-media_picker.multiple > .buttons {
+  padding: 5px 0 0;
+}
+.chayka-media_picker.multiple > .media_items {
+  text-align: left;
+}
+.chayka-media_picker.multiple > .media_items .as-sortable-placeholder {
+  border: 1px dashed #888;
+}
+.chayka-media_picker > .no_image {
+  cursor: pointer;
+  height: 200px;
+  background: url(../img/no-image.png) no-repeat center center;
+  background-size: contain;
+}
+.chayka-media_picker > .no_image > [data-spinner] {
+  position: relative;
+  z-index: 2;
+  top: 45%;
+}
+.chayka-media_picker > .no_image > [data-spinner] .chayka-spinner {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px 5px 5px 35px;
+  border-radius: 3px;
+  background-position: 5px center;
+}
+.chayka-media_picker > .note {
+  clear: both;
+}
+.chayka-media_picker > .buttons {
+  width: 100%;
+  box-sizing: border-box;
+  position: absolute;
+  text-align: right;
+  top: 0;
+  right: 0;
+  padding: 5px;
+  margin: 0;
+}
+.chayka-media_picker.image-set {
+  border-style: solid;
+}
 #normal-sortables .form_field,
 #advanced-sortables .form_field {
   margin-bottom: 1em;
