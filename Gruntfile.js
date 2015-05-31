@@ -32,6 +32,9 @@ module.exports = function(grunt) {
         jsAdmin: [
             'res/src/ng-modules/chayka-options-form.js',
             'res/src/ng-modules/chayka-wp-admin.js'
+        ],
+        jsAvatars: [
+            'res/src/ng-modules/chayka-avatars.js'
         ]
     };
 
@@ -126,6 +129,10 @@ module.exports = function(grunt) {
                         'res/lib/angular-translate/angular-translate.min.js',
                         'res/lib/angular-sanitize/angular-sanitize.min.js',
                         'res/dist/ng-modules/chayka-core.js'
+                    ],
+                    'res/dist/ng-modules/chayka-avatars-md5.js': [
+                        'res/lib/angular-md5/angular-md5.min.js',
+                        'res/dist/ng-modules/chayka-avatars-md5.js'
                     ]
                 }
             }
@@ -137,7 +144,7 @@ module.exports = function(grunt) {
                 jshintrc: true
             },
             all: {
-                src: resFiles.js.concat(resFiles.jsCore).concat(resFiles.jsAdmin).concat('Gruntfile.js')
+                src: resFiles.js.concat(resFiles.jsCore).concat(resFiles.jsAdmin).concat(resFiles.jsAvatars).concat('Gruntfile.js')
             }
         },
         uglify: {
@@ -155,11 +162,9 @@ module.exports = function(grunt) {
                 },
                 files: {
                     //'res/dist/js/application.js': resFiles.js,
-                    'res/dist/ng-modules/chayka-core.js': [
-                        //'res/lib/angular-translate/angular-translate.js',
-                        //'res/lib/angular-sanitize/angular-sanitize.js'
-                    ].concat(resFiles.jsCore),
-                    'res/dist/ng-modules/chayka-admin.js': resFiles.jsAdmin
+                    'res/dist/ng-modules/chayka-core.js': resFiles.jsCore,
+                    'res/dist/ng-modules/chayka-admin.js': resFiles.jsAdmin,
+                    'res/dist/ng-modules/chayka-avatars-md5.js': resFiles.jsAvatars
                 }
             }
         },
@@ -185,7 +190,7 @@ module.exports = function(grunt) {
         },
         watch: {
             js: {
-                files: resFiles.js.concat(resFiles.jsCore).concat(resFiles.jsAdmin),
+                files: resFiles.js.concat(resFiles.jsCore).concat(resFiles.jsAdmin).concat(resFiles.jsAvatars),
                 tasks: ['js']
             },
             less: {

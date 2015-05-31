@@ -242,6 +242,8 @@ class Plugin extends WP\Plugin{
 	    $this->registerNgScript('chayka-pagination', 'ng-modules/chayka-pagination.js', ['chayka-utils', 'chayka-translate']);
         $this->registerStyle('chayka-pagination', 'ng-modules/chayka-pagination.css', ['angular']);
 
+	    $this->registerNgScript('chayka-avatars', 'ng-modules/chayka-avatars.js', ['angular-md5']);
+
         $this->registerMinimizedScript('chayka-core', 'ng-modules/chayka-core.js', [
 	        'angular-translate',
 	        'angular-sanitize',
@@ -273,7 +275,12 @@ class Plugin extends WP\Plugin{
             'chayka-wp-admin',
         ]);
 
-		/* chayka: registerResources */
+	    $this->registerMinimizedScript('chayka-avatars-md5', 'ng-modules/chayka-avatars-md5.js', [
+		    'angular-md5',
+		    'chayka-avatars',
+	    ]);
+
+	    /* chayka: registerResources */
     }
 
     /**

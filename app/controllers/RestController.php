@@ -21,7 +21,7 @@ class RestController extends MVC\RestController{
 		$total = DbHelper::rowsFound();
 		$payload = array(
 			'items' => $items,
-			'total' => $total,
+			'total' => (int)$total,
 			'query' => $params
 		);
 

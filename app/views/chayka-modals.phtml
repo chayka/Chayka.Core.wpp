@@ -2,11 +2,11 @@
     <div class="chayka-modals-fader" data-ng-click="">
         <div data-ng-repeat="item in queue | limitTo: 1" class="chayka-modals-modal">
             <div class="modal_header">
-                <div class="modal_header-title">{{item.title}}</div>
+                <div class="modal_header-title">{{item.title | translate}}</div>
                 <div class="modal_header-close" data-ng-click="item.hide()">&times;</div>
             </div>
             <div class="modal_body">
-                <div class="modal_body-content">{{item.content}}</div>
+                <div class="modal_body-content" data-ng-bind-html="item.content"></div>
 <!--                <div class="modal_body-element" data-ng-show="!!item.element" data-modal-element="item.element"></div>-->
             </div>
             <div class="modal_buttons" data-ng-show="item.buttons && item.buttons.length">
@@ -21,7 +21,7 @@
         <div class="chayka-modals-fader" data-ng-click="">
             <div class="chayka-modals-modal">
                 <div class="modal_header">
-                    <div class="modal_header-title">{{title}}</div>
+                    <div class="modal_header-title">{{title | translate}}</div>
                     <div class="modal_header-close" data-ng-click="hide()">&times;</div>
                 </div>
                 <div class="modal_body" data-ng-transclude>

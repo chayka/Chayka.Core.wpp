@@ -163,7 +163,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                  */
                 var sendHandler = function(){
                     var result = false;
-                    if(!spinnerFieldId && formValidator && validateOnSend && !formValidator.validateFields()){
+                    if(formValidator && validateOnSend && !formValidator.validateFields()){
                         return false;
                     }
                     if(send && angular.isFunction(send)){
@@ -209,7 +209,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                         if(spinner){
                             spinner.hide();
                         }else if(spinnerFieldId && formValidator){
-                            formValidator.setFieldState(spinnerFieldId, 'clean', spinnerMessage);
+                            formValidator.setFieldState(spinnerFieldId, 'clean');
                         }else{
                             generalSpinner.hide(spinnerId);
                         }
@@ -238,11 +238,17 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                     var errors = ajax.handleErrors(data);
                     var message = errorMessage;
                     for(var i in errors){
-                        message = errors[i] || errorMessage;
-                        break;
+                        if(errors.hasOwnProperty(i)) {
+                            message = errors[i] || errorMessage;
+                            break;
+                        }
                     }
                     if(formValidator){
-                        formValidator.showErrors(errors);
+                        if(spinnerFieldId){
+                            formValidator.setFieldState(spinnerFieldId, 'error', message);
+                        }else {
+                            formValidator.showErrors(errors);
+                        }
                     }else if(message !== false){
                         modals.alert(message);
                     }
@@ -253,9 +259,6 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                     if(scope){
                         utils.patchScope(scope);
                     }
-                    //if(scope && !scope.$$phase){
-                    //    //scope.$digest();
-                    //}
                 };
 
                 prepared.error = errorHandler;
@@ -357,7 +360,9 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
 
                 var promise = prepared.send();
 
-                promise.success(prepared.success).error(prepared.error);
+                if(promise){
+                    promise.success(prepared.success).error(prepared.error);
+                }
 
                 return promise;
             },
@@ -394,7 +399,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
             },
 
             put: function(url, data, options, config){
-                options.method = 'putt';
+                options.method = 'put';
                 options.data = data;
                 options.config = config;
                 return ajax.request(url, options);

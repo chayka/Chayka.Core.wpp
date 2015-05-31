@@ -473,7 +473,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
             require: '^formValidator',
             restrict: 'AE',
             transclude: true,
-            template: '<label>{{label}}</label><div class="input" data-ng-transclude></div><div class="message" data-ng-class="{error: !valid}" data-ng-bind-html="message">{{message}}</div>',
+            template: '<label>{{label|translate}}</label><div class="input" data-ng-transclude></div><div class="message" data-ng-class="{error: !valid}" data-ng-bind-html="message">{{message}}</div>',
             scope: {
                 name: '@formField',
                 label: '@',

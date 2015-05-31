@@ -4,7 +4,7 @@ angular.module('chayka-utils', [])
     .factory('utils', ['$window', '$timeout', function($window, $timeout){
         var Chayka = $window.Chayka || {};
 
-        var _ = Chayka.Utils = Chayka.Utils || {
+        Chayka.Utils = Chayka.Utils || {
 
 
             /**
@@ -123,6 +123,8 @@ angular.module('chayka-utils', [])
 
             }
         };
+
+        Chayka.Utils.ensure('Chayka.Utils', Chayka.Utils);
 
         return Chayka.Utils;
     }]);
