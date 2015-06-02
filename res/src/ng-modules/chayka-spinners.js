@@ -9,6 +9,7 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
                 visible: '=?',
                 message: '=?'
             },
+            replace: true,
             template: '<div class="chayka-spinner" data-ng-show="visible" data-ng-bind-html="message"></div>',
 
             controller: function($scope){
@@ -33,6 +34,7 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
             scope:{
                 spinner: '=multiSpinner'
             },
+            replace: true,
             template: '<div class="chayka-multi_spinner" data-ng-show="total"><div data-ng-repeat="(id, message) in messages"><div data-spinner="spinners[id]" data-message="message" data-visible="true"></div></div></div>',
             //replace: true,
             controller: function($scope){

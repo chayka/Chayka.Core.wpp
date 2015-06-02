@@ -481,23 +481,23 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 message: '@hint'
                 //value: '='
             },
-            link: function(scope, element, attrs, formCtrl) {
-                var $input = element.find('[ng-model],[data-ng-model]'),
+            link: function($scope, $element, attrs, formCtrl) {
+                var $input = $element.find('[ng-model],[data-ng-model]'),
                     inputType = $input.attr('type'),
                 //hint = element.find('.message'),
                     model = $input.attr('data-ng-model') || $input.attr('ng-model'),
-                    $oldLabel = element.find('.input > label:first-child'),
-                    $newLabel = element.find('> label');
-                if(!scope.label && inputType !=='checkbox' /*&& inputType !== 'radio'*/){
+                    $oldLabel = $element.find('.input > label:first-child'),
+                    $newLabel = $element.find('> label');
+                if(!$scope.label && inputType !=='checkbox' /*&& inputType !== 'radio'*/){
                     //element.find('> label').remove();
-                    scope.label = $oldLabel.text().replace(/\s*:\s*$/, '');
+                    $scope.label = $oldLabel.text().replace(/\s*:\s*$/, '');
                     angular.forEach($oldLabel.attributes, function(i, attr){
                         var name = attr.name;
                         var value = attr.value;
                         $newLabel.attr(name, value);
                     });
                     $newLabel.addClass($oldLabel.attr('class'));
-                    $newLabel.text(scope.label);
+                    $newLabel.text($scope.label);
                     $oldLabel.remove();
                     //scope.$digest();
                 }
@@ -505,15 +505,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                 //console.dir({'attrs': attrs, element: element, input: input});
 
-                scope.valid = true;
+                $scope.valid = true;
 
-                scope.state = 'clean'; // clean|progress|valid|invalid
+                $scope.state = 'clean'; // clean|progress|valid|invalid
 
-                scope.active = true;
+                $scope.active = true;
 
-                scope.checks = {};
+                $scope.checks = {};
 
-                scope.element = element;
+                $scope.element = $element;
 
                 $input.focus(function(){
                     //formCtrl.clearFieldError(scope);
@@ -522,11 +522,11 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                 $input.blur(function(){
                     //formCtrl.setFieldError(scope, 'error');
-                    if(scope.value){
+                    if($scope.value){
                         //console.log('validating value: '+scope.value);
-                        formCtrl.validateField(scope, false);
+                        formCtrl.validateField($scope, false);
                     }
-                    utils.patchScope(scope);
+                    utils.patchScope($scope);
                     //scope.$apply(); // ok
                 });
 
@@ -535,8 +535,8 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  */
                 function setupIf(){
                     if(attrs['checkIf']){
-                        scope.$parent.$watch(attrs['checkIf'], function(value){
-                            scope.active = value;
+                        $scope.$parent.$watch(attrs['checkIf'], function(value){
+                            $scope.active = value;
                         });
                     }
                 }
@@ -548,7 +548,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  *      data-required = "This field is required"
                  */
                 function setupRequired(){
-                    scope.checks.required = {
+                    $scope.checks.required = {
                         message: attrs['checkRequired'] || $translate.instant('message_required')
                     };
                 }
@@ -571,8 +571,8 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     var max = parseInt(shorts[2] || attrs['checkLengthMax'] || 0);
                     var messageTemplate = shorts[0] || attrs['checkLengthMessage'] ||
                         $translate.instant('message_length');
-                    var message = utils.template(messageTemplate, {min: min, max: max, label: scope.label});
-                    scope.checks.length = {
+                    var message = utils.template(messageTemplate, {min: min, max: max, label: $scope.label});
+                    $scope.checks.length = {
                         message: message,
                         min: min,
                         max: max
@@ -614,8 +614,8 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     }
                     var messageTemplate = shorts[0] || attrs['checkRangeMessage'] ||
                         $translate.instant('message_range');
-                    var message = utils.template(messageTemplate, {min: min, max: max, label: scope.label});
-                    scope.checks.range = {
+                    var message = utils.template(messageTemplate, {min: min, max: max, label: $scope.label});
+                    $scope.checks.range = {
                         message: message,
                         min: min,
                         minE: minE,
@@ -640,7 +640,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     var max = shorts[1] || attrs['checkLtMax'] || 0;
                     var messageTemplate = shorts[0] || attrs['checkLtMessage'] ||
                         $translate.instant('message_lt');
-                    var message = utils.template(messageTemplate, {max: max, label: scope.label});
+                    var message = utils.template(messageTemplate, {max: max, label: $scope.label});
                     var format = shorts[2] || attrs['checkLtFormat'] || 'int';
                     switch(format){
                         case 'int':
@@ -651,7 +651,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                             break;
                         default:
                     }
-                    scope.checks.lt = {
+                    $scope.checks.lt = {
                         message: message,
                         max: max
                     };
@@ -673,7 +673,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     var max = shorts[1] || attrs['checkLeMax'] || 0;
                     var messageTemplate = shorts[0] || attrs['checkLeMessage'] ||
                         $translate.instant('message_le');
-                    var message = utils.template(messageTemplate, {max: max, label: scope.label});
+                    var message = utils.template(messageTemplate, {max: max, label: $scope.label});
                     var format = shorts[2] || attrs['checkLeFormat'] || 'int';
                     switch(format){
                         case 'int':
@@ -684,7 +684,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                             break;
                         default:
                     }
-                    scope.checks.le = {
+                    $scope.checks.le = {
                         message: message,
                         max: max
                     };
@@ -706,7 +706,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     var min = shorts[1] || attrs['checkGtMin'] || 0;
                     var messageTemplate = shorts[0] || attrs['checkGtMessage'] ||
                         $translate.instant('message_gt');
-                    var message = utils.template(messageTemplate, {min: min, label: scope.label});
+                    var message = utils.template(messageTemplate, {min: min, label: $scope.label});
                     var format = shorts[2] || attrs['checkGtFormat'] || 'int';
                     switch(format){
                         case 'int':
@@ -717,7 +717,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                             break;
                         default:
                     }
-                    scope.checks.gt = {
+                    $scope.checks.gt = {
                         message: message,
                         min: min
                     };
@@ -739,7 +739,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     var min = shorts[1] || attrs['checkGeMin'] || 0;
                     var messageTemplate = shorts[0] || attrs['checkGeMessage'] ||
                         $translate.instant('message_ge');
-                    var message = utils.template(messageTemplate, {min: min, label: scope.label});
+                    var message = utils.template(messageTemplate, {min: min, label: $scope.label});
                     var format = shorts[2] || attrs['checkGeFormat'] || 'int';
                     switch(format){
                         case 'int':
@@ -750,7 +750,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                             break;
                         default:
                     }
-                    scope.checks.ge = {
+                    $scope.checks.ge = {
                         message: message,
                         min: min
                     };
@@ -780,7 +780,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                     var regexp = new RegExp(pattern, modifiers);
 
-                    scope.checks.regexp = {
+                    $scope.checks.regexp = {
                         message: message,
                         regexp: regexp,
                         forbid: forbid
@@ -798,7 +798,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  */
                 function setupEmail() {
                     var message = attrs['checkEmail'] || $translate.instant('message_email');
-                    scope.checks.regexp = {
+                    $scope.checks.regexp = {
                         message: message,
                         regexp: /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i,
                         forbid: false
@@ -822,7 +822,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                     var message = shorts[1] || attrs['checkPasswordsMessage'] || $translate.instant('message_passwords');
 
-                    scope.checks.passwords = {
+                    $scope.checks.passwords = {
                         message: message,
                         repeat: repeat
                     };
@@ -848,7 +848,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                     var delay = shorts[2] || attrs['checkApiDelay'] || 0;
 
-                    scope.checks.api = {
+                    $scope.checks.api = {
                         message: message,
                         url: url,
                         delay: delay,
@@ -856,13 +856,13 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     };
 
                     $input.on('keyup change', function(){
-                        formCtrl.setFieldState(scope, 'clean');
-                        utils.patchScope(scope);
+                        formCtrl.setFieldState($scope, 'clean');
+                        utils.patchScope($scope);
                         //scope.$apply(); // ok
-                        if(scope.value){
-                            delayedCall('check-api-'+scope.name, delay, function(){
-                                formCtrl.validateField(scope, true);
-                                utils.patchScope(scope);
+                        if($scope.value){
+                            delayedCall('check-api-'+$scope.name, delay, function(){
+                                formCtrl.validateField($scope, true);
+                                utils.patchScope($scope);
                                 //scope.$apply();
                             });
                         }
@@ -890,7 +890,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                     var message = shorts[1] || attrs['checkCustomMessage'] || $translate.instant('message_custom');
 
-                    scope.checks.custom = {
+                    $scope.checks.custom = {
                         message: message,
                         callback: callback
                     };
@@ -899,7 +899,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 angular.forEach(attrs, function(attr, key){
                     var m = key.match(/^check([A-Z][a-z]*)/),
                         check = m && m[1];
-                    if(check && !scope.checks[check]){
+                    if(check && !$scope.checks[check]){
                         switch(check){
                             case 'If':
                                 setupIf();
@@ -946,18 +946,18 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 });
                 //console.dir({'checks': scope.checks});
 
-                scope.$parent.$watch(model, function(value){
+                $scope.$parent.$watch(model, function(value){
                     //console.log('we are watching: '+value);
-                    scope.value = value;
+                    $scope.value = value;
                     //formCtrl.validateField(scope);
                 });
 
-                scope.$watch('state', function(value){
-                    element.removeClass('clean progress valid invalid');
-                    element.addClass(value);
+                $scope.$watch('state', function(value){
+                    $element.removeClass('clean progress valid invalid');
+                    $element.addClass(value);
                 });
 
-                formCtrl.addField(scope);
+                formCtrl.addField($scope);
             },
             controller: function($scope){
             }
@@ -972,13 +972,30 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
             scope: {
                 message: '@'
             },
-            link: function (scope, element, attrs, formCtrl) {
-                scope.message = '';
-                scope.state = '';
-                formCtrl.setMessageBox(scope);
+            link: function ($scope, $element, attrs, formCtrl) {
+                $scope.message = '';
+                $scope.state = '';
+                formCtrl.setMessageBox($scope);
             }
         };
     })
+    .directive('autoHeight', [function(){
+        return {
+            restrict: 'A',
+            link: function($scope, $element){
+                var resizeTextarea = function(){
+                    var height = $element.css('box-sizing')==='border-box'?
+                        parseInt($element.css('borderTopWidth')) +
+                        $element.prop('scrollHeight')+
+                        parseInt($element.css('borderBottomWidth')):
+                        $element.prop('scrollHeight');
+                    $element.css('height', height+'px');
+                };
+
+                $element.on('change input cut paste drop keydown', resizeTextarea);
+            }
+        };
+    }])
     .factory('delayedCall', ['$timeout', function($timeout){
         var timeouts={};
 
