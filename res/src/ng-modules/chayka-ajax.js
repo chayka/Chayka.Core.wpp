@@ -163,7 +163,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                  */
                 var sendHandler = function(){
                     var result = false;
-                    if(formValidator && validateOnSend && !formValidator.validateFields()){
+                    if(formValidator && validateOnSend && !(!spinnerFieldId && formValidator.validateFields() || spinnerFieldId && formValidator.validateFieldById(spinnerId))){
                         return false;
                     }
                     if(send && angular.isFunction(send)){

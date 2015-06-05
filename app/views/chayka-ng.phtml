@@ -1,5 +1,5 @@
 <?php if(count(CHayka\WP\Helpers\AngularHelper::getQueue())): ?>
-	<script>
+<script>
 	(function($){
 		$(document).ready(function(){
 			window.angular.bootstrap(document.body, ['<?php echo join("', '", \Chayka\WP\Helpers\AngularHelper::getQueue());?>']);

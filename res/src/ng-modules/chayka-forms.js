@@ -120,7 +120,8 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  * @returns {boolean}
                  */
                 ctrl.checkRequired = function (field) {
-                    return !!field['value'];
+                    var c = field['checks'].required;
+                    return !c.active || !!field['value'];
                 };
 
                 /**
@@ -132,7 +133,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  */
                 ctrl.checkLength = function(field) {
                     var c = field['checks'].length;
-                    return !(c.max && field['value'].length > c.max || field['value'].length < c.min);
+                    return !c.active || !(c.max && field['value'].length > c.max || field['value'].length < c.min);
                 };
 
                 /**
@@ -149,7 +150,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     var c = field['checks'].range;
                     var lower = c.min && (c.minE && field['value'] < c.min || !c.minE && field['value'] <= c.min);
                     var greater = c.max && (c.maxE && field['value'] > c.max || !c.minE && field['value'] >= c.max);
-                    return !(lower || greater);
+                    return !c.active || !(lower || greater);
                 };
 
                 /**
@@ -161,7 +162,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  */
                 ctrl.checkLt = function(field) {
                     var c = field['checks'].lt;
-                    return field['value'] < c.max;
+                    return !c.active || field['value'] < c.max;
                 };
 
                 /**
@@ -173,7 +174,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  */
                 ctrl.checkLe = function(field) {
                     var c = field['checks'].le;
-                    return field['value'] <= c.max;
+                    return !c.active || field['value'] <= c.max;
                 };
 
                 /**
@@ -185,7 +186,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  */
                 ctrl.checkGt = function(field) {
                     var c = field['checks'].gt;
-                    return field['value'] > c.min;
+                    return !c.active || field['value'] > c.min;
                 };
 
                 /**
@@ -197,7 +198,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  */
                 ctrl.checkGe = function(field) {
                     var c = field['checks'].ge;
-                    return field['value'] >= c.min;
+                    return !c.active || field['value'] >= c.min;
                 };
 
                 /**
@@ -213,7 +214,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     if(c.forbid){
                         valid = !valid;
                     }
-                    return valid;
+                    return !c.active || valid;
                 };
 
                 /**
@@ -226,7 +227,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 ctrl.checkPasswords = function(field){
                     var c = field['checks'].passwords;
                     var repeatField = fields[c.repeat] || field;
-                    return field['value'] === repeatField.value;
+                    return !c.active || field['value'] === repeatField.value;
                 };
 
                 /**
@@ -242,35 +243,38 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     var c = field['checks'].api;
                     var url = utils.template(c.url, {name: encodeURIComponent(field['name']), value: encodeURIComponent(field['value'])});
                     var value = field['value'] + '';
-                    if(value in c.dictionary){
-                        if('valid' === c.dictionary[value]){
-                            ctrl.setFieldState(field, 'valid', null);
-                        }else{
-                            ctrl.setFieldState(field, 'invalid', c.message);
+                    if(c.active) {
+                        if (value in c.dictionary) {
+                            if ('valid' === c.dictionary[value]) {
+                                ctrl.setFieldState(field, 'valid', null);
+                            } else {
+                                ctrl.setFieldState(field, 'invalid', c.message);
+                            }
+                            return c.dictionary[value];
                         }
-                        return c.dictionary[value];
-                    }
 
-                    c.dictionary[value] = 'progress';
-                    ajax.get(url, {
-                        spinner: $scope.spinner,
-                        spinnerFieldId: field['name'],
-                        spinnerMessage: ' ',
-                        showMessage: false,
-                        formValidator: ctrl,
-                        errorMessage: c.message,
-                        scope: field,
-                        success: function(data){
-                            //console.dir({'data': data});
-                            c.dictionary[value] = 'valid';
-                            ctrl.setFieldState(field, 'valid', null);
-                        },
-                        error: function(data){
-                            c.dictionary[value] = 'invalid';
-                            c.message = c.message || 'mass_errors' === data.code && data.message[field['name']] || data.message;
-                        }
-                    });
-                    return c.dictionary[value];
+                        c.dictionary[value] = 'progress';
+                        ajax.get(url, {
+                            spinner: $scope.spinner,
+                            spinnerFieldId: field['name'],
+                            spinnerMessage: ' ',
+                            showMessage: false,
+                            formValidator: ctrl,
+                            errorMessage: c.message,
+                            validateOnSend: false,
+                            scope: field,
+                            success: function (data) {
+                                //console.dir({'data': data});
+                                c.dictionary[value] = 'valid';
+                                ctrl.setFieldState(field, 'valid', null);
+                            },
+                            error: function (data) {
+                                c.dictionary[value] = 'invalid';
+                                c.message = c.message || 'mass_errors' === data.code && data.message[field['name']] || data.message;
+                            }
+                        });
+                    }
+                    return !c.active || c.dictionary[value];
 
                 };
 
@@ -283,7 +287,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 ctrl.checkCustom = function(field){
                     var c = field['checks'].custom;
                     var callback = c.callback;
-                    return $scope.$parent[callback].call($scope, field['value']);
+                    return !c.active || $scope.$parent[callback].call($scope, field['value']);
                 };
 
                 /**
@@ -292,7 +296,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  *
                  * @param {$scope} field
                  * @param {boolean} [silent]
-                 * @returns {*}
+                 * @returns {bolean}
                  */
                 ctrl.validateField = function(field, silent) {
                     var valid = true,
@@ -368,6 +372,17 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                 };
 
                 /**
+                 * Validate field by field id
+                 * @param fieldId
+                 * @param [silent]
+                 * @return {boolean}
+                 */
+                ctrl.validateFieldById = function(fieldId, silent) {
+                    var field = fields[fieldId];
+                    return ctrl.validateField(field, silent);
+                };
+
+                    /**
                  * Validate all registered fields and scroll to
                  * top invalid field in case it is invisible.
                  *
@@ -545,23 +560,38 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  * Setup required field check.
                  *
                  * Html format:
-                 *      data-required = "This field is required"
+                 *      data-required = "This field is required|scopeCondition"
+                 * or
+                 *      data-check-required-message = "This field is required"
+                 *      data-check-required-if = "scopeCondition"
                  */
                 function setupRequired(){
+                    var short = attrs['checkRequired'];
+                    var shorts = short?short.split('|'):[];
+                    var message = $translate.instant(shorts[0] || attrs['checkRequiredMessage'] || 'message_required');
+
                     $scope.checks.required = {
-                        message: attrs['checkRequired'] || $translate.instant('message_required')
+                        message: message,
+                        active: true
                     };
+                    var condition = shorts[1] || attrs['checkRequiredIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.required.active = value;
+                        });
+                    }
                 }
 
                 /**
                  * Setup field value length check.
                  *
                  * Html format:
-                 *      data-check-length = "The length of this value should be between {min} and {max} symbols|0|16"
+                 *      data-check-length = "The length of this value should be between {min} and {max} symbols|0|16|scopeCondition"
                  * or
                  *      data-check-length-message = "The length of this value should be between {min} and {max} symbols"
                  *      data-check-length-min = "0"
                  *      data-check-length-max = "16"
+                 *      data-check-length-if = "scopeCondition"
                  *
                  */
                 function setupLength(){
@@ -569,26 +599,33 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     var shorts = short?short.split('|'):[];
                     var min = parseInt(shorts[1] || attrs['checkLengthMin'] || 0);
                     var max = parseInt(shorts[2] || attrs['checkLengthMax'] || 0);
-                    var messageTemplate = shorts[0] || attrs['checkLengthMessage'] ||
-                        $translate.instant('message_length');
+                    var messageTemplate = $translate.instant(shorts[0] || attrs['checkLengthMessage'] || 'message_length');
                     var message = utils.template(messageTemplate, {min: min, max: max, label: $scope.label});
                     $scope.checks.length = {
                         message: message,
                         min: min,
-                        max: max
+                        max: max,
+                        active: true
                     };
+                    var condition = shorts[3] || attrs['checkLengthIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.length.active = value;
+                        });
+                    }
                 }
 
                 /**
                  * Setup field value range check.
                  *
                  * Html format:
-                 *      data-check-range = "The value should be between {min} and {max}|=0|16|int"
+                 *      data-check-range = "The value should be between {min} and {max}|=0|16|int|scopeCondition"
                  * or
                  *      data-check-range-message = "The value should be between {min} and {max}"
                  *      data-check-range-min = "=0" ('=' means 'inclusive')
                  *      data-check-range-max = "16"
                  *      data-check-range-format = "int"
+                 *      data-check-range-if = "scopeCondition"
                  *
                  */
                 function setupRange(){
@@ -620,19 +657,27 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                         min: min,
                         minE: minE,
                         max: max,
-                        maxE: maxE
+                        maxE: maxE,
+                        active: true
                     };
+                    var condition = shorts[4] || attrs['checkRangeIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.range.active = value;
+                        });
+                    }
                 }
 
                 /**
                  * Setup field value 'lower than (<)'.
                  *
                  * Html format:
-                 *      data-check-lt = "The value should be lower than {max}|0|int"
+                 *      data-check-lt = "The value should be lower than {max}|0|int|scopeCondition"
                  * or
                  *      data-check-lt-message = "The value should be lower than {max}"
                  *      data-check-lt-max = "0"
                  *      data-check-lt-format = "int"
+                 *      data-check-lt-if = "scopeCondition"
                  */
                 function setupLt(){
                     var short = attrs['checkLt'];
@@ -653,19 +698,27 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     }
                     $scope.checks.lt = {
                         message: message,
-                        max: max
+                        max: max,
+                        active: true
                     };
+                    var condition = shorts[3] || attrs['checkLtIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.lt.active = value;
+                        });
+                    }
                 }
 
                 /**
                  * Setup field value 'lower or equal (<=)'.
                  *
                  * Html format:
-                 *      data-check-le = "The value should be lower than {max} or equal|0|int"
+                 *      data-check-le = "The value should be lower than {max} or equal|0|int|scopeCondition"
                  * or
                  *      data-check-le-message = "The value should be lower than {max} or equal"
                  *      data-check-le-max = "0"
                  *      data-check-le-format = "int"
+                 *      data-check-le-if = "scopeCondition"
                  */
                 function setupLe(){
                     var short = attrs['checkLe'];
@@ -686,19 +739,27 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     }
                     $scope.checks.le = {
                         message: message,
-                        max: max
+                        max: max,
+                        active: true
                     };
+                    var condition = shorts[3] || attrs['checkLeIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.le.active = value;
+                        });
+                    }
                 }
 
                 /**
                  * Setup field value 'greater than (>)'.
                  *
                  * Html format:
-                 *      data-check-gt = "The value should be greater than {min}|0|int"
+                 *      data-check-gt = "The value should be greater than {min}|0|int|scopeCondition"
                  * or
                  *      data-check-gt-message = "The value should be greater than {min}"
                  *      data-check-gt-max = "0"
                  *      data-check-gt-format = "int"
+                 *      data-check-gt-if = "scopeCondition"
                  */
                 function setupGt(){
                     var short = attrs['checkGt'];
@@ -719,19 +780,27 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     }
                     $scope.checks.gt = {
                         message: message,
-                        min: min
+                        min: min,
+                        active: true
                     };
+                    var condition = shorts[3] || attrs['checkGtIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.gt.active = value;
+                        });
+                    }
                 }
 
                 /**
                  * Setup field value 'greater or equal (<=)'.
                  *
                  * Html format:
-                 *      data-check-ge = "The value should be greater than {min} or equal|0|int"
+                 *      data-check-ge = "The value should be greater than {min} or equal|0|int|scopeCondition"
                  * or
                  *      data-check-ge-message = "The value should be greater than {min} or equal"
                  *      data-check-ge-min = "0"
                  *      data-check-ge-format = "int"
+                 *      data-check-ge-if = "scopeCondition"
                  */
                 function setupGe(){
                     var short = attrs['checkGe'];
@@ -752,8 +821,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     }
                     $scope.checks.ge = {
                         message: message,
-                        min: min
+                        min: min,
+                        active: true
                     };
+                    var condition = shorts[3] || attrs['checkGeIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.ge.active = value;
+                        });
+                    }
                 }
 
                 /**
@@ -762,12 +838,13 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  * You'd better use extended format instead of short one.
                  *
                  * Html format:
-                 *      data-check-regexp = "Invalid phone format|/\d{7}/i|forbid"
+                 *      data-check-regexp = "Invalid phone format|/\d{7}/i|forbid|scopeCondition"
                  * or
                  *      data-check-regexp-message = "Invalid phone format"
                  *      data-check-regexp-pattern = "\d{7}"
                  *      data-check-regexp-modifiers = "i"
                  *      data-check-regexp-forbid = "forbid"
+                 *      data-check-regexp-if = "scopeCondition"
                  */
                 function setupRegExp(){
                     var short = attrs['checkRegexp'];
@@ -783,8 +860,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     $scope.checks.regexp = {
                         message: message,
                         regexp: regexp,
-                        forbid: forbid
+                        forbid: forbid,
+                        active: true
                     };
+                    var condition = shorts[4] || attrs['checkRegexpIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.regexp.active = value;
+                        });
+                    }
 
                     //console.dir({'regexp':scope.checks.regexp});
 
@@ -794,25 +878,38 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  * Setup email field check.
                  *
                  * Html format:
-                 *      data-check-email = "Valid email format: user@domain.com"
+                 *      data-check-email = "Valid email format: user@domain.com|scopeCondition"
+                 * or
+                 *      data-check-email-message = "Valid email format: user@domain.com"
+                 *      data-check-email-if = "scopeCondition"
                  */
                 function setupEmail() {
-                    var message = attrs['checkEmail'] || $translate.instant('message_email');
+                    var short = attrs['checkEmail'];
+                    var shorts = short?short.split('|'):[];
+                    var message = $translate.instant(shorts[0] || attrs['checkEmailMessage'] || 'message_email');
                     $scope.checks.regexp = {
                         message: message,
                         regexp: /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i,
-                        forbid: false
+                        forbid: false,
+                        active: true
                     };
+                    var condition = shorts[1] || attrs['checkEmailIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.regexp.active = value;
+                        });
+                    }
                 }
 
                 /**
                  * Setup password compare check.
                  *
                  * Html format:
-                 *      data-check-passwords = "pass1_id|Passwords do not match"
+                 *      data-check-passwords = "pass1_id|Passwords do not match|scopeCondition"
                  * or
                  *      data-check-passwords-message = "Invalid phone format"
                  *      data-check-passwords-repeat = "pass1_id"
+                 *      data-check-passwords-if = "scopeCondition"
                  */
                 function setupPasswords() {
                     var short = attrs['checkPasswords']; // 'pass1id|Введенные пароли отличаются'
@@ -824,19 +921,27 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                     $scope.checks.passwords = {
                         message: message,
-                        repeat: repeat
+                        repeat: repeat,
+                        active: true
                     };
+                    var condition = shorts[2] || attrs['checkPasswordsIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.passwords.active = value;
+                        });
+                    }
                 }
 
                 /**
                  * Setup backend api check.
                  *
                  * Html format:
-                 *      data-check-api = "/api/check-existing/{name}/{value}|Email exists|500"
+                 *      data-check-api = "/api/check-existing/{name}/{value}|Email exists|500|scopeCondition"
                  * or
                  *      data-check-api-message = "Invalid phone format"
                  *      data-check-api-url = "/api/check-existing/{name}/{value}"
                  *      data-check-api-delay = "500"
+                 *      data-check-api-if = "scopeCondition"
                  */
                 function setupApiCall() {
                     var short = attrs['checkApi']; // '/api/check-existing/{name}/{value}|Email exists|500'
@@ -852,8 +957,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                         message: message,
                         url: url,
                         delay: delay,
-                        dictionary: {}
+                        dictionary: {},
+                        active: true
                     };
+                    var condition = shorts[3] || attrs['checkApiIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.api.active = value;
+                        });
+                    }
 
                     $input.on('keyup change', function(){
                         formCtrl.setFieldState($scope, 'clean');
@@ -875,10 +987,11 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                  * Setup custom check.
                  *
                  * Html format:
-                 *      data-check-custom = "validateProjectTitle|Project Title should be sweet"
+                 *      data-check-custom = "validateProjectTitle|Project Title should be sweet|scopeCondition"
                  * or
                  *      data-check-custom-message = "Project Title should be sweet"
                  *      data-check-custom-callback = "validateProjectTitle"
+                 *      data-check-custom-if = "scopeCondition"
                  *
                  * callback.call($scope, value) will be called
                  */
@@ -892,8 +1005,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
 
                     $scope.checks.custom = {
                         message: message,
-                        callback: callback
+                        callback: callback,
+                        active: true
                     };
+                    var condition = shorts[2] || attrs['checkCustomeIf'];
+                    if(condition){
+                        $scope.$parent.$watch(condition, function(value){
+                            $scope.checks.custom.active = value;
+                        });
+                    }
                 }
 
                 angular.forEach(attrs, function(attr, key){

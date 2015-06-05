@@ -55,6 +55,9 @@
   display: inline-block;
   margin-right: 1ex;
 }
+.form_field.fullsize.checkbox > label {
+  display: none;
+}
 .form_field.progress > .input input[type=text],
 .form_field.progress > .input input[type=password],
 .form_field.progress > .input input[type=number],

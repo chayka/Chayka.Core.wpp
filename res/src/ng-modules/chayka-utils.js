@@ -100,6 +100,22 @@ angular.module('chayka-utils', [])
             },
 
             /**
+             * Get param from html tag
+             *
+             * @param {jQuery} $element
+             * @param {string} name
+             * @param {*} defaultValue
+             * @return {*}
+             */
+            getHtmlParam: function($element, name, defaultValue){
+                var value = $element.attr(name) || $element.attr('data-'+name) || $element.data(name);
+                if(value === undefined){
+                    value = defaultValue;
+                }
+                return value;
+            },
+
+            /**
              * Simple template function, replaces '{var}' with var value.
              *
              * @param {string} tpl
