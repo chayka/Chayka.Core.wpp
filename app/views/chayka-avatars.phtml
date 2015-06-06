@@ -1,0 +1,10 @@
+<script>
+	var Chayka = Chayka || {};
+	Chayka.Avatars = Chayka.Avatars || {};
+	Chayka.Avatars.gravatarOptions = {
+		type: '<?php echo get_option('avatar_default');?>',
+		emptyType: '<?php echo get_option('avatar_default_empty', 'mm');?>',
+		rating: '<?php echo get_option('avatar_rating');?>',
+		forceDefault: '<?php echo get_option('avatar_force_default');?>'
+	};
+</script>

@@ -242,7 +242,13 @@ class Plugin extends WP\Plugin{
 	    $this->registerNgScript('chayka-pagination', 'ng-modules/chayka-pagination.js', ['chayka-utils', 'chayka-translate']);
         $this->registerStyle('chayka-pagination', 'ng-modules/chayka-pagination.css', ['angular']);
 
-	    $this->registerNgScript('chayka-avatars', 'ng-modules/chayka-avatars.js', ['angular-md5']);
+	    $this->registerNgScript('chayka-avatars', 'ng-modules/chayka-avatars.js', ['angular-md5', 'chayka-utils'], function(){
+		    $view = self::getView();
+		    $cb = function() use ($view){
+			    echo $view->render('chayka-avatars.phtml');
+		    };
+		    $this->addAction('wp_footer', $cb, 1000);
+	    });
 
         $this->registerMinimizedScript('chayka-core', 'ng-modules/chayka-core.js', [
 	        'angular-translate',
