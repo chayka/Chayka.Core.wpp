@@ -233,8 +233,11 @@ class Plugin extends WP\Plugin{
 	    $this->registerNgScript('chayka-forms', 'ng-modules/chayka-forms.js', ['jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax']);
         $this->registerStyle('chayka-forms', 'ng-modules/chayka-forms.css', ['angular', 'chayka-spinners']);
 
-	    $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-modals', 'chayka-forms', 'ng-sortable']);
-	    $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['angular', 'chayka-forms', 'chayka-modals', 'ng-sortable']);
+	    $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-modals', 'chayka-forms', 'ng-sortable'], function(){
+			wp_enqueue_script('wp-color-picker');
+	    });
+
+	    $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['angular', 'chayka-forms', 'chayka-modals', 'ng-sortable', 'wp-color-picker']);
 
 	    $this->registerNgScript('chayka-options-form', 'ng-modules/chayka-options-form.js', ['chayka-forms', 'chayka-wp-admin']);
         $this->registerStyle('chayka-options-form', 'ng-modules/chayka-options-form.css', ['angular', 'chayka-forms', 'chayka-wp-admin']);

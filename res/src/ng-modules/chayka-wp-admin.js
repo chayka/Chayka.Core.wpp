@@ -462,6 +462,66 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
             }
         };
     }])
+    .directive('colorPicker', ['utils', function(utils){
+        return {
+            restrict: 'AE',
+            scope:{
+                defaultColor: '@?',
+                palettes: '=?'
+            },
+            link: function($scope, element, attrs){
+                var $ = angular.element,
+                    $element = $(element);
+
+                var onPickerColorChange = function(event, change){
+                    //console.dir({
+                    //    change: arguments,
+                    //    color: change.color,
+                    //    '#color': change.color.toString()
+                    //});
+                    setTimeout(function(){
+                        $scope.$parent.$apply(attrs.ngModel+'="'+(change && change.color.toString() || '')+'";');
+                        console.dir({scope: $scope.$parent});
+                    }, 0);
+                };
+                if($.fn.wpColorPicker){
+                    $element.attr('type', 'hidden');
+                    var $input = $('<input type="text">')
+                        .insertAfter(element)
+                        .val($element.val())
+                        .wpColorPicker({
+                            defaultColor: $scope.defaultColor,
+                            hide: true,
+                            palettes: $scope.palettes,
+                            change: onPickerColorChange,
+                            clear: onPickerColorChange
+                        });
+                    $scope.$parent.$watch(attrs.ngModel, function(value){
+                        if(value!==$input.val()){
+                            $input.wpColorPicker('color', value);
+                        }
+                    });
+                    var $inputDiv = $element.parent(),
+                        $pickerContainer = $inputDiv.find('.wp-picker-container'),
+                        $pickerColorButton = $pickerContainer.find('.wp-color-result'),
+                        $pickerInputWrap = $pickerContainer.find('.wp-picker-input-wrap'),
+                        $pickerHolder = $pickerContainer.find('.wp-picker-holder');
+                    $pickerContainer.off('keyup', '*');
+                    $input.off('keyup').on( 'keyup', function( event ) {
+                        if ( event.keyCode === 13 || event.keyCode === 32 ) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            //$pickerColorButton.trigger( 'click' );//.next().focus();
+                            $input.wpColorPicker('close');
+                        }
+                    });
+
+                    //$pickerColorButton.appendTo($inputDiv);
+
+                }
+            }
+        };
+    }])
     .directive('jobControl', [function(){
         return {
             restrict: 'AE',

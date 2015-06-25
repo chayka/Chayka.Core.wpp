@@ -257,3 +257,55 @@ html {
 .chayka-job_control .box_output .message:last-child {
   border-bottom: none;
 }
+.form_field.color_picker > .input {
+  position: relative;
+  min-height: 32px;
+}
+.form_field.color_picker > .input > .wp-picker-container {
+  position: absolute;
+  z-index: 10;
+}
+.form_field.color_picker > .input > .wp-picker-container > .wp-color-result {
+  line-height: 16px;
+  min-height: 32px;
+}
+.form_field.color_picker > .input > .wp-picker-container > .wp-color-result::after {
+  font-size: 14px;
+  line-height: 30px;
+  min-height: 32px;
+}
+.form_field.color_picker > .input > .wp-picker-container > .wp-color-result.wp-picker-open + .wp-picker-input-wrap {
+  display: inline-block;
+}
+.form_field.color_picker > .input > .wp-picker-container > .wp-picker-input-wrap {
+  width: 257px;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #dfdfdf;
+  box-sizing: border-box;
+  display: none;
+}
+.form_field.color_picker > .input > .wp-picker-container > .wp-picker-input-wrap > input.wp-color-picker {
+  width: 85px;
+  float: left;
+  font-size: 16px;
+  line-height: 16px;
+  padding: 0 5px;
+}
+.form_field.color_picker > .input > .wp-picker-container > .wp-picker-input-wrap > input.button {
+  font-size: 16px;
+  line-height: 16px;
+  min-height: 32px;
+  float: right;
+  padding: 0 8px 1px;
+}
+.form_field.color_picker.stretch > .input > .wp-picker-container {
+  right: 0;
+}
+.form_field.color_picker.stretch > .input > .wp-picker-container > .wp-color-result {
+  float: right;
+  margin-right: 0;
+}
+.form_field.color_picker.stretch > .input > .wp-picker-container > .wp-picker-input-wrap {
+  clear: both;
+}
