@@ -181,6 +181,15 @@ module.exports = function(grunt) {
             }
         },
 
+        dgeni: {
+            options: {
+                // Specify the base path used when resolving relative paths to source files
+                basePath: 'res/src/ng-modules'
+            },
+            src: ['*.js'],
+            dest: 'docs/ng-modules'
+        },
+
         //  common:
         clean: {
             css: ['res/tmp/css'],

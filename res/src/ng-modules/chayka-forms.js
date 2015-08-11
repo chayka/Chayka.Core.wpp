@@ -1,6 +1,21 @@
 'use strict';
 
+/**
+ * @ngdoc module
+ * @name chayka-forms
+ * @description
+ *
+ * This is a module that enables form validation stuff.
+ */
 angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax'])
+    /**
+     * @ngdoc directive
+     * @name chayka-forms#formValidator
+     * @description
+     *
+     * This directive creates wrapper for the fields that should be validated.
+     * Then you can access it and perform field set validation.
+     */
     .directive('formValidator', ['$window', 'modals', 'ajax', 'utils', function($window, modals, ajax, utils) {
         return {
             restrict: 'AE',
@@ -382,7 +397,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-translate
                     return ctrl.validateField(field, silent);
                 };
 
-                    /**
+                /**
                  * Validate all registered fields and scroll to
                  * top invalid field in case it is invisible.
                  *

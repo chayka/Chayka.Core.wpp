@@ -186,8 +186,9 @@ class Plugin extends WP\Plugin{
     public function registerResources($minimize = false) {
 
         $this->registerBowerResources(true);
-
-	    $this->registerStyle('angular', 'lib/angular/angular-csp.css', [], '1.3.0');
+        $this->unregisterScript('angular');
+        $this->registerScript('angular', $minimize? 'lib/angular/angular.min.js':'lib/angular/angular.js', ['jquery'], '1.3.0');
+        $this->registerStyle('angular', 'lib/angular/angular-csp.css', [], '1.3.0');
 //	    $this->setScriptLocation('angular', false);
 //	    $this->setScriptLocation('angular-sanitize', true);
 //	    $this->setScriptLocation('angular-translate', true);
