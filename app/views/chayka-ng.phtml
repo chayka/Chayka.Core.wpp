@@ -1,8 +1,9 @@
-<?php if(count(CHayka\WP\Helpers\AngularHelper::getQueue())): ?>
+<?php $ngQueue = Chayka\WP\Helpers\AngularHelper::getQueue();
+if(count($ngQueue)): wp_print_scripts();?>
 <script>
 	(function($){
 		$(document).ready(function(){
-			window.angular.bootstrap(document.body, ['<?php echo join("', '", \Chayka\WP\Helpers\AngularHelper::getQueue());?>']);
+			window.angular.bootstrap(document.body, ['<?php echo join("', '", $ngQueue);?>']);
 		});
 	}(window.jQuery));
 </script>
