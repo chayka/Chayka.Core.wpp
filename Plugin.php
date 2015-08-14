@@ -196,7 +196,7 @@ class Plugin extends WP\Plugin{
         $this->setResSrcDir('src/');
         $this->setResDistDir('dist/');
 
-	    $this->registerNgScript('chayka-translate', 'ng-modules/chayka-translate.js', ['jquery', 'angular', 'angular-translate'], function(){
+	    $this->registerNgScript('chayka-translate', 'ng-modules/chayka-translate.js', ['angular-translate'], function(){
 		    $view = self::getView();
 		    $cb = function() use ($view){
 			    echo $view->render('chayka-js-nls.phtml');
@@ -205,9 +205,9 @@ class Plugin extends WP\Plugin{
 		    $this->addAction('admin_head', $cb);
 	    });
 
-	    $this->registerNgScript('chayka-utils', 'ng-modules/chayka-utils.js',['jquery', 'angular']);
+	    $this->registerNgScript('chayka-utils', 'ng-modules/chayka-utils.js');
 
-	    $this->registerNgScript('chayka-spinners', 'ng-modules/chayka-spinners.js', ['jquery', 'angular', 'chayka-translate', 'chayka-utils'], function(){
+	    $this->registerNgScript('chayka-spinners', 'ng-modules/chayka-spinners.js', ['chayka-translate', 'chayka-utils'], function(){
 		    $view = self::getView();
 		    $cb = function() use ($view){
 			    echo $view->render('chayka-spinners.phtml');
@@ -215,11 +215,11 @@ class Plugin extends WP\Plugin{
 		    $this->addAction('wp_footer', $cb, 1000);
 		    $this->addAction('admin_footer', $cb, 1000);
 	    });
-        $this->registerStyle('chayka-spinners', 'ng-modules/chayka-spinners.css', ['angular']);
+        $this->registerNgStyle('chayka-spinners', 'ng-modules/chayka-spinners.css');
 
-	    $this->registerNgScript('chayka-buttons', 'ng-modules/chayka-buttons.js', ['angular']);
+	    $this->registerNgScript('chayka-buttons', 'ng-modules/chayka-buttons.js');
 
-	    $this->registerNgScript('chayka-modals', 'ng-modules/chayka-modals.js', ['jquery', 'angular', 'chayka-buttons', 'angular-sanitize', 'chayka-translate', 'chayka-utils'], function(){
+	    $this->registerNgScript('chayka-modals', 'ng-modules/chayka-modals.js', ['chayka-buttons', 'chayka-translate', 'chayka-utils', 'angular-sanitize'], function(){
 		    $view = self::getView();
 		    $cb = function() use ($view){
 			    echo $view->render('chayka-modals.phtml');
@@ -227,26 +227,24 @@ class Plugin extends WP\Plugin{
 		    $this->addAction('wp_footer', $cb, 1000);
 		    $this->addAction('admin_footer', $cb, 1000);
 	    });
-        $this->registerStyle('chayka-modals', 'ng-modules/chayka-modals.css', ['angular']);
+        $this->registerNgStyle('chayka-modals', 'ng-modules/chayka-modals.css');
 
-	    $this->registerNgScript('chayka-ajax', 'ng-modules/chayka-ajax.js', ['jquery', 'angular', 'chayka-spinners']);
+	    $this->registerNgScript('chayka-ajax', 'ng-modules/chayka-ajax.js', ['chayka-spinners']);
 
-	    $this->registerNgScript('chayka-forms', 'ng-modules/chayka-forms.js', ['jquery', 'angular', 'angular-sanitize', 'chayka-modals', 'chayka-translate', 'chayka-ajax']);
-        $this->registerStyle('chayka-forms', 'ng-modules/chayka-forms.css', ['angular', 'chayka-spinners']);
+	    $this->registerNgScript('chayka-forms', 'ng-modules/chayka-forms.js', ['chayka-modals', 'chayka-translate', 'chayka-ajax', 'angular-sanitize']);
+        $this->registerNgStyle('chayka-forms', 'ng-modules/chayka-forms.css', ['chayka-spinners']);
 
-	    $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-modals', 'chayka-forms', 'ng-sortable'], function(){
-			wp_enqueue_script('wp-color-picker');
-	    });
+	    $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-modals', 'chayka-forms', 'ng-sortable', 'wp-color-picker']);
 
-	    $this->registerStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['angular', 'chayka-forms', 'chayka-modals', 'ng-sortable', 'wp-color-picker']);
+	    $this->registerNgStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['chayka-forms', 'chayka-modals', 'ng-sortable', 'wp-color-picker']);
 
 	    $this->registerNgScript('chayka-options-form', 'ng-modules/chayka-options-form.js', ['chayka-forms', 'chayka-wp-admin']);
-        $this->registerStyle('chayka-options-form', 'ng-modules/chayka-options-form.css', ['angular', 'chayka-forms', 'chayka-wp-admin']);
+        $this->registerNgStyle('chayka-options-form', 'ng-modules/chayka-options-form.css', ['chayka-forms', 'chayka-wp-admin']);
 
 	    $this->registerNgScript('chayka-pagination', 'ng-modules/chayka-pagination.js', ['chayka-utils', 'chayka-translate']);
-        $this->registerStyle('chayka-pagination', 'ng-modules/chayka-pagination.css', ['angular']);
+        $this->registerNgStyle('chayka-pagination', 'ng-modules/chayka-pagination.css');
 
-	    $this->registerNgScript('chayka-avatars', 'ng-modules/chayka-avatars.js', ['angular-md5', 'chayka-utils'], function(){
+	    $this->registerNgScript('chayka-avatars', 'ng-modules/chayka-avatars.js', ['chayka-utils', 'angular-md5'], function(){
 		    $view = self::getView();
 		    $cb = function() use ($view){
 			    echo $view->render('chayka-avatars.phtml');
