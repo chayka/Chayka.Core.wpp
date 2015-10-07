@@ -1,0 +1,9 @@
+<?php
+$appUrls = \Chayka\WP\Helpers\ResourceHelper::getApplicationResourceFolderUrls();
+if(count($appUrls)):?>
+<script>
+    var Chayka = Chayka || {};
+    Chayka.Core = Chayka.Core || {};
+    Chayka.Core.appResFolderUrls = <?php echo \Chayka\Helpers\JsonHelper::encode($appUrls);?>;
+</script>
+<?php endif;

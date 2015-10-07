@@ -8,7 +8,9 @@ If you use this module you can give it a thumbs up at [http://ngmodules.org/modu
 
 #### Release:
 
-Latest release version 1.2.2
+Latest release version 1.3.0 
+[Module name will be modified from 'ui.sortable' to 'as.sortable' from versions 1.3.x,
+considering the conflict with the sortable module from bootstrap-ui.]
 
 #### Demo Page:
 
@@ -104,7 +106,7 @@ Following callbacks are defined, and should be overridden to perform custom logi
 - callbacks.dragStart = function({type: Object}) // triggered on drag start.
 - callbacks.dragEnd = function({type: Object}) // triggered on drag end.
 
-###### Parameters:
+##### Parameters:
     Object (event) - structure         
              source:
                   index: original index before move.
@@ -155,7 +157,7 @@ And Inject the sortable module as dependency.
 angular.module('xyzApp', ['ui.sortable', '....']);
 ```
 
-###### Html Structure:
+##### Html Structure:
 
 Invoke the Directives using below html structure.
 
@@ -176,7 +178,7 @@ Define your callbacks in the invoking controller.
     
 That's what all you have to do.
 
-###### Restrict Moving between Columns:
+##### Restrict Moving between Columns:
 
 Define the accept callback. and the implementation is your choice.
 The itemHandleScope(dragged Item) and sortableScope(destination list) is exposed. 
@@ -192,7 +194,7 @@ and that too becomes straight forward as you have your scope Objects in hand.
 
 And reversing the condition, allows you to Drag across Columns but not within same Column.
 
-###### How To Revert Move After Validation Failure:
+##### How To Revert Move After Validation Failure:
 
 In case you want the item to be reverted back to its original location after a validation failure
 You can just do the below.
@@ -219,13 +221,17 @@ The move failure Impl here just reverts the moved item to its original location.
     }
 
 
-###### Horizontal Sorting:
+##### Horizontal Sorting:
 
 Horizontal Drag and Drop can be achieved using the same Library. The Column display can be tweaked to have horizontal items and the same can be achieved via some CSS tweaks (like making the column display style to "inline-block"). Added a sample in the demo source (refer plunker.css/js/html).
 
-Plunkr example link: http://plnkr.co/edit/5hzdWd?p=preview
+Plunkr example link: http://plnkr.co/edit/OcaMzBV3c0K3CL1nw9L4?p=preview
 
-###### Enable/Disable Drag at Runtime:
+##### Scroll page after reaching end of visible area.
+
+Implement dragMove callback and follow https://github.com/a5hik/ng-sortable/issues/13#issuecomment-120388981
+
+##### Enable/Disable Drag at Runtime:
 
 The Drag can be controlled at runtime and you can enable/disable it by setting the "is-disabled" property to true or false.
 

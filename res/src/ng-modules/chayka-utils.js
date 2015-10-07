@@ -4,7 +4,8 @@ angular.module('chayka-utils', [])
     .factory('utils', ['$window', '$timeout', function($window, $timeout){
         var Chayka = $window.Chayka || {};
 
-        Chayka.Utils = Chayka.Utils || {
+        Chayka.Utils = Chayka.Utils ||
+        {
 
 
             /**
@@ -137,10 +138,54 @@ angular.module('chayka-utils', [])
                     $timeout(function(){scope.$apply();}, 0);
                 }
 
+            },
+
+            /**
+             * Get resource url from specified chayka application (plugin or theme)
+             *
+             * @param appId
+             * @param resPath
+             * @return {*}
+             */
+            getResourceUrl: function (appId, resPath){
+                return Chayka.Utils.getItem(Chayka.Core.appResFolderUrls, appId, '/no_app_url_found/') + resPath;
             }
+
         };
 
         Chayka.Utils.ensure('Chayka.Utils', Chayka.Utils);
 
         return Chayka.Utils;
-    }]);
+    }])
+    /**
+     * Angular directive that includes a template from WP plugin or theme.
+     * You don't have to know plugin server path but it's ID instead
+     * Works like that:
+     *      <div wp-include="Chayka.Core:ng/template.html"></div>
+     *      <div wp-include="ng/template.html" wp-app="Chayka.Core"></div>
+     *      <wp-include="Chayka.Core:ng/template.html"></wp-include>
+     *      <wp-include="ng/template.html" app-id="Chayka.Core"></wp-include>
+     */
+    .directive('wpInclude', ['utils', function(utils){
+        return {
+            restrict: 'AE',
+            templateUrl: function(element, attributes){
+                var include = attributes['wpInclude'] ||
+                    attributes['wp-include'] ||
+                    attributes['data-wp-include'] ||
+                    attributes['src'];
+                var src = include,
+                    params = include.split(':');
+                var appId = attributes['wpApp'] ||
+                    attributes['wp-app'] ||
+                    attributes['data-wp-app'] ||
+                    attributes['app-id'];
+                if(params.length > 1){
+                    appId = params[0];
+                    src = params[1];
+                }
+                return utils.getResourceUrl(appId, src);
+            }
+        };
+    }])
+;
