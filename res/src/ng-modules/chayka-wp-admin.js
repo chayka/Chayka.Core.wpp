@@ -235,8 +235,6 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
                 '</div>' +
                 '</div>',
             controller: function($scope, $element){
-                console.log('media picker');
-                console.dir({$element:$element});
                 $scope.buttonClass = buttons.getButtonClass();
                 $scope.mediaSrc = null;
                 $scope.mediaItems = [];
@@ -423,7 +421,6 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
                             }else{
                                 var attachment = frame.state().get('selection').first().toJSON();
 
-                                console.dir({'media':attachment});
                                 switch ($scope.mode){
                                     case 'id':
                                         $scope.model = attachment.id;
@@ -474,14 +471,8 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
                     $element = $(element);
 
                 var onPickerColorChange = function(event, change){
-                    //console.dir({
-                    //    change: arguments,
-                    //    color: change.color,
-                    //    '#color': change.color.toString()
-                    //});
                     setTimeout(function(){
                         $scope.$parent.$apply(attrs.ngModel+'="'+(change && change.color.toString() || '')+'";');
-                        console.dir({scope: $scope.$parent});
                     }, 0);
                 };
                 if($.fn.wpColorPicker){
