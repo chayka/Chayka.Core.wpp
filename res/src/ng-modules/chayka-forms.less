@@ -92,7 +92,7 @@
         input[type=tel],
         input[type=url],
         textarea{
-            background: ~'url(../img/spinner32x32.gif)' no-repeat 99% 50%;
+            background: url(../img/spinner32x32.gif) no-repeat 99% 50%;
             background-size: 16px 16px;
         }
         textarea{
@@ -102,12 +102,12 @@
 
     & > .message{
         min-height: 1em;
+        text-align: right;
         line-height: normal;
+        font-size: .9em;
     }
     &.invalid .message{
         color: #CD0A0A;
-        text-align: right;
-        font-size: .9em;
     }
 
 

@@ -74,12 +74,12 @@
 }
 .form_field > .message {
   min-height: 1em;
+  text-align: right;
   line-height: normal;
+  font-size: .9em;
 }
 .form_field.invalid .message {
   color: #CD0A0A;
-  text-align: right;
-  font-size: .9em;
 }
 .form_field > .width05 {
   width: 5%;

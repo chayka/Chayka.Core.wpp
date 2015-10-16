@@ -13,6 +13,12 @@
     > label{
         padding-top: 4px;
     }
+    > .message.error{
+        border: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+    }
 }
 #postbox-container-1, #postbox-container-2{
 
@@ -151,8 +157,10 @@ body, html{
 .media_item.as-sortable-item, .chayka-media_picker.multiple .media_items .as-sortable-placeholder{
     margin: 2px;
     background-size: cover;
-    background-color: rgba(0,0,0, .1);
-    display: inline-block;
+    background-color: rgb(230, 230, 230);
+    background-color: rgba(0, 0, 0, .1);
+    //display: inline-block;
+    display: block;
     float: left;
     border: 1px solid #888;
     box-sizing: border-box;
@@ -188,7 +196,8 @@ body, html{
     min-height: 100px;
     padding: 0;
     overflow: hidden;
-    background-color: rgba(0,0,0, .05);
+    background-color: rgb(240, 240, 240);
+    background-color: rgba(0, 0, 0, .05);
     line-height: normal;
     & > img{
         max-width: 100%;
@@ -216,7 +225,7 @@ body, html{
     & > .no_image{
         cursor: pointer;
         height: 200px;
-        background: ~'url(../img/no-image.png)' no-repeat center center;
+        background: url(../img/no-image.png) no-repeat center center;
         background-size: contain;
 
         &>[data-spinner] {
@@ -224,6 +233,7 @@ body, html{
             z-index: 2;
             top: 45%;
             .chayka-spinner {
+                background-color: rgb(200, 200, 200);
                 background-color: rgba(255, 255, 255, .8);
                 padding: 5px 5px 5px 35px;
                 border-radius: 3px;
