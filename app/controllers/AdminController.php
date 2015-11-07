@@ -78,4 +78,7 @@ class AdminController extends Controller{
         $this->view->tables=$tables;
     }
 
-} 
+    public function logsAction(){
+
+    }
+}

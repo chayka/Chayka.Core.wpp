@@ -44,7 +44,13 @@
       "PostModel": [],
       "CommentModel": [],
       "UserModel": [],
-      "Rest": []
-    }
+      "Rest": [],
+      "Admin": [
+        "logs"
+      ]
+    },
+    "consolePages": [
+      "logs"
+    ]
   }
 }

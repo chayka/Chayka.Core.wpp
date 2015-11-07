@@ -6,6 +6,7 @@ use Chayka\MVC\Pagination;
 use Chayka\WP;
 use Chayka\Helpers\Util;
 use Chayka\Helpers\NlsHelper;
+use Chayka\Helpers\LogHelper;
 use Chayka\WP\Helpers\OptionHelper;
 
 class Plugin extends WP\Plugin{
@@ -33,43 +34,46 @@ class Plugin extends WP\Plugin{
                 /* chayka: init/controllers */
             ));
 
-            $locale = OptionHelper::getOption('Locale', 'auto');
+            /**
+             * Logs settings
+             */
+            $logLevel = 0;
+            if(OptionHelper::getOption('logFunctions')){
+                $logLevel |= LogHelper::NEED_FUNC;
+            }
+            if(OptionHelper::getOption('logErrors')){
+                $logLevel |= LogHelper::NEED_ERROR;
+            }
+            if(OptionHelper::getOption('logWarnings')){
+                $logLevel |= LogHelper::NEED_WARNING;
+            }
+            if(OptionHelper::getOption('logInfo')){
+                $logLevel |= LogHelper::NEED_INFO;
+            }
+            $logsDir = OptionHelper::getOption('logsFolderLocation', 'core') === 'core' ?
+                $app->getPath('logs') :
+                ABSPATH.'/logs';
 
+            LogHelper::init($logsDir, $logLevel);
+            LogHelper::flushLogsFolder(OptionHelper::getOption('logsLifeSpan'));
+
+            /**
+             * Locale setting
+             */
+            $locale = OptionHelper::getOption('Locale', 'auto');
             NlsHelper::setLocale($locale);
-			$app->addAngular();
+
+            $app->addAngular();
 //            $app->addJsNls();
 
             $app->addSupport_ConsolePages();
             $app->addSupport_Metaboxes();
             $app->addSupport_PostProcessing();
-//          $app->addSupport_UriProcessing();
 
             $app->registerComposerPlugins();
 
-//            $app->addModals();
-//            $app->addSpinners();
             $app->addPagination();
             /* chayka: init-addSupport */
-
-//	        ob_start(function ($buffer) {
-//
-//		        $search = array(
-//			        '/\>[^\S ]+/s',  // strip whitespaces after tags, except space
-//			        '/[^\S ]+\</s',  // strip whitespaces before tags, except space
-//			        '/(\s)+/s'       // shorten multiple whitespace sequences
-//		        );
-//
-//		        $replace = array(
-//			        '>',
-//			        '<',
-//			        '\\1'
-//		        );
-//
-//		        $buffer = preg_replace($search, $replace, $buffer);
-//
-//		        return $buffer;
-//	        });
-
         }
     }
 
@@ -168,7 +172,6 @@ class Plugin extends WP\Plugin{
 //            $this->addAction('wp_footer', 'fixTimezone');
         }
     	/* chayka: registerActions */
-
     }
 
     /**
@@ -426,6 +429,8 @@ class Plugin extends WP\Plugin{
 //        $this->addConsoleSubPage('chayka-core-admin',
 //            'Blockade', 'Blockade', 'update_core', 'zf-core-blockade',
 //            '/admin/blockade-options', '', null);
+        $this->addConsoleSubPage('chayka-core', 'Logs', 'update_core', 'logs', '/admin/logs');
+
         /* chayka: registerConsolePages */
     }
     

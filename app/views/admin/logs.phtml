@@ -1,0 +1,43 @@
+<h2>Logs</h2>
+
+<div data-ng-cloak>
+    <div data-ng-controller="optionsForm" data-ng-init="namespace = 'Chayka.WP'">
+        <form data-form-validator="validator" novalidate="novalidate">
+            <div class="form_field stretch logs_folder_location" data-form-field="logsFolderLocation">
+                <label class="width60">Logs Folder Location</label><select data-ng-init="options.logsFolderLocation='core'; logsFolderLocationOptions = {'wordpress':'WP folder','core':'Plugin folder'}" data-ng-model="options.logsFolderLocation" data-ng-options="key as value for (key, value) in logsFolderLocationOptions" title="Logs Folder Location"></select>
+            </div>
+            <div class="form_field stretch logs_life_span" data-form-field="logsLifeSpan">
+                <label class="width60">Logs Life Span (days)</label><input type="text" data-ng-init="options.logsLifeSpan=''" data-ng-model="options.logsLifeSpan" title="Logs Life Span (days)"/>
+            </div>
+            <div class="form_field fullsize checkbox log_functions" data-form-field="logFunctions">
+                <label>
+                    <input type="checkbox" data-ng-init="options.logFunctions=''" data-ng-model="options.logFunctions" data-ng-true-value="'1'" data-ng-false-value="''" title="Log Functions"/>
+                    Log Functions
+                </label>
+            </div>
+            <div class="form_field fullsize checkbox log_errors" data-form-field="logErrors">
+                <label>
+                    <input type="checkbox" data-ng-init="options.logErrors=''" data-ng-model="options.logErrors" data-ng-true-value="'1'" data-ng-false-value="''" title="Log Errors"/>
+                    Log Errors
+                </label>
+            </div>
+            <div class="form_field fullsize checkbox log_warnings" data-form-field="logWarnings">
+                <label>
+                    <input type="checkbox" data-ng-init="options.logWarnings=''" data-ng-model="options.logWarnings" data-ng-true-value="'1'" data-ng-false-value="''" title="Log Warnings"/>
+                    Log Warnings
+                </label>
+            </div>
+            <div class="form_field fullsize checkbox log_info" data-form-field="logInfo">
+                <label>
+                    <input type="checkbox" data-ng-init="options.logInfo=''" data-ng-model="options.logInfo" data-ng-true-value="'1'" data-ng-false-value="''" title="Log Info"/>
+                    Log Info
+                </label>
+            </div>
+
+	        <!-- chayka: fields -->
+            <div class="buttons">
+                <button class="button button-primary button-large" data-ng-click="saveOptions();">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -23,7 +23,8 @@
             "echo \"git stash\" >> update.sh",
             "echo \"git pull\" >> update.sh",
             "echo \"php composer.phar update\" >> update.sh",
-            "chmod +x update.sh"
+            "chmod +x update.sh",
+            "mkdir -m logs"
         ],
         "post-update-cmd": [
         ]
