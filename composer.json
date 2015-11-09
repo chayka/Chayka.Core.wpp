@@ -22,9 +22,9 @@
             "echo \"#!/bin/bash\" >> update.sh",
             "echo \"git stash\" >> update.sh",
             "echo \"git pull\" >> update.sh",
-            "echo \"php composer.phar update\" >> update.sh",
+            "echo \"composer update\" >> update.sh",
             "chmod +x update.sh",
-            "mkdir -m logs"
+            "mkdir logs"
         ],
         "post-update-cmd": [
         ]
