@@ -142,8 +142,8 @@ class Plugin extends WP\Plugin{
                 break;
             default :
                 if($schemeDiffers){
-//                    header("Location: $scheme//".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'], true, 301);
-//                    die();
+                    header("Location: $scheme//".$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'], true, 301);
+                    die();
                 }
         }
     }
