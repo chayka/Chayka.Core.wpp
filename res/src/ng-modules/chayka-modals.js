@@ -179,11 +179,14 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
                 modal: '=modal',
                 title: '@?modalTitle',
                 show: '@modalShow',
-                buttons: '=?modalButtons'
+                buttons: '=?modalButtons',
+                width: '@modalWidth',
+                height: '@modalHeight',
+                onClose: '&?onModalClose'
 
             },
             template: document.getElementById('chayka-modals-template').innerHTML,
-            link: function(scope){
+            link: function($scope, $element){
                 //console.log('modal.directive');
 
                 var ctrl = {};
@@ -192,7 +195,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
                  * Show element within modal popup.
                  */
                 ctrl.show = function(){
-                    scope.isOpen = true;
+                    $scope.isOpen = true;
                 };
 
                 /**
@@ -200,8 +203,11 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
                  *
                  * @type {Function}
                  */
-                ctrl.hide = scope.hide = function(){
-                    scope.isOpen = false;
+                ctrl.hide = $scope.hide = function(){
+                    $scope.isOpen = false;
+                    if($scope.onClose){
+                        $scope.onClose();
+                    }
                 };
 
                 /**
@@ -210,7 +216,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
                  * @param {string} title
                  */
                 ctrl.setTitle = function(title){
-                    scope.title = title;
+                    $scope.title = title;
                 };
 
                 /**
@@ -227,7 +233,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
                         });
                         buttons = btns;
                     }
-                    scope.buttons = buttons;
+                    $scope.buttons = buttons;
                 };
 
                 /**
@@ -235,17 +241,25 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
                  * @param button
                  * @return {string}
                  */
-                scope.getButtonClass = function(button){
+                $scope.getButtonClass = function(button){
                     return modals.getButtonClass(button);
                 };
 
-                if(scope.buttons){
-                    ctrl.setButtons(scope.buttons);
+                if($scope.buttons){
+                    ctrl.setButtons($scope.buttons);
                 }
 
-                scope.modal = ctrl;
-                if(scope.show){
+                $scope.modal = ctrl;
+                if($scope.show){
                     ctrl.show();
+                }
+
+                if($scope.height){
+                    $element.css('height', $scope.height);
+                }
+
+                if($scope.width){
+                    $element.css('width', $scope.width);
                 }
             },
             controller: function($scope) {

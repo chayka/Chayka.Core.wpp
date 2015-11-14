@@ -229,6 +229,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('img', ['imagemin']);
 
-    grunt.registerTask('default', ['css', 'js', 'img', 'clean:all']);
+    grunt.registerTask('default', ['css', 'js', 'img', 'clean:all', 'watch']);
 
 };
