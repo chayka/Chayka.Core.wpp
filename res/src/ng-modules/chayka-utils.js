@@ -190,6 +190,18 @@ angular.module('chayka-utils', [])
                         }
                     }
                 };
+            },
+
+            /**
+             * Return ordinal suffix of an integer
+             * @param {int} input
+             * @return {string}
+             */
+            ordinal: function (input) {
+                var n = input % 100;
+                return (n < 11 || n > 13) ?
+                        ['st', 'nd', 'rd', 'th'][Math.min((n - 1) % 10, 3)] :
+                        'th';
             }
 
         };
@@ -227,6 +239,11 @@ angular.module('chayka-utils', [])
                 }
                 return utils.getResourceUrl(appId, src);
             }
+        };
+    }])
+    .filter('ordinal', ['utils', function (utils) {
+        return function (input) {
+            return input + utils.ordinal(input);
         };
     }])
 ;

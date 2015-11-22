@@ -138,7 +138,10 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
 
                 options = angular.extend(defaults, options);
 
-                var spinner = options.spinner || null;
+                var spinner = options.spinner; //|| null;
+                if(!spinner && spinner !== false){
+                    spinner = null;
+                }
                 var spinnerId = options.spinnerId || 'spinner';
                 var spinnerFieldId = options.spinnerFieldId;
                 var spinnerMessage = options.spinnerMessage || 'Processing...';
