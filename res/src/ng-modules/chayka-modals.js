@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-utils'])
+angular.module('chayka-modals', ['chayka-nls', 'chayka-buttons', 'chayka-utils'])
     .controller('modalCtrl', ['$scope', 'modals', 'buttons', function($scope, modals){
         modals.setQueueScope($scope);
         $scope.close = modals.close;
@@ -9,10 +9,9 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
             return modals.getButtonClass(button);
         };
     }])
-    //.factory('modals', ['$window', '$translate', 'utils', function($window, $translate, utils){
     .provider('modals', function(){
 
-        this.$get = ['$window', '$translate', 'buttons', 'utils', function($window, $translate, btn, utils){
+        this.$get = ['$window', 'nls', 'buttons', 'utils', function($window, nls, btn, utils){
 
             var modals = utils.ensure('Chayka.Modals', {
                 queue: [],
@@ -113,7 +112,7 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
                         title: title || '',
                         modalClass: modalClass,
                         buttons: [
-                            {text: $translate.instant('Ok'), click: callback}
+                            {text: nls._('Ok'), click: callback}
                         ]
                     });
                 },
@@ -132,8 +131,8 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
                         modalClass: 'modal_confirm',
                         //modal: false,
                         buttons: [
-                            {text: $translate.instant('Yes'), click: callback},
-                            {text: $translate.instant('No')}
+                            {text: nls._('Yes'), click: callback},
+                            {text: nls._('No')}
                         ]
                     });
                 },
@@ -266,16 +265,16 @@ angular.module('chayka-modals', ['chayka-translate', 'chayka-buttons', 'chayka-u
             }
         };
     }])
-    .config(['$translateProvider', function($translateProvider) {
+    .config(['nlsProvider', function(nlsProvider) {
 
         // Adding a translation table for the English language
-        $translateProvider.translations('en-US', {
+        nlsProvider.setTranslations('en-US', {
             'Yes': 'Yes',
             'No': 'No',
             'Ok': 'Ok'
         });
 
-        $translateProvider.translations('ru-RU', {
+        nlsProvider.setTranslations('ru-RU', {
             'Yes': 'Да',
             'No': 'Нет',
             'Ok': 'Ok'

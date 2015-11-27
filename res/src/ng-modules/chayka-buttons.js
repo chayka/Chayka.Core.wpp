@@ -5,26 +5,29 @@ angular.module('chayka-buttons', ['chayka-utils'])
 
         var stdButtonClass = '';
 
-        /**
-         * Set button class
-         * @param {string} cls
-         */
-        this.setButtonClass = function (cls) {
-            stdButtonClass = cls;
+        var buttons = {
+
+            /**
+             * Set button class
+             * @param {string} cls
+             */
+            setButtonClass: function(cls){
+                stdButtonClass = cls;
+            },
+
+            /**
+             * Get button class
+             * @return {string}
+             */
+            getButtonClass: function(){
+                return stdButtonClass;
+            }
         };
 
+        angular.extend(this, buttons);
         this.$get = ['utils', function (utils) {
 
-            var buttons = utils.ensure('Chayka.Buttons', {
-
-                setButtonClass: function(cls){
-                    stdButtonClass = cls;
-                },
-
-                getButtonClass: function(){
-                    return stdButtonClass;
-                }
-            });
+            utils.ensure('Chayka.Buttons',buttons);
 
             return buttons;
         }];

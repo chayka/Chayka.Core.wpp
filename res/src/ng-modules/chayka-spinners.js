@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
+angular.module('chayka-spinners', ['chayka-nls', 'chayka-utils'])
     .directive('spinner', [function(){
         return {
             restrict: 'AE',
@@ -13,7 +13,6 @@ angular.module('chayka-spinners', ['chayka-translate', 'chayka-utils'])
             template: '<div class="chayka-spinner" data-ng-show="visible" data-ng-bind-html="message"></div>',
 
             controller: function($scope){
-                var ctrl = {};
 
                 $scope.show = function(message){
                     $scope.message = message || $scope.message || 'Loading...';

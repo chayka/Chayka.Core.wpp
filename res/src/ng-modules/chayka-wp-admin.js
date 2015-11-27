@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayka-utils', 'chayka-buttons', 'chayka-forms', 'ui.sortable'])
+angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-nls', 'chayka-utils', 'chayka-buttons', 'chayka-forms', 'ui.sortable'])
     .controller('metabox', ['$scope', function($scope){
         $scope.meta = {};
         $scope.validator = null;
@@ -155,7 +155,7 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
 
         return resolver;
     }])
-    .directive('mediaPicker', ['buttons', 'mediaResolver', '$translate', 'modals', function(buttons, mediaResolver, $translate, modals){
+    .directive('mediaPicker', ['buttons', 'mediaResolver', 'nls', 'modals', function(buttons, mediaResolver, nls, modals){
         return {
             restrict: 'AE',
             scope: {
@@ -230,8 +230,8 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
                 '</div>' +
                 '<div class="note" data-ng-transclude></div>' +
                 '<div class="buttons">' +
-                '   <button class="{{buttonClass}} btn_clear" data-ng-click="clearMedia($event);" data-ng-show="!!hasImages()" >{{ "Clear" | translate}}</button>' +
-                '   <button class="{{buttonClass}} btn_pick" data-ng-click="pickMedia($event);">{{ pickerButtonText || "Browse" | translate}}</button>' +
+                '   <button class="{{buttonClass}} btn_clear" data-ng-click="clearMedia($event);" data-ng-show="!!hasImages()" >{{ "Clear" | nls}}</button>' +
+                '   <button class="{{buttonClass}} btn_pick" data-ng-click="pickMedia($event);">{{ pickerButtonText || "Browse" | nls}}</button>' +
                 '</div>' +
                 '</div>',
             controller: function($scope, $element){
@@ -258,7 +258,7 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
                                 $scope.mediaItems = [];
                                 if(model){
                                     if($scope.spinner){
-                                        $scope.spinner.show($translate.instant('Retrieving media data...'));
+                                        $scope.spinner.show(nls._('Retrieving media data...'));
                                     }
                                     mediaResolver.resolveByIds(model, function(items){
                                         if($scope.spinner){
@@ -292,7 +292,7 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
                                 model = parseInt(model);
                                 if(model){
                                     if($scope.spinner){
-                                        $scope.spinner.show($translate.instant('Retrieving media data...'));
+                                        $scope.spinner.show(nls._('Retrieving media data...'));
                                     }
                                     mediaResolver.resolveById(model, function(item){
                                         if($scope.spinner){
@@ -341,7 +341,7 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
                  */
                 $scope.removeMediaItem = function($event, item){
                     $event.preventDefault();
-                    modals.confirm($translate.instant('Delete this item?'), function(){
+                    modals.confirm(nls._('Delete this item?'), function(){
                         var value = '';
                         switch ($scope.mode){
                             case 'id':
@@ -389,9 +389,9 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
                     }
                     if(true || !frame){
                         frame = wp.media({
-                            title: $translate.instant($scope.title || 'Select or Upload Media'),
+                            title: nls._($scope.title || 'Select or Upload Media'),
                             button: {
-                                text: $translate.instant($scope.pickerButtonText || 'Use this media')
+                                text: nls._($scope.pickerButtonText || 'Use this media')
                             },
                             multiple: $scope.multiple  // Set to true to allow multiple files to be selected
                         });
@@ -449,7 +449,7 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
                 $scope.clearMedia = function($event){
                     $event.preventDefault();
                     if($scope.multiple && $scope.mediaItems.length > 3){
-                        modals.confirm($translate.instant('Remove media items?'), function(){
+                        modals.confirm(nls._('Remove media items?'), function(){
                             $scope.model = '';
                         });
                     }else{
@@ -528,12 +528,12 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
             '<div class="progress_label">{{ total ? processed + " / " + total + " (" + Math.floor(processed / total * 100) + "%)" : "0%" }}</div>' +
             '</div>' +
             '<div class="box_controls">' +
-            '<button class="dashicons-before dashicons-controls-play button button-small button_start" data-ng-click="start()" title="{{ \'btn_start\' | translate }}" data-ng-show="!state && buttons.indexOf(\'start\') >= 0"></button>' +
-            '<button class="dashicons-before dashicons-controls-pause button button-small button_pause" data-ng-click="pause()" title="{{ \'btn_pause\' | translate }}" data-ng-show="state===\'running\' && buttons.indexOf(\'pause\') >= 0"></button>' +
-            '<button class="dashicons-before dashicons-controls-repeat button button-small button_resume" data-ng-click="resume()" title="{{ \'btn_resume\' | translate }}" data-ng-show="state===\'paused\' && buttons.indexOf(\'resume\') >= 0"></button>' +
-            '<button class="dashicons-before dashicons-no button button-small button_stop" data-ng-click="stop()" title="{{ \'btn_stop\' | translate }}" data-ng-show="state && buttons.indexOf(\'stop\') >= 0"></button>' +
+            '<button class="dashicons-before dashicons-controls-play button button-small button_start" data-ng-click="start()" title="{{ \'btn_start\' | nls }}" data-ng-show="!state && buttons.indexOf(\'start\') >= 0"></button>' +
+            '<button class="dashicons-before dashicons-controls-pause button button-small button_pause" data-ng-click="pause()" title="{{ \'btn_pause\' | nls }}" data-ng-show="state===\'running\' && buttons.indexOf(\'pause\') >= 0"></button>' +
+            '<button class="dashicons-before dashicons-controls-repeat button button-small button_resume" data-ng-click="resume()" title="{{ \'btn_resume\' | nls }}" data-ng-show="state===\'paused\' && buttons.indexOf(\'resume\') >= 0"></button>' +
+            '<button class="dashicons-before dashicons-no button button-small button_stop" data-ng-click="stop()" title="{{ \'btn_stop\' | nls }}" data-ng-show="state && buttons.indexOf(\'stop\') >= 0"></button>' +
             '<span class="field_items_per_iteration">' +
-            '<label>{{ "label_per_iteration" | translate }}</label>' +
+            '<label>{{ "label_per_iteration" | nls }}</label>' +
             '<input type="number" data-ng-model="perIteration"/>' +
             '</span>' +
             '</div>' +
@@ -656,10 +656,10 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
             }
         };
     }])
-    .config(['$translateProvider', 'buttonsProvider', function($translateProvider, buttonsProvider) {
+    .config(['nlsProvider', 'buttonsProvider', function(nlsProvider, buttonsProvider) {
 
         // Adding a translation table for the English language
-        $translateProvider.translations('en-US', {
+        nlsProvider.setTranslations('en-US', {
             'btn_start': 'Start',
             'btn_stop': 'Stop',
             'btn_pause': 'Pause',
@@ -667,7 +667,7 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-translate', 'chayk
             'label_per_iteration': 'Per iteration'
         });
 
-        $translateProvider.translations('ru-RU', {
+        nlsProvider.setTranslations('ru-RU', {
             'btn_start': 'Старт',
             'btn_stop': 'Стоп',
             'btn_pause': 'Пауза',

@@ -1,8 +1,8 @@
-<div id="chayka-modals" data-ng-controller="modalCtrl" data-ng-show="queue.length" class="ng-cloak chayka-modals">
+<div id="chayka-modals" data-ng-controller="modalCtrl" data-ng-show="queue.length" class="ng-cloak chayka-modals" data-ng-cloak="">
     <div class="chayka-modals-fader" data-ng-click="">
         <div data-ng-repeat="item in queue | limitTo: 1" class="chayka-modals-modal">
             <div class="modal_header">
-                <div class="modal_header-title">{{item.title | translate}}</div>
+                <div class="modal_header-title">{{item.title | nls}}</div>
                 <div class="modal_header-close" data-ng-click="item.hide()">&times;</div>
             </div>
             <div class="modal_body">
@@ -10,7 +10,7 @@
 <!--                <div class="modal_body-element" data-ng-show="!!item.element" data-modal-element="item.element"></div>-->
             </div>
             <div class="modal_buttons" data-ng-show="item.buttons && item.buttons.length">
-                <button data-ng-repeat="button in item.buttons" data-ng-click="button.persist || item.hide(); button.click && button.click();" class="{{getButtonClass(button)}}">{{button.text | translate}}</button>
+                <button data-ng-repeat="button in item.buttons" data-ng-click="button.persist || item.hide(); button.click && button.click();" class="{{getButtonClass(button)}}">{{button.text | nls}}</button>
             </div>
         </div>
     </div>
@@ -21,13 +21,13 @@
         <div class="chayka-modals-fader" data-ng-click="">
             <div class="chayka-modals-modal">
                 <div class="modal_header">
-                    <div class="modal_header-title">{{title | translate}}</div>
+                    <div class="modal_header-title">{{title | nls}}</div>
                     <div class="modal_header-close" data-ng-click="hide()">&times;</div>
                 </div>
                 <div class="modal_body" data-ng-transclude>
                 </div>
                 <div class="modal_buttons" data-ng-show="buttons && buttons.length">
-                    <button data-ng-repeat="button in buttons" data-ng-click="button.persist || hide(); button.click && button.click();" class="{{getButtonClass(button)}}">{{button.text | translate}}</button>
+                    <button data-ng-repeat="button in buttons" data-ng-click="button.persist || hide(); button.click && button.click();" class="{{getButtonClass(button)}}">{{button.text | nls}}</button>
                 </div>
             </div>
         </div>

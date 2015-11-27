@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
+angular.module('chayka-pagination', ['chayka-nls', 'chayka-utils'])
     .directive('pagination', ['utils', function(utils){
 
         return {
@@ -271,17 +271,17 @@ angular.module('chayka-pagination', ['chayka-translate', 'chayka-utils'])
             }
         };
     }])
-    .config(['$translateProvider', function($translateProvider) {
+    .config(['nlsProvider', function(nlsProvider) {
 
         // Adding a translation table for the English language
-        $translateProvider.translations('en-US', {
+        nlsProvider.translations('en-US', {
             'next': 'Next',
             'previous': 'Previous',
             'next_page': 'Next page',
             'previous_page': 'Previous Page'
         });
 
-        $translateProvider.translations('ru-RU', {
+        nlsProvider.translations('ru-RU', {
             'next': 'Следующая',
             'previous': 'Предыдущая',
             'next_page': 'Следующая страница',

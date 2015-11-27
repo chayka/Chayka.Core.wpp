@@ -18,7 +18,7 @@ module.exports = function(grunt) {
         jsCore: [
             'res/src/ng-modules/chayka-utils.js',
             'res/src/ng-modules/chayka-buttons.js',
-            'res/src/ng-modules/chayka-translate.js',
+            'res/src/ng-modules/chayka-nls.js',
             'res/src/ng-modules/chayka-spinners.js',
             'res/src/ng-modules/chayka-ajax.js',
             'res/src/ng-modules/chayka-modals.js',
@@ -126,7 +126,7 @@ module.exports = function(grunt) {
             core: {
                 files: {
                     'res/dist/ng-modules/chayka-core.js': [
-                        'res/lib/angular-translate/angular-translate.min.js',
+                        //'res/lib/angular-translate/angular-translate.min.js',
                         'res/lib/angular-sanitize/angular-sanitize.min.js',
                         'res/dist/ng-modules/chayka-core.js'
                     ],
