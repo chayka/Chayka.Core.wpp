@@ -251,7 +251,6 @@ class Plugin extends WP\Plugin{
         $this->registerNgStyle('chayka-forms', 'ng-modules/chayka-forms.css', ['chayka-spinners']);
 
 	    $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-nls', 'chayka-utils', 'chayka-modals', 'chayka-forms', 'ng-sortable', 'wp-color-picker']);
-
 	    $this->registerNgStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['chayka-forms', 'chayka-modals', 'ng-sortable', 'wp-color-picker']);
 
 	    $this->registerNgScript('chayka-options-form', 'ng-modules/chayka-options-form.js', ['chayka-forms', 'chayka-wp-admin']);

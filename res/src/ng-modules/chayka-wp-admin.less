@@ -24,26 +24,26 @@
 
     .postbox{
         .form_field{
-            > label{
+            & > label{
                 cursor: auto;
             }
-            > label.alignright{
+            & > label.alignright{
                 text-align: right;
             }
-            > .input{
+            & > .input{
                 display: block;
-                input[type=text],
-                input[type=password],
-                select{
+                & > input[type=text],
+                & > input[type=password],
+                & > select{
 
                 }
-                textarea{
+                & > textarea{
                     resize: vertical;
                 }
-                input[type=radio]{
+                & > input[type=radio]{
 
                 }
-                input[type=checkbox]{
+                & > input[type=checkbox]{
 
                 }
                 .fullsize{
@@ -56,37 +56,37 @@
 
         }
         .form_field.fullsize{
-            > label{
+            & > label{
                 display: block;
                 width: 100%;
                 position: static;
                 float: none;
             }
-            > .input{
+            & > .input{
                 margin: 0;
                 width: 100%;
-                input[type=text],
-                input[type=password],
-                select{
+                & > input[type=text],
+                & > input[type=password],
+                & > select{
                     width: 100%;
                 }
-                textarea{
+                & > textarea{
                     width: 100%;
                 }
-                input[type=radio]{
+                & > input[type=radio]{
 
                 }
-                input[type=checkbox]{
+                & > input[type=checkbox]{
 
                 }
-                label[for]{
+                & > label[for]{
 
                 }
                 .ui-datepicker-month, .ui-datepicker-year{
                     width: auto;
                 }
             }
-            > .message{
+            & > .message{
 
             }
         }
@@ -121,30 +121,30 @@
 #side-sortables{
     .form_field{
         margin-bottom: 1em;
-        > label{
+        & > label{
             padding-top: 4px;
         }
-        > .input{
+        & > .input{
 
-            input[type=text],
-            input[type=password],
-            select{
+            & > input[type=text],
+            & > input[type=password],
+            & > select{
                 width: 100%;
             }
-            textarea{
+            & > textarea{
                 width: 100%;
             }
-            input[type=radio]{
+            & > input[type=radio]{
 
             }
-            input[type=checkbox]{
+            & > input[type=checkbox]{
 
             }
-            label[for]{
+            & > label[for]{
 
             }
         }
-        > .message{
+        & > .message{
 
         }
     }
@@ -383,56 +383,9 @@ body, html{
         }
     }
 
-//    &.running{
-//
-//        .box_buttons{
-//            .button_start{
-//                display: inline;
-//            }
-//            .button_pause{
-//                display: inline;
-//
-//            }
-//            .button_resume{
-//                display: none;
-//            }
-//            .button_stop{
-//                display: inline;
-//
-//            }
-//        }
-//        .processor{
-//            .progress_spinner{
-//                display: block;
-//            }
-//        }
-//    }
-//
-//    &.paused{
-//
-//        .box_buttons{
-//            .button_start{
-//                display: none;
-//            }
-//            .button_pause{
-//                display: none;
-//            }
-//            .button_resume{
-//                display: inline;
-//            }
-//            .button_stop{
-//                display: inline;
-//            }
-//        }
-//    }
-//
-//    &.finished{
-//
-//        .box_buttons{
-//            display: none;
-//        }
-//    }
 }
+
+/* Color Picker */
 
 .form_field.color_picker{
     & > .input{
@@ -506,5 +459,24 @@ body, html{
     }
     &.fullsize > .input{
 
+    }
+}
+
+/* Thumbnails in theme-customized admin area */
+
+.wp-list-table{
+    td {
+        & > img {
+            max-width: 100%;
+            height: auto;
+        }
+    }
+}
+
+/* metabox fix */
+
+.metabox{
+    & > [data-form-validator], & > [form-validator]{
+        width: auto;
     }
 }

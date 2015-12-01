@@ -22,8 +22,8 @@
 #postbox-container-2 .postbox .form_field > .input {
   display: block;
 }
-#postbox-container-1 .postbox .form_field > .input textarea,
-#postbox-container-2 .postbox .form_field > .input textarea {
+#postbox-container-1 .postbox .form_field > .input > textarea,
+#postbox-container-2 .postbox .form_field > .input > textarea {
   resize: vertical;
 }
 #postbox-container-1 .postbox .form_field > .input .fullsize,
@@ -42,16 +42,16 @@
   margin: 0;
   width: 100%;
 }
-#postbox-container-1 .postbox .form_field.fullsize > .input input[type=text],
-#postbox-container-2 .postbox .form_field.fullsize > .input input[type=text],
-#postbox-container-1 .postbox .form_field.fullsize > .input input[type=password],
-#postbox-container-2 .postbox .form_field.fullsize > .input input[type=password],
-#postbox-container-1 .postbox .form_field.fullsize > .input select,
-#postbox-container-2 .postbox .form_field.fullsize > .input select {
+#postbox-container-1 .postbox .form_field.fullsize > .input > input[type=text],
+#postbox-container-2 .postbox .form_field.fullsize > .input > input[type=text],
+#postbox-container-1 .postbox .form_field.fullsize > .input > input[type=password],
+#postbox-container-2 .postbox .form_field.fullsize > .input > input[type=password],
+#postbox-container-1 .postbox .form_field.fullsize > .input > select,
+#postbox-container-2 .postbox .form_field.fullsize > .input > select {
   width: 100%;
 }
-#postbox-container-1 .postbox .form_field.fullsize > .input textarea,
-#postbox-container-2 .postbox .form_field.fullsize > .input textarea {
+#postbox-container-1 .postbox .form_field.fullsize > .input > textarea,
+#postbox-container-2 .postbox .form_field.fullsize > .input > textarea {
   width: 100%;
 }
 #postbox-container-1 .postbox .form_field.fullsize > .input .ui-datepicker-month,
@@ -89,12 +89,12 @@
 #side-sortables .form_field > label {
   padding-top: 4px;
 }
-#side-sortables .form_field > .input input[type=text],
-#side-sortables .form_field > .input input[type=password],
-#side-sortables .form_field > .input select {
+#side-sortables .form_field > .input > input[type=text],
+#side-sortables .form_field > .input > input[type=password],
+#side-sortables .form_field > .input > select {
   width: 100%;
 }
-#side-sortables .form_field > .input textarea {
+#side-sortables .form_field > .input > textarea {
   width: 100%;
 }
 body,
@@ -266,6 +266,7 @@ html {
 .chayka-job_control .box_output .message:last-child {
   border-bottom: none;
 }
+/* Color Picker */
 .form_field.color_picker > .input {
   position: relative;
   min-height: 32px;
@@ -317,4 +318,14 @@ html {
 }
 .form_field.color_picker.stretch > .input > .wp-picker-container > .wp-picker-input-wrap {
   clear: both;
+}
+/* Thumbnails in theme-customized admin area */
+.wp-list-table td > img {
+  max-width: 100%;
+  height: auto;
+}
+/* metabox fix */
+.metabox > [data-form-validator],
+.metabox > [form-validator] {
+  width: auto;
 }
