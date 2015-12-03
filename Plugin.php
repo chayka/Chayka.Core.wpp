@@ -176,6 +176,24 @@ class Plugin extends WP\Plugin{
         if(empty($_SESSION['timezone'])){
 //            $this->addAction('wp_footer', 'fixTimezone');
         }
+        if(true){
+            if(is_active_sidebar('chayka-core-js-header')){
+                $this->addAction('wp_head', function (){
+                    echo '<div id="chayka-core-js-header" style="display: none;">';
+                    dynamic_sidebar('chayka-core-js-header');
+                    echo '</div>';
+                });
+            }
+            if(is_active_sidebar('chayka-core-js-footer')){
+                $this->addAction('wp_footer', function (){
+                    echo '<div id="chayka-core-js-footer" style="display: none;">';
+                    dynamic_sidebar('chayka-core-js-footer');
+                    echo '</div>';
+                });
+            }
+
+        }
+
     	/* chayka: registerActions */
     }
 
@@ -442,6 +460,30 @@ class Plugin extends WP\Plugin{
      */
     public function registerMetaBoxes(){
         /* chayka: registerMetaBoxes */
+    }
+
+    /**
+     * Add custom sidebars
+     */
+    public function registerSidebars(){
+        if(true){
+            register_sidebar(array(
+                'name'          => 'Javascript - Header',
+                'id'            => 'chayka-core-js-header',
+                'before_widget' => '',
+                'after_widget'  => '',
+                'before_title'  => "<!--",
+                'after_title'   => "-->\n"
+            ));
+            register_sidebar(array(
+                'name'          => 'Javascript - Footer',
+                'id'            => 'chayka-core-js-footer',
+                'before_widget' => '',
+                'after_widget'  => '',
+                'before_title'  => "<!--",
+                'after_title'   => "-->\n"
+            ));
+        }
     }
 }
 
