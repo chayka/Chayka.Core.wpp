@@ -24,15 +24,15 @@
   margin-left: 120px;
   display: block;
 }
-.form_field > .input input[type=text],
-.form_field > .input input[type=password],
-.form_field > .input input[type=number],
-.form_field > .input input[type=email],
-.form_field > .input input[type=search],
-.form_field > .input input[type=tel],
-.form_field > .input input[type=url],
-.form_field > .input select,
-.form_field > .input textarea {
+.form_field > .input > input[type=text],
+.form_field > .input > input[type=password],
+.form_field > .input > input[type=number],
+.form_field > .input > input[type=email],
+.form_field > .input > input[type=search],
+.form_field > .input > input[type=tel],
+.form_field > .input > input[type=url],
+.form_field > .input > select,
+.form_field > .input > textarea {
   margin: 0;
   font-size: 16px;
   min-height: 32px;
@@ -41,35 +41,35 @@
   line-height: 32px;
   box-sizing: border-box;
 }
-.form_field > .input textarea {
+.form_field > .input > textarea {
   resize: vertical;
   line-height: normal;
 }
-.form_field.radio label {
+.form_field.radio > label {
   white-space: nowrap;
 }
-.form_field.radio .input {
+.form_field.radio > .input {
   padding-top: 1px;
 }
-.form_field.radio .input label {
+.form_field.radio > .input > label {
   display: inline-block;
   margin-right: 1ex;
 }
 .form_field.fullsize.checkbox > label {
   display: none;
 }
-.form_field.progress > .input input[type=text],
-.form_field.progress > .input input[type=password],
-.form_field.progress > .input input[type=number],
-.form_field.progress > .input input[type=email],
-.form_field.progress > .input input[type=search],
-.form_field.progress > .input input[type=tel],
-.form_field.progress > .input input[type=url],
-.form_field.progress > .input textarea {
+.form_field.progress > .input > input[type=text],
+.form_field.progress > .input > input[type=password],
+.form_field.progress > .input > input[type=number],
+.form_field.progress > .input > input[type=email],
+.form_field.progress > .input > input[type=search],
+.form_field.progress > .input > input[type=tel],
+.form_field.progress > .input > input[type=url],
+.form_field.progress > .input > textarea {
   background: url(../img/spinner32x32.gif) no-repeat 99% 50%;
   background-size: 16px 16px;
 }
-.form_field.progress > .input textarea {
+.form_field.progress > .input > textarea {
   background-position: 99% 4px;
 }
 .form_field > .message {
@@ -212,30 +212,30 @@
   position: static;
   float: none;
 }
-.form_field.fullsize .input {
+.form_field.fullsize > .input {
   margin: 0;
   width: 100%;
 }
-.form_field.fullsize .input input[type=text],
-.form_field.fullsize .input input[type=password],
-.form_field.fullsize .input input[type=number],
-.form_field.fullsize .input input[type=email],
-.form_field.fullsize .input input[type=search],
-.form_field.fullsize .input input[type=tel],
-.form_field.fullsize .input input[type=url],
-.form_field.fullsize .input select,
-.form_field.fullsize .input textarea {
+.form_field.fullsize > .input > input[type=text],
+.form_field.fullsize > .input > input[type=password],
+.form_field.fullsize > .input > input[type=number],
+.form_field.fullsize > .input > input[type=email],
+.form_field.fullsize > .input > input[type=search],
+.form_field.fullsize > .input > input[type=tel],
+.form_field.fullsize > .input > input[type=url],
+.form_field.fullsize > .input > select,
+.form_field.fullsize > .input > textarea {
   width: 100%;
 }
-.form_field.stretch .input input[type=text],
-.form_field.stretch .input input[type=password],
-.form_field.stretch .input input[type=number],
-.form_field.stretch .input input[type=email],
-.form_field.stretch .input input[type=search],
-.form_field.stretch .input input[type=tel],
-.form_field.stretch .input input[type=url],
-.form_field.stretch .input select,
-.form_field.stretch .input textarea {
+.form_field.stretch > .input > input[type=text],
+.form_field.stretch > .input > input[type=password],
+.form_field.stretch > .input > input[type=number],
+.form_field.stretch > .input > input[type=email],
+.form_field.stretch > .input > input[type=search],
+.form_field.stretch > .input > input[type=tel],
+.form_field.stretch > .input > input[type=url],
+.form_field.stretch > .input > select,
+.form_field.stretch > .input > textarea {
   width: 100%;
 }
 /* grid */
