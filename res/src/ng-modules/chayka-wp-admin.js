@@ -212,7 +212,12 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-nls', 'chayka-util
                  * - contain
                  * - cover
                  */
-                itemMode: '@?'
+                itemMode: '@?',
+
+                /**
+                 * On model change callback
+                 */
+                onChange: '&?'
             },
             transclude: true,
             template:
@@ -241,10 +246,12 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-nls', 'chayka-util
                 $scope.mode = $scope.mode || 'id';
                 $scope.size = $scope.size || 'medium';
                 $scope.spinner = null;
+                $scope.prevModel = '';
 
                 var frame = null;
                 var wp = window.wp;
-                //var media = null;
+
+                $scope.prevModel = $scope.model?JSON.stringify($scope.model):'';
 
 
                 /**
@@ -309,6 +316,13 @@ angular.module('chayka-wp-admin', ['chayka-spinners', 'chayka-nls', 'chayka-util
                         }
 
                     }
+
+                    var newModel = model?JSON.stringify(model):'';
+                    if($scope.onChange && newModel !== $scope.prevModel){
+                        $scope.onChange();
+                    }
+
+                    $scope.prevModel = newModel;
                 });
 
                 /**

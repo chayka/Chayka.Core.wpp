@@ -101,6 +101,27 @@ angular.module('chayka-utils', [])
             },
 
             /**
+             * Set default values if object members not set
+             *
+             * @param {{}} obj
+             * @param {{}} defaults
+             */
+            setDefaults: function(obj, defaults){
+                obj = obj || {};
+                for(var key in defaults){
+                    if(defaults.hasOwnProperty(key)){
+                        if(typeof defaults[key] === 'object'){
+                            obj[key] = Chayka.Utils.setDefaults(obj[key] || {}, defaults[key]);
+                        }else if(obj[key] === undefined){
+                            obj[key] = defaults[key];
+                        }
+                    }
+                }
+
+                return obj;
+            },
+
+            /**
              * Get param from html tag
              *
              * @param {jQuery} $element
