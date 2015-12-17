@@ -106,12 +106,12 @@ angular.module('chayka-utils', [])
              * @param {{}} obj
              * @param {{}} defaults
              */
-            setDefaults: function(obj, defaults){
+            setObjectDefaults: function(obj, defaults){
                 obj = obj || {};
                 for(var key in defaults){
                     if(defaults.hasOwnProperty(key)){
                         if(typeof defaults[key] === 'object'){
-                            obj[key] = Chayka.Utils.setDefaults(obj[key] || {}, defaults[key]);
+                            obj[key] = Chayka.Utils.setObjectDefaults(obj[key] || {}, defaults[key]);
                         }else if(obj[key] === undefined){
                             obj[key] = defaults[key];
                         }
@@ -119,6 +119,28 @@ angular.module('chayka-utils', [])
                 }
 
                 return obj;
+            },
+
+            /**
+             * Remove all existing object members and set new ones from update.
+             * Returns updated object
+             *
+             * @param {{}} obj
+             * @param {{}} update
+             * @return {{}}
+             */
+            updateObject: function(obj, update){
+                for(var property in obj){
+                    if(obj.hasOwnProperty(property)){
+                        if(update[property] !== undefined){
+                            obj[property] = null;
+                        }else{
+                            delete obj[property];
+                        }
+                    }
+                }
+
+                return angular.extend(obj, update);
             },
 
             /**
