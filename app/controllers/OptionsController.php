@@ -30,7 +30,7 @@ class OptionsController extends Controller{
                 AclHelper::apiPermissionRequired( '', 'get_option', $namespace . $option );
             }
             $value = get_option($namespace.$option);
-            $options[$option] = $value?$value:$defValue;
+            $options[$option] = strlen($value)?$value:$defValue;
         }
         AclHelper::apiPermissionRequired('', 'manage_network_options');
         foreach($siteOptions as $option => $defValue){
@@ -38,7 +38,7 @@ class OptionsController extends Controller{
                 AclHelper::apiPermissionRequired( '', 'get_site_option', $namespace . $option );
             }
             $value = get_site_option($namespace.$option);
-            $siteOptions[$option] = $value?$value:$defValue;
+            $siteOptions[$option] = strlen($value)?$value:$defValue;
         }
         $options['site'] = $siteOptions;
         JsonHelper::respond($options);
