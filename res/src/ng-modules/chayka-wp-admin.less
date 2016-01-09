@@ -111,8 +111,17 @@
             }
         }
         .form_field.checkbox{
-            >label{
+            & > label{
                 display: none;
+            }
+        }
+        .form_field.checkboxes{
+            & > label{
+                white-space: nowrap;
+                display: inline-block;
+                & > input[type=checkbox]{
+
+                }
             }
         }
     }

@@ -83,6 +83,11 @@
 #postbox-container-2 .postbox .form_field.checkbox > label {
   display: none;
 }
+#postbox-container-1 .postbox .form_field.checkboxes > label,
+#postbox-container-2 .postbox .form_field.checkboxes > label {
+  white-space: nowrap;
+  display: inline-block;
+}
 #side-sortables .form_field {
   margin-bottom: 1em;
 }

@@ -58,6 +58,12 @@
 .form_field.fullsize.checkbox > label {
   display: none;
 }
+.form_field.checkboxes > label {
+  white-space: nowrap;
+  display: inline-block;
+  width: auto;
+  position: static;
+}
 .form_field.progress > .input > input[type=text],
 .form_field.progress > .input > input[type=password],
 .form_field.progress > .input > input[type=number],

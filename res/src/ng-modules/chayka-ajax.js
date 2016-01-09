@@ -371,30 +371,35 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
             },
 
             get: function(url, options, config){
+                options = options || {};
                 options.method = 'get';
                 options.config = config;
                 return ajax.request(url, options);
             },
 
             del: function(url, options, config){
+                options = options || {};
                 options.method = 'delete';
                 options.config = config;
                 return ajax.request(url, options);
             },
 
             head: function(url, options, config){
+                options = options || {};
                 options.method = 'head';
                 options.config = config;
                 return ajax.request(url, options);
             },
 
             jsonp: function(url, options, config){
+                options = options || {};
                 options.method = 'jsonp';
                 options.config = config;
                 return ajax.request(url, options);
             },
 
             post: function(url, data, options, config){
+                options = options || {};
                 options.method = 'post';
                 options.data = data;
                 options.config = config;
@@ -402,6 +407,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
             },
 
             put: function(url, data, options, config){
+                options = options || {};
                 options.method = 'put';
                 options.data = data;
                 options.config = config;
@@ -409,6 +415,7 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
             },
 
             patch: function(url, data, options, config){
+                options = options || {};
                 options.method = 'patch';
                 options.data = data;
                 options.config = config;
@@ -417,4 +424,42 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
         };
 
         return ajax;
-    }]);
+    }])
+    .directive('buttonAjaxRequest', ['ajax', 'modals', function(ajax, modals){
+        return {
+            scope: {
+                url: '@buttonAjaxRequest',
+                postData: '=?post',
+                confirm: '@?'
+            },
+
+            link: function($scope, $element){
+                var onSuccess = function(data){
+                    if(data.message){
+                        modals.alert(data.message);
+                    }
+                };
+                var sendRequest = function(){
+                    if($scope.postData){
+                        ajax.post($scope.url, $scope.postData, {
+                            success: onSuccess
+                        });
+                    }else{
+                        ajax.get($scope.url, {
+                            success: onSuccess
+                        });
+                    }
+                };
+
+                $element.click(function(e){
+                    e.preventDefault();
+                    if($scope.confirm){
+                        modals.confirm($scope.confirm, sendRequest);
+                    }else{
+                        sendRequest();
+                    }
+                });
+            }
+        };
+    }])
+;
