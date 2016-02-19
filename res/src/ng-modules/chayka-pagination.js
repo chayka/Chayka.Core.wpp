@@ -274,14 +274,14 @@ angular.module('chayka-pagination', ['chayka-nls', 'chayka-utils'])
     .config(['nlsProvider', function(nlsProvider) {
 
         // Adding a translation table for the English language
-        nlsProvider.translations('en-US', {
+        nlsProvider.setTranslations('en-US', {
             'next': 'Next',
             'previous': 'Previous',
             'next_page': 'Next page',
             'previous_page': 'Previous Page'
         });
 
-        nlsProvider.translations('ru-RU', {
+        nlsProvider.setTranslations('ru-RU', {
             'next': 'Следующая',
             'previous': 'Предыдущая',
             'next_page': 'Следующая страница',
