@@ -25,471 +25,476 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                 scrollMargin: '@',
                 scrollDuration: '@'
             },
-            link: (scope, element) => {
-                scope.element = element;
+            link: ($scope, $element) => {
+                $scope.element = $element;
             },
             controller: ($scope) => {
-                var fields = $scope.fields = {};
-                var ctrl = {};
-                var messageBox = null;
-                $scope.scrollMargin = $scope.scrollMargin || 50;
-                //console.log('validation form');
+                var ctrl = {
 
-                /**
-                 * Sets message box for validator.
-                 * The box that will show common errors.
-                 * This function is called by 'form-message' directive.
-                 *
-                 * If not set, Chayka.Modals.alert() will be utilized.
-                 *
-                 * @param {$scope} msgBox
-                 */
-                ctrl.setMessageBox = (msgBox) => {
-                    messageBox = msgBox;
-                };
+                    scrollMargin: $scope.scrollMargin || 50,
+                    scrollDuration: $scope.scrollMargin || 500,
+                    fields: $scope.fields || {},
+                    messageBox: null,
 
-                /**
-                 * Show message using message box or Chayka.Modals.alert()
-                 *
-                 * @param {string} message
-                 * @param {string} state
-                 * @returns {boolean}
-                 */
-                ctrl.showMessage = (message, state) => {
-                    if(messageBox){
-                        messageBox.message = message;
-                        messageBox.state = state || '';
-                        return true;
-                    }
-                    modals.alert(message, '', state);
-                    return false;
-                };
+                    /**
+                     * Sets message box for validator.
+                     * The box that will show common errors.
+                     * This function is called by 'form-message' directive.
+                     *
+                     * If not set, Chayka.Modals.alert() will be utilized.
+                     *
+                     * @param {$scope} msgBox
+                     */
+                    setMessageBox: (msgBox) => {
+                        ctrl.messageBox = msgBox;
+                    },
 
-                /**
-                 * Hide message shown by message box
-                 *
-                 * @returns {boolean}
-                 */
-                ctrl.clearMessage = () => {
-                    if(messageBox){
-                        messageBox.message = '';
-                        messageBox.state = '';
-                        return true;
-                    }
-                    return false;
-                };
-
-                /**
-                 * Add field to the set of validated fields
-                 *
-                 * @param {$scope} field
-                 */
-                ctrl.addField = (field) => {
-                    fields[field['name']] = field;
-                };
-
-                /**
-                 * Set field state and message (hint)
-                 *
-                 * @param {string|$scope} field
-                 * @param {string} state
-                 * @param {string} [message]
-                 */
-                ctrl.setFieldState = (field, state, message) => {
-                    if(angular.isString(field)){
-                        field = fields[field];
-                        if(!field){
-                            return;
+                    /**
+                     * Show message using message box or Chayka.Modals.alert()
+                     *
+                     * @param {string} message
+                     * @param {string} state
+                     * @returns {boolean}
+                     */
+                    showMessage: (message, state) => {
+                        if (ctrl.messageBox) {
+                            ctrl.messageBox.message = message;
+                            ctrl.messageBox.state = state || '';
+                            return true;
                         }
-                    }
-                    field['valid'] = state === 'valid' || state === 'clean';
-                    field['state'] = state;
-                    field['message'] = message || field['hint'];
+                        modals.alert(message, '', state);
+                        return false;
+                    },
 
-                    utils.patchScope(field);
-                };
-
-                /**
-                 * Set field state to error
-                 *
-                 * @param {string|scope} field
-                 * @param message
-                 */
-                ctrl.setFieldError = (field, message) => {
-                    ctrl.setFieldState(field, 'invalid', message);
-                };
-
-                /**
-                 * Clear field error state.
-                 *
-                 * @param {string|scope} field
-                 */
-                ctrl.clearFieldError = (field) => {
-                    ctrl.setFieldState(field, 'clear');
-                };
-
-                /**
-                 * Check required field
-                 *
-                 * @param {$scope} field
-                 * @returns {boolean}
-                 */
-                ctrl.checkRequired = (field) => {
-                    var c = field['checks'].required;
-                    return !c.active || !!field['value'];
-                };
-
-                /**
-                 * Check field length.
-                 *
-                 * @param {$scope} field
-                 * - length
-                 * @returns {boolean}
-                 */
-                ctrl.checkLength = (field) => {
-                    var c = field['checks'].length;
-                    return !c.active || !(c.max && field['value'].length > c.max || field['value'].length < c.min);
-                };
-
-                /**
-                 * Check field value range.
-                 *
-                 * @param {$scope} field
-                 * - min
-                 * - minE
-                 * - max
-                 * - maxE
-                 * @returns {boolean}
-                 */
-                ctrl.checkRange = (field) => {
-                    var c = field['checks'].range;
-                    var lower = c.min && (c.minE && field['value'] < c.min || !c.minE && field['value'] <= c.min);
-                    var greater = c.max && (c.maxE && field['value'] > c.max || !c.minE && field['value'] >= c.max);
-                    return !c.active || !(lower || greater);
-                };
-
-                /**
-                 * Check field value lt (<).
-                 *
-                 * @param {$scope} field
-                 * - max
-                 * @returns {boolean}
-                 */
-                ctrl.checkLt = (field) => {
-                    var c = field['checks'].lt;
-                    return !c.active || field['value'] < c.max;
-                };
-
-                /**
-                 * Check field value le (<=).
-                 *
-                 * @param {$scope} field
-                 * - max
-                 * @returns {boolean}
-                 */
-                ctrl.checkLe = (field) => {
-                    var c = field['checks'].le;
-                    return !c.active || field['value'] <= c.max;
-                };
-
-                /**
-                 * Check field value gt (>).
-                 *
-                 * @param {$scope} field
-                 * - min
-                 * @returns {boolean}
-                 */
-                ctrl.checkGt = (field) => {
-                    var c = field['checks'].gt;
-                    return !c.active || field['value'] > c.min;
-                };
-
-                /**
-                 * Check field value ge (>=).
-                 *
-                 * @param {$scope} field
-                 * - min
-                 * @returns {boolean}
-                 */
-                ctrl.checkGe = (field) => {
-                    var c = field['checks'].ge;
-                    return !c.active || field['value'] >= c.min;
-                };
-
-                /**
-                 * Check field value against regexp.
-                 *
-                 * @param {$scope} field
-                 * - regexp
-                 * @returns {*|boolean}
-                 */
-                ctrl.checkRegexp = (field) => {
-                    var c = field['checks'].regexp;
-                    var valid = c.regexp.test( field['value'] );
-                    if(c.forbid){
-                        valid = !valid;
-                    }
-                    return !c.active || valid;
-                };
-
-                /**
-                 * Compare two password field values.
-                 *
-                 * @param {$scope} field
-                 * - repeat
-                 * @returns {boolean}
-                 */
-                ctrl.checkPasswords = (field) => {
-                    var c = field['checks'].passwords;
-                    var repeatField = fields[c.repeat] || field;
-                    return !c.active || field['value'] === repeatField.value;
-                };
-
-                /**
-                 * Check value using api call.
-                 * Stores checked values to cache.
-                 *
-                 * @param {$scope} field
-                 * - url
-                 * - delay
-                 * @returns {string} state
-                 */
-                ctrl.checkApi = (field) => {
-                    var c = field['checks'].api;
-                    var url = utils.template(c.url, {name: encodeURIComponent(field['name']), value: encodeURIComponent(field['value'])});
-                    var value = field['value'] + '';
-                    if(c.active) {
-                        if (value in c.dictionary) {
-                            if ('valid' === c.dictionary[value]) {
-                                ctrl.setFieldState(field, 'valid', null);
-                            } else {
-                                ctrl.setFieldState(field, 'invalid', c.message);
-                            }
-                            return c.dictionary[value];
+                    /**
+                     * Hide message shown by message box
+                     *
+                     * @returns {boolean}
+                     */
+                    clearMessage: () => {
+                        if (ctrl.messageBox) {
+                            ctrl.messageBox.message = '';
+                            ctrl.messageBox.state = '';
+                            return true;
                         }
+                        return false;
+                    },
 
-                        c.dictionary[value] = 'progress';
-                        ajax.get(url, {
-                            spinner: $scope.spinner,
-                            spinnerFieldId: field['name'],
-                            spinnerMessage: ' ',
-                            showMessage: false,
-                            formValidator: ctrl,
-                            errorMessage: c.message,
-                            validateOnSend: false,
-                            scope: field,
-                            success: (data) => {
-                                //console.dir({'data': data});
-                                c.dictionary[value] = 'valid';
-                                ctrl.setFieldState(field, 'valid', null);
-                            },
-                            error: (data) => {
-                                c.dictionary[value] = 'invalid';
-                                c.message = c.message || 'mass_errors' === data.code && data.message[field['name']] || data.message;
-                            }
-                        });
-                    }
-                    return !c.active || c.dictionary[value];
+                    /**
+                     * Add field to the set of validated fields
+                     *
+                     * @param {$scope} field
+                     */
+                    addField: (field) => {
+                        ctrl.fields[field['name']] = field;
+                    },
 
-                };
-
-                /**
-                 * Perform custom check by calling provided scope callback.
-                 *
-                 * @param {$scope} field
-                 * @returns {*}
-                 */
-                ctrl.checkCustom = (field) => {
-                    var c = field['checks'].custom;
-                    var callback = c.callback;
-                    return !c.active || $scope.$parent[callback].call($scope, field['value']);
-                };
-
-                /**
-                 * Perform all the set up checks for the given field.
-                 * If silent, does not visualize validation state.
-                 *
-                 * @param {$scope} field
-                 * @param {boolean} [silent]
-                 * @returns {bolean}
-                 */
-                ctrl.validateField = (field, silent) => {
-                    var valid = true,
-                        message = '',
-                        state,
-                        checks = field['checks'];
-
-                    if(!field['active']){
-                        return true;
-                    }
-
-                    if(checks.required && !ctrl.checkRequired(field)){
-                        valid = false;
-                        message = checks.required.message;
-                    }
-
-                    if(field['value']){
-                        angular.forEach(checks, (c, check) => {
-                            if(!valid){
+                    /**
+                     * Set field state and message (hint)
+                     *
+                     * @param {string|$scope} field
+                     * @param {string} state
+                     * @param {string} [message]
+                     */
+                    setFieldState: (field, state, message) => {
+                        if (angular.isString(field)) {
+                            field = ctrl.fields[field];
+                            if (!field) {
                                 return;
                             }
-                            switch(check){
-                                case 'length':
-                                    valid = ctrl.checkLength(field);
-                                    break;
-                                case 'range':
-                                    valid = ctrl.checkRange(field);
-                                    break;
-                                case 'lt':
-                                    valid = ctrl.checkLt(field);
-                                    break;
-                                case 'le':
-                                    valid = ctrl.checkLe(field);
-                                    break;
-                                case 'gt':
-                                    valid = ctrl.checkGt(field);
-                                    break;
-                                case 'ge':
-                                    valid = ctrl.checkGe(field);
-                                    break;
-                                case 'regexp':
-                                    valid = ctrl.checkRegexp(field);
-                                    break;
-                                case 'passwords':
-                                    valid = ctrl.checkPasswords(field);
-                                    break;
-                                default :
+                        }
+                        field['valid'] = state === 'valid' || state === 'clean';
+                        field['state'] = state;
+                        field['message'] = message || field['hint'];
+
+                        //utils.patchScope(field);
+                    },
+
+                    /**
+                     * Set field state to error
+                     *
+                     * @param {string|scope} field
+                     * @param message
+                     */
+                    setFieldError: (field, message) => {
+                        ctrl.setFieldState(field, 'invalid', message);
+                    },
+
+                    /**
+                     * Clear field error state.
+                     *
+                     * @param {string|scope} field
+                     */
+                    clearFieldError: (field) => {
+                        ctrl.setFieldState(field, 'clear');
+                    },
+
+                    /**
+                     * Check required field
+                     *
+                     * @param {$scope} field
+                     * @returns {boolean}
+                     */
+                    checkRequired: (field) => {
+                        var c = field['checks'].required;
+                        return !c.active || !!field['value'];
+                    },
+
+                    /**
+                     * Check field length.
+                     *
+                     * @param {$scope} field
+                     * - length
+                     * @returns {boolean}
+                     */
+                    checkLength: (field) => {
+                        var c = field['checks'].length;
+                        return !c.active || !(c.max && field['value'].length > c.max || field['value'].length < c.min);
+                    },
+
+                    /**
+                     * Check field value range.
+                     *
+                     * @param {$scope} field
+                     * - min
+                     * - minE
+                     * - max
+                     * - maxE
+                     * @returns {boolean}
+                     */
+                    checkRange: (field) => {
+                        var c = field['checks'].range;
+                        var lower = c.min && (c.minE && field['value'] < c.min || !c.minE && field['value'] <= c.min);
+                        var greater = c.max && (c.maxE && field['value'] > c.max || !c.minE && field['value'] >= c.max);
+                        return !c.active || !(lower || greater);
+                    },
+
+                    /**
+                     * Check field value lt (<).
+                     *
+                     * @param {$scope} field
+                     * - max
+                     * @returns {boolean}
+                     */
+                    checkLt: (field) => {
+                        var c = field['checks'].lt;
+                        return !c.active || field['value'] < c.max;
+                    },
+
+                    /**
+                     * Check field value le (<=).
+                     *
+                     * @param {$scope} field
+                     * - max
+                     * @returns {boolean}
+                     */
+                    checkLe: (field) => {
+                        var c = field['checks'].le;
+                        return !c.active || field['value'] <= c.max;
+                    },
+
+                    /**
+                     * Check field value gt (>).
+                     *
+                     * @param {$scope} field
+                     * - min
+                     * @returns {boolean}
+                     */
+                    checkGt: (field) => {
+                        var c = field['checks'].gt;
+                        return !c.active || field['value'] > c.min;
+                    },
+
+                    /**
+                     * Check field value ge (>=).
+                     *
+                     * @param {$scope} field
+                     * - min
+                     * @returns {boolean}
+                     */
+                    checkGe: (field) => {
+                        var c = field['checks'].ge;
+                        return !c.active || field['value'] >= c.min;
+                    },
+
+                    /**
+                     * Check field value against regexp.
+                     *
+                     * @param {$scope} field
+                     * - regexp
+                     * @returns {*|boolean}
+                     */
+                    checkRegexp: (field) => {
+                        var c = field['checks'].regexp;
+                        var valid = c.regexp.test(field['value']);
+                        if (c.forbid) {
+                            valid = !valid;
+                        }
+                        return !c.active || valid;
+                    },
+
+                    /**
+                     * Compare two password field values.
+                     *
+                     * @param {$scope} field
+                     * - repeat
+                     * @returns {boolean}
+                     */
+                    checkPasswords: (field) => {
+                        var c = field['checks'].passwords;
+                        var repeatField = ctrl.fields[c.repeat] || field;
+                        return !c.active || field['value'] === repeatField.value;
+                    },
+
+                    /**
+                     * Check value using api call.
+                     * Stores checked values to cache.
+                     *
+                     * @param {$scope} field
+                     * - url
+                     * - delay
+                     * @returns {string} state
+                     */
+                    checkApi: (field) => {
+                        var c = field['checks'].api;
+                        var url = utils.template(c.url, {
+                            name: encodeURIComponent(field['name']),
+                            value: encodeURIComponent(field['value'])
+                        });
+                        var value = field['value'] + '';
+                        if (c.active) {
+                            if (value in c.dictionary) {
+                                if ('valid' === c.dictionary[value]) {
+                                    ctrl.setFieldState(field, 'valid', null);
+                                } else {
+                                    ctrl.setFieldState(field, 'invalid', c.message);
+                                }
+                                return c.dictionary[value];
                             }
-                            if(!valid){
-                                message = c.message;
+
+                            c.dictionary[value] = 'progress';
+                            ajax.get(url, {
+                                spinner: $scope.spinner,
+                                spinnerFieldId: field['name'],
+                                spinnerMessage: ' ',
+                                showMessage: false,
+                                formValidator: ctrl,
+                                errorMessage: c.message,
+                                validateOnSend: false,
+                                scope: field,
+                                success: (data) => {
+                                    //console.dir({'data': data});
+                                    c.dictionary[value] = 'valid';
+                                    ctrl.setFieldState(field, 'valid', null);
+                                },
+                                error: (data) => {
+                                    c.dictionary[value] = 'invalid';
+                                    c.message = c.message || 'mass_errors' === data.code && data.message[field['name']] || data.message;
+                                }
+                            });
+                        }
+                        return !c.active || c.dictionary[value];
+
+                    },
+
+                    /**
+                     * Perform custom check by calling provided scope callback.
+                     *
+                     * @param {$scope} field
+                     * @returns {*}
+                     */
+                    checkCustom: (field) => {
+                        var c = field['checks'].custom;
+                        var callback = c.callback;
+                        return !c.active || $scope.$parent[callback].call($scope, field['value']);
+                    },
+
+                    /**
+                     * Perform all the set up checks for the given field.
+                     * If silent, does not visualize validation state.
+                     *
+                     * @param {$scope} field
+                     * @param {boolean} [silent]
+                     * @returns {boolean}
+                     */
+                    validateField: (field, silent) => {
+                        var valid = true,
+                            message = '',
+                            state,
+                            checks = field['checks'];
+
+                        if (!field['active']) {
+                            return true;
+                        }
+
+                        if (checks.required && !ctrl.checkRequired(field)) {
+                            valid = false;
+                            message = checks.required.message;
+                        }
+
+                        if (field['value']) {
+                            angular.forEach(checks, (c, check) => {
+                                if (!valid) {
+                                    return;
+                                }
+                                switch (check) {
+                                    case 'length':
+                                        valid = ctrl.checkLength(field);
+                                        break;
+                                    case 'range':
+                                        valid = ctrl.checkRange(field);
+                                        break;
+                                    case 'lt':
+                                        valid = ctrl.checkLt(field);
+                                        break;
+                                    case 'le':
+                                        valid = ctrl.checkLe(field);
+                                        break;
+                                    case 'gt':
+                                        valid = ctrl.checkGt(field);
+                                        break;
+                                    case 'ge':
+                                        valid = ctrl.checkGe(field);
+                                        break;
+                                    case 'regexp':
+                                        valid = ctrl.checkRegexp(field);
+                                        break;
+                                    case 'passwords':
+                                        valid = ctrl.checkPasswords(field);
+                                        break;
+                                    default :
+                                }
+                                if (!valid) {
+                                    message = c.message;
+                                }
+                            });
+                        }
+
+                        if (valid && checks.custom) {
+                            valid = ctrl.checkCustom(field);
+                            message = valid ? '' : checks.custom.message;
+                        }
+
+                        state = valid ? 'valid' : 'invalid';
+
+                        if (valid && checks.api) {
+                            state = ctrl.checkApi(field);
+                            message = state === 'invalid' ? checks.api.message : '';
+                        }
+
+
+                        if (!silent) {
+                            ctrl.setFieldState(field, state, message);
+                        }
+
+                        return field.valid;
+                    },
+
+                    /**
+                     * Validate field by field id
+                     * @param fieldId
+                     * @param [silent]
+                     * @return {boolean}
+                     */
+                    validateFieldById: (fieldId, silent) => {
+                        var field = ctrl.fields[fieldId];
+                        return ctrl.validateField(field, silent);
+                    },
+
+                    /**
+                     * Validate all registered fields and scroll to
+                     * top invalid field in case it is invisible.
+                     *
+                     * @returns {boolean}
+                     */
+                    validateFields: () => {
+                        var valid = true;
+
+                        var scrollTo = 0;
+
+                        angular.forEach(ctrl.fields, (field) => {
+                            if (!ctrl.validateField(field)) {
+                                var scrollPos = field.element.offset().top;
+                                if (!scrollTo || scrollPos && scrollTo > scrollPos) {
+                                    scrollTo = scrollPos;
+                                }
+                                valid = false;
                             }
                         });
-                    }
-
-                    if(valid && checks.custom){
-                        valid = ctrl.checkCustom(field);
-                        message = valid?'':checks.custom.message;
-                    }
-
-                    state = valid?'valid':'invalid';
-
-                    if(valid && checks.api){
-                        state = ctrl.checkApi(field);
-                        message = state === 'invalid'?checks.api.message:'';
-                    }
 
 
-                    if(!silent){
-                        ctrl.setFieldState(field, state, message);
-                    }
-
-                    return field.valid;
-                };
-
-                /**
-                 * Validate field by field id
-                 * @param fieldId
-                 * @param [silent]
-                 * @return {boolean}
-                 */
-                ctrl.validateFieldById = (fieldId, silent) => {
-                    var field = fields[fieldId];
-                    return ctrl.validateField(field, silent);
-                };
-
-                /**
-                 * Validate all registered fields and scroll to
-                 * top invalid field in case it is invisible.
-                 *
-                 * @returns {boolean}
-                 */
-                ctrl.validateFields = () => {
-                    var valid = true;
-
-                    var scrollTo = 0;
-
-                    angular.forEach(fields, (field) => {
-                        if(!ctrl.validateField(field)){
-                            var scrollPos = field.element.offset().top;
-                            if(!scrollTo || scrollPos && scrollTo > scrollPos){
-                                scrollTo = scrollPos;
-                            }
-                            valid = false;
+                        if (!valid && scrollTo) {
+                            ctrl.scrollTo(scrollTo);
                         }
-                    });
 
+                        $scope.valid = valid;
 
-                    if(!valid && scrollTo){
-                        ctrl.scrollTo(scrollTo);
-                    }
+                        return valid;
+                    },
 
-                    $scope.valid = valid;
+                    /**
+                     * Scroll to set position in case if position is out of the vieport.
+                     * If duration is 0, scroll is not animated.
+                     * Default duration value is taken from markup (see scroll-duration directive).
+                     *
+                     * @param {int} scrollTo
+                     * @param {int|string} [duration]
+                     */
+                    scrollTo: (scrollTo, duration) => {
 
-                    return valid;
-                };
+                        if (angular.isUndefined(duration)) {
+                            duration = parseInt(ctrl.scrollDuration) || ctrl.scrollDuration;
+                        }
 
-                /**
-                 * Scroll to set position in case if position is out of the vieport.
-                 * If duration is 0, scroll is not animated.
-                 * Default duration value is taken from markup (see scroll-duration directive).
-                 *
-                 * @param {int} scrollTo
-                 * @param {int|string} [duration]
-                 */
-                ctrl.scrollTo = (scrollTo, duration) => {
-
-                    if(angular.isUndefined(duration)){
-                        duration = parseInt($scope.scrollDuration) || $scope.scrollDuration;
-                    }
-
-                    scrollTo-=parseInt($scope.scrollMargin);
-                    if($window.jQuery){
-                        var $ = $window.jQuery;
-                        if(scrollTo < $window.pageYOffset || scrollTo > $window.pageYOffset + $($window).height()){
-                            if(duration){
-                                $window.jQuery('html, body').animate({scrollTop: scrollTo}, duration);
-                            }else{
-                                $window.jQuery('html, body').scrollTop(scrollTo);
+                        scrollTo -= parseInt(ctrl.scrollMargin);
+                        if ($window.jQuery) {
+                            var $ = $window.jQuery;
+                            if (scrollTo < $window.pageYOffset || scrollTo > $window.pageYOffset + $($window).height()) {
+                                if (duration) {
+                                    $window.jQuery('html, body').animate({scrollTop: scrollTo}, duration);
+                                } else {
+                                    $window.jQuery('html, body').scrollTop(scrollTo);
+                                }
                             }
                         }
-                    }
-                };
+                    },
 
-                /**
-                 * Scroll to top of the form-validator DOM-element if one is not visible.
-                 *
-                 * @param {int|string} [duration]
-                 */
-                ctrl.scrollUp = (duration) => {
-                    ctrl.scrollTo($scope.element.offset().top, duration);
-                };
+                    /**
+                     * Scroll to top of the form-validator DOM-element if one is not visible.
+                     *
+                     * @param {int|string} [duration]
+                     */
+                    scrollUp: (duration) => {
+                        ctrl.scrollTo($scope.element.offset().top, duration);
+                    },
 
-                /**
-                 * Show set of errors organized by fields.
-                 * This function is handy to show errors from backend api call.
-                 *
-                 * Errors for non-existing fields will be shown in message box
-                 * or via Chayka.Modals.alert();
-                 *
-                 * @param {object} errors
-                 */
-                ctrl.showErrors = (errors) => {
-                    var scrollTo = 0;
-                    angular.forEach(errors, (message, key) => {
-                        var field = fields[key];
-                        if(field){
-                            ctrl.setFieldState(field, 'invalid', message);
-                            var scrollPos = field.element.offset().top;
-                            if(!scrollTo || scrollPos && scrollTo > scrollPos){
-                                scrollTo = scrollPos;
+                    /**
+                     * Show set of errors organized by fields.
+                     * This function is handy to show errors from backend api call.
+                     *
+                     * Errors for non-existing fields will be shown in message box
+                     * or via Chayka.Modals.alert();
+                     *
+                     * @param {object} errors
+                     */
+                    showErrors: (errors) => {
+                        var scrollTo = 0;
+                        angular.forEach(errors, (message, key) => {
+                            var field = ctrl.fields[key];
+                            if (field) {
+                                ctrl.setFieldState(field, 'invalid', message);
+                                var scrollPos = field.element.offset().top;
+                                if (!scrollTo || scrollPos && scrollTo > scrollPos) {
+                                    scrollTo = scrollPos;
+                                }
+                            } else {
+                                ctrl.showMessage(message, 'error');
                             }
-                        }else{
-                            ctrl.showMessage(message, 'error');
-                        }
-                    });
+                        });
 
-                    if(scrollTo){
-                        ctrl.scrollTo(scrollTo);
+                        if (scrollTo) {
+                            ctrl.scrollTo(scrollTo);
+                        }
                     }
                 };
 
@@ -501,10 +506,14 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
     }])
     .directive('formField', ['nls', 'delayedCall', 'utils', (nls, delayedCall, utils) => {
         return {
-            require: '^formValidator',
+            require: ['^^formValidator', 'formField'],
             restrict: 'AE',
             transclude: true,
-            template: '<label>{{label|nls}}</label><div class="input" data-ng-transclude></div><div class="message" data-ng-class="{error: !valid}" data-ng-bind-html="message">{{message}}</div>',
+            controllerAs: 'f',
+            template:
+                '<label>{{f.label|nls}}</label>' +
+                '<div class="input" data-ng-transclude></div>' +
+                '<div class="message" data-ng-class="{error: !f.valid}" data-ng-bind-html="message">{{f.message}}</div>',
             scope: {
                 name: '@formField',
                 label: '@',
@@ -512,15 +521,16 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                 message: '@hint'
                 //value: '='
             },
-            link: ($scope, $element, attrs, formCtrl) => {
+
+            link: ($scope, $element, $attrs, controllers) => {
+                var [formCtrl, field] = controllers;
                 var $input = $element.find('[ng-model],[data-ng-model]'),
                     inputType = $input.attr('type'),
-                //hint = element.find('.message'),
-                    model = $input.attr('data-ng-model') || $input.attr('ng-model'),
                     $oldLabel = $element.find('.input > label:first-child'),
                     $newLabel = $element.find('> label');
-                if(!$scope.label && inputType !=='checkbox' /*&& inputType !== 'radio'*/){
-                    //element.find('> label').remove();
+                field.model = $input.attr('data-ng-model') || $input.attr('ng-model');
+                field.element = $element;
+                if (!$scope.label && inputType !== 'checkbox') {
                     $scope.label = $oldLabel.text().replace(/\s*:\s*$/, '');
                     angular.forEach($oldLabel.attributes, (i, attr) => {
                         var name = attr.name;
@@ -532,19 +542,10 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                     $oldLabel.remove();
                     //scope.$digest();
                 }
-                //console.log('model binding: '+model);
 
-                //console.dir({'attrs': attrs, element: element, input: input});
-
-                $scope.valid = true;
-
-                $scope.state = 'clean'; // clean|progress|valid|invalid
-
-                $scope.active = true;
-
-                $scope.checks = {};
-
-                $scope.element = $element;
+                field.label = $scope.label;
+                field.name = $scope.name;
+                field.message = $scope.message;
 
                 $input.focus(() => {
                     //formCtrl.clearFieldError(scope);
@@ -553,21 +554,21 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
 
                 $input.blur(() => {
                     //formCtrl.setFieldError(scope, 'error');
-                    if($scope.value){
+                    if (field.value) {
                         //console.log('validating value: '+scope.value);
-                        formCtrl.validateField($scope, false);
+                        formCtrl.validateField(field, false);
                     }
-                    utils.patchScope($scope);
+                    //utils.patchScope($scope);
                     //scope.$apply(); // ok
                 });
 
                 /**
                  * setup data-check-if="condition"
                  */
-                function setupIf(){
-                    if(attrs['checkIf']){
-                        $scope.$parent.$watch(attrs['checkIf'], (value) => {
-                            $scope.active = value;
+                function setupIf() {
+                    if ($attrs['checkIf']) {
+                        $scope.$parent.$watch($attrs['checkIf'], (value) => {
+                            field.active = !!value;
                         });
                     }
                 }
@@ -581,19 +582,19 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-required-message = "This field is required"
                  *      data-check-required-if = "scopeCondition"
                  */
-                function setupRequired(){
-                    var short = attrs['checkRequired'];
-                    var shorts = short?short.split('|'):[];
-                    var message = nls._(shorts[0] || attrs['checkRequiredMessage'] || 'message_required');
+                function setupRequired() {
+                    var short = $attrs['checkRequired'];
+                    var shorts = short ? short.split('|') : [];
+                    var message = nls._(shorts[0] || $attrs['checkRequiredMessage'] || 'message_required');
 
-                    $scope.checks.required = {
+                    field.checks.required = {
                         message: message,
                         active: true
                     };
-                    var condition = shorts[1] || attrs['checkRequiredIf'];
-                    if(condition){
+                    var condition = shorts[1] || $attrs['checkRequiredIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.required.active = value;
+                            field.checks.required.active = value;
                         });
                     }
                 }
@@ -610,23 +611,23 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-length-if = "scopeCondition"
                  *
                  */
-                function setupLength(){
-                    var short = attrs['checkLength'];
-                    var shorts = short?short.split('|'):[];
-                    var min = parseInt(shorts[1] || attrs['checkLengthMin'] || 0);
-                    var max = parseInt(shorts[2] || attrs['checkLengthMax'] || 0);
-                    var messageTemplate = nls._(shorts[0] || attrs['checkLengthMessage'] || 'message_length');
-                    var message = utils.template(messageTemplate, {min: min, max: max, label: $scope.label});
-                    $scope.checks.length = {
+                function setupLength() {
+                    var short = $attrs['checkLength'];
+                    var shorts = short ? short.split('|') : [];
+                    var min = parseInt(shorts[1] || $attrs['checkLengthMin'] || 0);
+                    var max = parseInt(shorts[2] || $attrs['checkLengthMax'] || 0);
+                    var messageTemplate = nls._(shorts[0] || $attrs['checkLengthMessage'] || 'message_length');
+                    var message = utils.template(messageTemplate, {min: min, max: max, label: field.label});
+                    field.checks.length = {
                         message: message,
                         min: min,
                         max: max,
                         active: true
                     };
-                    var condition = shorts[3] || attrs['checkLengthIf'];
-                    if(condition){
+                    var condition = shorts[3] || $attrs['checkLengthIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.length.active = value;
+                            field.checks.length.active = value;
                         });
                     }
                 }
@@ -644,17 +645,17 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-range-if = "scopeCondition"
                  *
                  */
-                function setupRange(){
-                    var short = attrs['checkRange'];
-                    var shorts = short?short.split('|'):[];
-                    var minStr = shorts[1] || attrs['checkRangeMin'] || 0;
+                function setupRange() {
+                    var short = $attrs['checkRange'];
+                    var shorts = short ? short.split('|') : [];
+                    var minStr = shorts[1] || $attrs['checkRangeMin'] || 0;
                     var minE = !!minStr.match(/^=/);
-                    var min = minE? minStr.substr(1): minStr;
-                    var maxStr = shorts[2] || attrs['checkRangeMax'] || 0;
+                    var min = minE ? minStr.substr(1) : minStr;
+                    var maxStr = shorts[2] || $attrs['checkRangeMax'] || 0;
                     var maxE = !!maxStr.match(/^=/);
-                    var max = maxE? maxStr.substr(1): maxStr;
-                    var format = shorts[3] || attrs['checkRangeFormat'] || 'int';
-                    switch(format){
+                    var max = maxE ? maxStr.substr(1) : maxStr;
+                    var format = shorts[3] || $attrs['checkRangeFormat'] || 'int';
+                    switch (format) {
                         case 'int':
                             min = parseInt(min);
                             max = parseInt(max);
@@ -665,10 +666,10 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                             break;
                         default:
                     }
-                    var messageTemplate = shorts[0] || attrs['checkRangeMessage'] ||
+                    var messageTemplate = shorts[0] || $attrs['checkRangeMessage'] ||
                         nls._('message_range');
-                    var message = utils.template(messageTemplate, {min: min, max: max, label: $scope.label});
-                    $scope.checks.range = {
+                    var message = utils.template(messageTemplate, {min: min, max: max, label: field.label});
+                    field.checks.range = {
                         message: message,
                         min: min,
                         minE: minE,
@@ -676,10 +677,10 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                         maxE: maxE,
                         active: true
                     };
-                    var condition = shorts[4] || attrs['checkRangeIf'];
-                    if(condition){
+                    var condition = shorts[4] || $attrs['checkRangeIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.range.active = value;
+                            field.checks.range.active = value;
                         });
                     }
                 }
@@ -695,15 +696,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-lt-format = "int"
                  *      data-check-lt-if = "scopeCondition"
                  */
-                function setupLt(){
-                    var short = attrs['checkLt'];
-                    var shorts = short?short.split('|'):[];
-                    var max = shorts[1] || attrs['checkLtMax'] || 0;
-                    var messageTemplate = shorts[0] || attrs['checkLtMessage'] ||
+                function setupLt() {
+                    var short = $attrs['checkLt'];
+                    var shorts = short ? short.split('|') : [];
+                    var max = shorts[1] || $attrs['checkLtMax'] || 0;
+                    var messageTemplate = shorts[0] || $attrs['checkLtMessage'] ||
                         nls._('message_lt');
-                    var message = utils.template(messageTemplate, {max: max, label: $scope.label});
-                    var format = shorts[2] || attrs['checkLtFormat'] || 'int';
-                    switch(format){
+                    var message = utils.template(messageTemplate, {max: max, label: field.label});
+                    var format = shorts[2] || $attrs['checkLtFormat'] || 'int';
+                    switch (format) {
                         case 'int':
                             max = parseInt(max);
                             break;
@@ -712,15 +713,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                             break;
                         default:
                     }
-                    $scope.checks.lt = {
+                    field.checks.lt = {
                         message: message,
                         max: max,
                         active: true
                     };
-                    var condition = shorts[3] || attrs['checkLtIf'];
-                    if(condition){
+                    var condition = shorts[3] || $attrs['checkLtIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.lt.active = value;
+                            field.checks.lt.active = value;
                         });
                     }
                 }
@@ -736,15 +737,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-le-format = "int"
                  *      data-check-le-if = "scopeCondition"
                  */
-                function setupLe(){
-                    var short = attrs['checkLe'];
-                    var shorts = short?short.split('|'):[];
-                    var max = shorts[1] || attrs['checkLeMax'] || 0;
-                    var messageTemplate = shorts[0] || attrs['checkLeMessage'] ||
+                function setupLe() {
+                    var short = $attrs['checkLe'];
+                    var shorts = short ? short.split('|') : [];
+                    var max = shorts[1] || $attrs['checkLeMax'] || 0;
+                    var messageTemplate = shorts[0] || $attrs['checkLeMessage'] ||
                         nls._('message_le');
-                    var message = utils.template(messageTemplate, {max: max, label: $scope.label});
-                    var format = shorts[2] || attrs['checkLeFormat'] || 'int';
-                    switch(format){
+                    var message = utils.template(messageTemplate, {max: max, label: field.label});
+                    var format = shorts[2] || $attrs['checkLeFormat'] || 'int';
+                    switch (format) {
                         case 'int':
                             max = parseInt(max);
                             break;
@@ -753,15 +754,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                             break;
                         default:
                     }
-                    $scope.checks.le = {
+                    field.checks.le = {
                         message: message,
                         max: max,
                         active: true
                     };
-                    var condition = shorts[3] || attrs['checkLeIf'];
-                    if(condition){
+                    var condition = shorts[3] || $attrs['checkLeIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.le.active = value;
+                            field.checks.le.active = value;
                         });
                     }
                 }
@@ -777,15 +778,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-gt-format = "int"
                  *      data-check-gt-if = "scopeCondition"
                  */
-                function setupGt(){
-                    var short = attrs['checkGt'];
-                    var shorts = short?short.split('|'):[];
-                    var min = shorts[1] || attrs['checkGtMin'] || 0;
-                    var messageTemplate = shorts[0] || attrs['checkGtMessage'] ||
+                function setupGt() {
+                    var short = $attrs['checkGt'];
+                    var shorts = short ? short.split('|') : [];
+                    var min = shorts[1] || $attrs['checkGtMin'] || 0;
+                    var messageTemplate = shorts[0] || $attrs['checkGtMessage'] ||
                         nls._('message_gt');
-                    var message = utils.template(messageTemplate, {min: min, label: $scope.label});
-                    var format = shorts[2] || attrs['checkGtFormat'] || 'int';
-                    switch(format){
+                    var message = utils.template(messageTemplate, {min: min, label: field.label});
+                    var format = shorts[2] || $attrs['checkGtFormat'] || 'int';
+                    switch (format) {
                         case 'int':
                             min = parseInt(min);
                             break;
@@ -794,15 +795,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                             break;
                         default:
                     }
-                    $scope.checks.gt = {
+                    field.checks.gt = {
                         message: message,
                         min: min,
                         active: true
                     };
-                    var condition = shorts[3] || attrs['checkGtIf'];
-                    if(condition){
+                    var condition = shorts[3] || $attrs['checkGtIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.gt.active = value;
+                            field.checks.gt.active = value;
                         });
                     }
                 }
@@ -818,15 +819,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-ge-format = "int"
                  *      data-check-ge-if = "scopeCondition"
                  */
-                function setupGe(){
-                    var short = attrs['checkGe'];
-                    var shorts = short?short.split('|'):[];
-                    var min = shorts[1] || attrs['checkGeMin'] || 0;
-                    var messageTemplate = shorts[0] || attrs['checkGeMessage'] ||
+                function setupGe() {
+                    var short = $attrs['checkGe'];
+                    var shorts = short ? short.split('|') : [];
+                    var min = shorts[1] || $attrs['checkGeMin'] || 0;
+                    var messageTemplate = shorts[0] || $attrs['checkGeMessage'] ||
                         nls._('message_ge');
-                    var message = utils.template(messageTemplate, {min: min, label: $scope.label});
-                    var format = shorts[2] || attrs['checkGeFormat'] || 'int';
-                    switch(format){
+                    var message = utils.template(messageTemplate, {min: min, label: field.label});
+                    var format = shorts[2] || $attrs['checkGeFormat'] || 'int';
+                    switch (format) {
                         case 'int':
                             min = parseInt(min);
                             break;
@@ -835,15 +836,15 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                             break;
                         default:
                     }
-                    $scope.checks.ge = {
+                    field.checks.ge = {
                         message: message,
                         min: min,
                         active: true
                     };
-                    var condition = shorts[3] || attrs['checkGeIf'];
-                    if(condition){
+                    var condition = shorts[3] || $attrs['checkGeIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.ge.active = value;
+                            field.checks.ge.active = value;
                         });
                     }
                 }
@@ -862,27 +863,27 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-regexp-forbid = "forbid"
                  *      data-check-regexp-if = "scopeCondition"
                  */
-                function setupRegExp(){
-                    var short = attrs['checkRegexp'];
-                    var shorts = short?short.split('|'):[];
+                function setupRegExp() {
+                    var short = $attrs['checkRegexp'];
+                    var shorts = short ? short.split('|') : [];
                     var patternAndModifiers = short && /\/(.*)\/(\w*)$/.exec(shorts[1]) || [];
-                    var message = shorts[0] || attrs['checkRegexpMessage'] || nls._('message_regexp');
-                    var pattern = patternAndModifiers[1] || attrs['checkRegexpPattern'] || '.*';
-                    var modifiers = patternAndModifiers[2] || attrs['checkRegexpModifiers'] || '';
-                    var forbid = shorts[2] || attrs['checkRegexpForbid'] || false;
+                    var message = shorts[0] || $attrs['checkRegexpMessage'] || nls._('message_regexp');
+                    var pattern = patternAndModifiers[1] || $attrs['checkRegexpPattern'] || '.*';
+                    var modifiers = patternAndModifiers[2] || $attrs['checkRegexpModifiers'] || '';
+                    var forbid = shorts[2] || $attrs['checkRegexpForbid'] || false;
 
                     var regexp = new RegExp(pattern, modifiers);
 
-                    $scope.checks.regexp = {
+                    field.checks.regexp = {
                         message: message,
                         regexp: regexp,
                         forbid: forbid,
                         active: true
                     };
-                    var condition = shorts[4] || attrs['checkRegexpIf'];
-                    if(condition){
+                    var condition = shorts[4] || $attrs['checkRegexpIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.regexp.active = value;
+                            field.checks.regexp.active = value;
                         });
                     }
 
@@ -900,19 +901,19 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-email-if = "scopeCondition"
                  */
                 function setupEmail() {
-                    var short = attrs['checkEmail'];
-                    var shorts = short?short.split('|'):[];
-                    var message = nls._(shorts[0] || attrs['checkEmailMessage'] || 'message_email');
-                    $scope.checks.regexp = {
+                    var short = $attrs['checkEmail'];
+                    var shorts = short ? short.split('|') : [];
+                    var message = nls._(shorts[0] || $attrs['checkEmailMessage'] || 'message_email');
+                    field.checks.regexp = {
                         message: message,
                         regexp: /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i,
                         forbid: false,
                         active: true
                     };
-                    var condition = shorts[1] || attrs['checkEmailIf'];
-                    if(condition){
+                    var condition = shorts[1] || $attrs['checkEmailIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.regexp.active = value;
+                            field.checks.regexp.active = value;
                         });
                     }
                 }
@@ -928,22 +929,22 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-passwords-if = "scopeCondition"
                  */
                 function setupPasswords() {
-                    var short = attrs['checkPasswords']; // 'pass1id|Введенные пароли отличаются'
-                    var shorts = short?short.split('|'):[];
+                    var short = $attrs['checkPasswords']; // 'pass1id|Введенные пароли отличаются'
+                    var shorts = short ? short.split('|') : [];
 
-                    var repeat = shorts[0] || attrs['checkPasswordsRepeat'];
+                    var repeat = shorts[0] || $attrs['checkPasswordsRepeat'];
 
-                    var message = shorts[1] || attrs['checkPasswordsMessage'] || nls._('message_passwords');
+                    var message = shorts[1] || $attrs['checkPasswordsMessage'] || nls._('message_passwords');
 
-                    $scope.checks.passwords = {
+                    field.checks.passwords = {
                         message: message,
                         repeat: repeat,
                         active: true
                     };
-                    var condition = shorts[2] || attrs['checkPasswordsIf'];
-                    if(condition){
+                    var condition = shorts[2] || $attrs['checkPasswordsIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.passwords.active = value;
+                            field.checks.passwords.active = value;
                         });
                     }
                 }
@@ -960,37 +961,37 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *      data-check-api-if = "scopeCondition"
                  */
                 function setupApiCall() {
-                    var short = attrs['checkApi']; // '/api/check-existing/{name}/{value}|Email exists|500'
-                    var shorts = short?short.split('|'):[];
+                    var short = $attrs['checkApi']; // '/api/check-existing/{name}/{value}|Email exists|500'
+                    var shorts = short ? short.split('|') : [];
 
-                    var url = shorts[0] || attrs['checkApiUrl'];
+                    var url = shorts[0] || $attrs['checkApiUrl'];
 
-                    var message = shorts[1] || attrs['checkApiMessage'];
+                    var message = shorts[1] || $attrs['checkApiMessage'];
 
-                    var delay = shorts[2] || attrs['checkApiDelay'] || 0;
+                    var delay = shorts[2] || $attrs['checkApiDelay'] || 0;
 
-                    $scope.checks.api = {
+                    field.checks.api = {
                         message: message,
                         url: url,
                         delay: delay,
                         dictionary: {},
                         active: true
                     };
-                    var condition = shorts[3] || attrs['checkApiIf'];
-                    if(condition){
+                    var condition = shorts[3] || $attrs['checkApiIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.api.active = value;
+                            field.checks.api.active = value;
                         });
                     }
 
                     $input.on('keyup change', () => {
-                        formCtrl.setFieldState($scope, 'clean');
-                        utils.patchScope($scope);
+                        formCtrl.setFieldState(field, 'clean');
+                        //utils.patchScope($scope);
                         //scope.$apply(); // ok
-                        if($scope.value){
-                            delayedCall('check-api-'+$scope.name, delay, () => {
-                                formCtrl.validateField($scope, true);
-                                utils.patchScope($scope);
+                        if (field.value) {
+                            delayedCall('check-api-' + field.name, delay, () => {
+                                formCtrl.validateField(field, true);
+                                //utils.patchScope($scope);
                                 //scope.$apply();
                             });
                         }
@@ -1012,31 +1013,31 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  * callback.call($scope, value) will be called
                  */
                 function setupCustom() {
-                    var short = attrs['checkCustom'];
-                    var shorts = short?short.split('|'):[];
+                    var short = $attrs['checkCustom'];
+                    var shorts = short ? short.split('|') : [];
 
-                    var callback = shorts[0] || attrs['checkCustomCallback'];
+                    var callback = shorts[0] || $attrs['checkCustomCallback'];
 
-                    var message = shorts[1] || attrs['checkCustomMessage'] || nls._('message_custom');
+                    var message = shorts[1] || $attrs['checkCustomMessage'] || nls._('message_custom');
 
-                    $scope.checks.custom = {
+                    field.checks.custom = {
                         message: message,
                         callback: callback,
                         active: true
                     };
-                    var condition = shorts[2] || attrs['checkCustomeIf'];
-                    if(condition){
+                    var condition = shorts[2] || $attrs['checkCustomeIf'];
+                    if (condition) {
                         $scope.$parent.$watch(condition, (value) => {
-                            $scope.checks.custom.active = value;
+                            field.checks.custom.active = value;
                         });
                     }
                 }
 
-                angular.forEach(attrs, (attr, key) => {
+                angular.forEach($attrs, (attr, key) => {
                     var m = key.match(/^check([A-Z][a-z]*)/),
                         check = m && m[1];
-                    if(check && !$scope.checks[check]){
-                        switch(check){
+                    if (check && !field.checks[check]) {
+                        switch (check) {
                             case 'If':
                                 setupIf();
                                 break;
@@ -1082,9 +1083,9 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                 });
                 //console.dir({'checks': scope.checks});
 
-                $scope.$parent.$watch(model, (value) => {
+                $scope.$parent.$watch(field.model, (value) => {
                     //console.log('we are watching: '+value);
-                    $scope.value = value;
+                    field.value = value;
                     //formCtrl.validateField(scope);
                 });
 
@@ -1095,23 +1096,50 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
 
                 formCtrl.addField($scope);
             },
+
             controller: ($scope) => {
+
+                return {
+
+                    name: '',
+
+                    label: '',
+
+                    message: '',
+
+                    value: null,
+
+                    valid: true,
+
+                    state: 'clean', // clean|progress|valid|invalid
+
+                    active: true,
+
+                    checks: {}
+                };
             }
         };
     }])
     .directive('formMessage', () => {
         return {
-            require: '^formValidator',
+            require: ['^^formValidator', 'formMessage'],
             restrict: 'AE',
             replace: true,
-            template: '<div class="form-message {{state}}" data-ng-show="!!message" data-ng-bind-html="message"></div>',
+            controllerAs: 'mb',
+            bindToController: true,
+            template: '<div class="form-message {{mb.state}}" data-ng-show="!!mb.message" data-ng-bind-html="mb.message"></div>',
             scope: {
                 message: '@'
             },
-            link: ($scope, $element, attrs, formCtrl) => {
-                $scope.message = '';
-                $scope.state = '';
-                formCtrl.setMessageBox($scope);
+
+            controller: function(){
+                return {
+                    message: '',
+                    state: ''
+                }
+            },
+            link: ($scope, $element, attrs, [formCtrl, messageBox]) => {
+                formCtrl.setMessageBox(messageBox);
             }
         };
     })
@@ -1120,12 +1148,12 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
             restrict: 'A',
             link: ($scope, $element) => {
                 var resizeTextarea = () => {
-                    var height = $element.css('box-sizing')==='border-box'?
-                        parseInt($element.css('borderTopWidth')) +
-                        $element.prop('scrollHeight')+
-                        parseInt($element.css('borderBottomWidth')):
+                    var height = $element.css('box-sizing') === 'border-box' ?
+                    parseInt($element.css('borderTopWidth')) +
+                    $element.prop('scrollHeight') +
+                    parseInt($element.css('borderBottomWidth')) :
                         $element.prop('scrollHeight');
-                    $element.css('height', height+'px');
+                    $element.css('height', height + 'px');
                 };
 
                 $element.on('change input cut paste drop keydown', resizeTextarea);
@@ -1133,7 +1161,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
         };
     }])
     .factory('delayedCall', ['$timeout', ($timeout) => {
-        var timeouts={};
+        var timeouts = {};
 
         /**
          * This function created named timeout that is canceled and rescheduled
