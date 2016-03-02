@@ -1,0 +1,16 @@
+{
+  "rules": {
+    "valid-jsdoc": 0
+  },
+  "globals": {
+    "jQuery": true,
+    "angular": true
+  },
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  }
+}

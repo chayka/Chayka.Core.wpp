@@ -1,36 +1,39 @@
 'use strict';
 
-angular.module('chayka-buttons', ['chayka-utils'])
-    .provider('buttons', function() {
+angular.module('chayka-buttons', ['chayka-utils']).provider('buttons', function () {
 
-        var stdButtonClass = '';
+    var stdButtonClass = '';
 
-        var buttons = {
+    //var buttons = {
+    //
+    //};
 
-            /**
-             * Set button class
-             * @param {string} cls
-             */
-            setButtonClass: function(cls){
-                stdButtonClass = cls;
-            },
+    //angular.extend(this, buttons);
+    var buttons = {
 
-            /**
-             * Get button class
-             * @return {string}
-             */
-            getButtonClass: function(){
-                return stdButtonClass;
-            }
-        };
+        /**
+         * Set button class
+         * @param {string} cls
+         */
+        setButtonClass: function setButtonClass(cls) {
+            stdButtonClass = cls;
+        },
 
-        angular.extend(this, buttons);
-        this.$get = ['utils', function (utils) {
+        /**
+         * Get button class
+         * @return {string}
+         */
+        getButtonClass: function getButtonClass() {
+            return stdButtonClass;
+        },
 
-            utils.ensure('Chayka.Buttons',buttons);
+        $get: ['utils', function (utils) {
+
+            utils.ensure('Chayka.Buttons', buttons);
 
             return buttons;
-        }];
-    })
-;
+        }]
+    };
 
+    return buttons;
+});

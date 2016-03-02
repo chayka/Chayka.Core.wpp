@@ -1,12 +1,12 @@
 'use strict';
 
-angular.module('chayka-avatars', ['chayka-utils', 'angular-md5'])
-    .provider('avatars', function(){
+angular.module('chayka-avatars', ['chayka-utils', 'angular-md5']).provider('avatars', function () {
 
-        var Chayka = window.Chayka || {};
-        Chayka.Avatars = Chayka.Avatars || {};
-        var gravatarOptions = Chayka.Avatars.gravatarOptions || {};
+    var Chayka = window.Chayka || {};
+    Chayka.Avatars = Chayka.Avatars || {};
+    var gravatarOptions = Chayka.Avatars.gravatarOptions || {};
 
+    var avatars = {
         /**
          * Set gravatar type.
          *
@@ -19,9 +19,9 @@ angular.module('chayka-avatars', ['chayka-utils', 'angular-md5'])
          *
          * @param {'mm'|'blank'|'identicon'|'wavatar'|'monsterid'|'retro'} type
          */
-        this.setGravatarType = function(type){
+        setGravatarType: function setGravatarType(type) {
             gravatarOptions.type = type;
-        };
+        },
 
         /**
          * Set gravatar type for empty email.
@@ -35,9 +35,9 @@ angular.module('chayka-avatars', ['chayka-utils', 'angular-md5'])
          *
          * @param {'mm'|'blank'|'identicon'|'wavatar'|'monsterid'|'retro'} type
          */
-        this.setGravatarEmptyType = function(type){
+        setGravatarEmptyType: function setGravatarEmptyType(type) {
             gravatarOptions.emptyType = type;
-        };
+        },
 
         /**
          * Set gravatar max rating
@@ -48,16 +48,16 @@ angular.module('chayka-avatars', ['chayka-utils', 'angular-md5'])
          *
          * @param {'G'|'PG'|'R'|'X'} rating
          */
-        this.setGravatarRating = function(rating){
+        setGravatarRating: function setGravatarRating(rating) {
             gravatarOptions.rating = rating;
-        };
+        },
 
-        this.setGravatarForceDefault = function(force){
+        setGravatarForceDefault: function setGravatarForceDefault(force) {
             gravatarOptions.forceDefault = force;
-        };
+        },
 
-        this.$get = ['md5', 'utils', function(md5, utils){
-            var avatars = utils.ensure('Chayka.Avatars', {
+        $get: ['md5', 'utils', function (md5, utils) {
+            return utils.ensure('Chayka.Avatars', {
                 /**
                  * Get gravatar image url
                  * @param {string} email
@@ -67,25 +67,25 @@ angular.module('chayka-avatars', ['chayka-utils', 'angular-md5'])
                  * @param [forceDefault]
                  * @return {string}
                  */
-                gravatar: function(email, size, type, rating, forceDefault) {
+                gravatar: function gravatar(email, size, type, rating, forceDefault) {
                     size = size || 80;
                     var url = '//www.gravatar.com/avatar/';
-                    type = type === undefined? gravatarOptions.type : type;
+                    type = type === undefined ? gravatarOptions.type : type;
                     rating = rating || gravatarOptions.rating;
                     forceDefault = forceDefault === undefined ? gravatarOptions.forceDefault : forceDefault;
-                    if(email){
+                    if (email) {
                         url = url + md5.createHash(email);
-                    }else{
+                    } else {
                         type = gravatarOptions.emptyType;
                     }
                     url = url + '?s=' + size;
-                    if(type){
+                    if (type) {
                         url = url + '&d=' + type;
                     }
-                    if(rating){
+                    if (rating) {
                         url = url + '&r=' + rating;
                     }
-                    if(forceDefault){
+                    if (forceDefault) {
                         url = url + '&forcedefault=1';
                     }
                     return url;
@@ -97,13 +97,13 @@ angular.module('chayka-avatars', ['chayka-utils', 'angular-md5'])
                  * @param size
                  * @return {string}
                  */
-                fbavatar: function(fbUserId, size){
+                fbavatar: function fbavatar(fbUserId, size) {
                     size = parseInt(size) || 80;
-                    return '//graph.facebook.com/'+fbUserId+'/picture/?type=square&height='+size+'&width='+size;
+                    return '//graph.facebook.com/' + fbUserId + '/picture/?type=square&height=' + size + '&width=' + size;
                 }
             });
+        }]
+    };
 
-            return avatars;
-        }];
-    })
-;
+    return avatars;
+});
