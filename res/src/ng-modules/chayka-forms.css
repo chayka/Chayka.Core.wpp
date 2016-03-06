@@ -64,18 +64,18 @@
   width: auto;
   position: static;
 }
-.form_field.progress > .input > input[type=text],
-.form_field.progress > .input > input[type=password],
-.form_field.progress > .input > input[type=number],
-.form_field.progress > .input > input[type=email],
-.form_field.progress > .input > input[type=search],
-.form_field.progress > .input > input[type=tel],
-.form_field.progress > .input > input[type=url],
-.form_field.progress > .input > textarea {
+.form_field > .input.progress > input[type=text],
+.form_field > .input.progress > input[type=password],
+.form_field > .input.progress > input[type=number],
+.form_field > .input.progress > input[type=email],
+.form_field > .input.progress > input[type=search],
+.form_field > .input.progress > input[type=tel],
+.form_field > .input.progress > input[type=url],
+.form_field > .input.progress > textarea {
   background: url(../img/spinner32x32.gif) no-repeat 99% 50%;
   background-size: 16px 16px;
 }
-.form_field.progress > .input > textarea {
+.form_field > .input.progress > textarea {
   background-position: 99% 4px;
 }
 .form_field > .message {

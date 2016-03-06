@@ -106,7 +106,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                             return;
                         }
                     }
-                    field['valid'] = state === 'valid' || state === 'clean';
+                    field['valid'] = state === 'valid' || state === 'clean' || state === 'progress';
                     field['state'] = state;
                     field['message'] = message || field['hint'];
 
@@ -427,7 +427,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                         ctrl.scrollTo(scrollTo);
                     }
 
-                    $scope.valid = valid;
+                    //$scope.valid = valid;
 
                     return valid;
                 },
@@ -509,7 +509,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
         restrict: 'AE',
         transclude: true,
         controllerAs: 'f',
-        template: '<label>{{f.label|nls}}</label>' + '<div class="input" data-ng-transclude></div>' + '<div class="message" data-ng-class="{error: !f.valid}" data-ng-bind-html="message">{{f.message}}</div>',
+        template: '<label>{{f.label|nls}}</label>' + '<div class="input {{f.state}}" data-ng-transclude></div>' + '<div class="message" data-ng-class="{error: !f.valid}" data-ng-bind-html="f.message"></div>',
         scope: {
             name: '@formField',
             label: '@',
@@ -558,7 +558,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                     //console.log('validating value: '+scope.value);
                     formCtrl.validateField(field, false);
                 }
-                //utils.patchScope($scope);
+                utils.patchScope($scope);
                 //scope.$apply(); // ok
             });
 
@@ -1086,7 +1086,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                 $element.addClass(value);
             });
 
-            formCtrl.addField($scope);
+            formCtrl.addField(field);
         },
 
         controller: function controller($scope) {
