@@ -76,6 +76,7 @@ var write = function(pipe, dst){
 
 var uglifyCss = function(src, cat, dst){
     var res = gulp.src(src)
+        .pipe(plumber(handleError))
         .pipe(sourcemaps.init())
         .pipe(cssnano());
     if(cat){
@@ -89,6 +90,7 @@ var uglifyCss = function(src, cat, dst){
 
 var uglifyJs = function(src, cat, dst){
     var res = gulp.src(src)
+        .pipe(plumber(handleError))
         .pipe(sourcemaps.init())
         .pipe(uglify({
             mangle: false
@@ -112,18 +114,19 @@ gulp.task('clean', function(){
  */
 gulp.task('less', function(){
     return gulp.src(paths.lessNg)
+        .pipe(plumber(handleError))
         .pipe(less())
         .pipe(autoprefixer({
             browsers: ['last 2 versions']
         }))
-        .pipe(gulp.dest(paths.srcNgModules))
+        .pipe(gulp.dest(paths.srcNgModules));
 });
 
 gulp.task('lint:css', function() {
     gulp.src(paths.cssNg)
+        .pipe(plumber(handleError))
         .pipe(csslint())
-        .pipe(csslint.reporter())
-        .on('error', handleError);
+        .pipe(csslint.reporter());
 });
 
 gulp.task('css:core', function(){
@@ -144,24 +147,24 @@ gulp.task('css', ['css:core', 'css:admin']);
  */
 gulp.task('lint:es6', function() {
     return gulp.src(paths.es6Ng)
+        .pipe(plumber(handleError))
         .pipe(eslint('.eslintrc.json'))
-        .pipe(eslint.format())
-        .pipe(plumber());
+        .pipe(eslint.format());
 });
 
 gulp.task('lint:js', function() {
     gulp.src(paths.jsAll)
+        .pipe(plumber(handleError))
         .pipe(jshint())
-        .pipe(jshint.reporter('default'))
-        .on('error', handleError);
+        .pipe(jshint.reporter('default'));
 });
 
 gulp.task('babel', ['lint:es6'], function(){
     return gulp.src(paths.es6Ng)
+        .pipe(plumber(handleError))
         .pipe(babel({
             presets: ['es2015']
         }))
-        .pipe(plumber())
         .pipe(gulp.dest(paths.srcNgModules))
 });
 
@@ -199,7 +202,7 @@ gulp.task('lint', ['lint:js', 'lint:css']);
 
 gulp.task('build', ['less', 'babel', 'lint', 'js', 'css', 'img']);
 
-gulp.task('watch', function(){
+gulp.task('watch', ['build'], function(){
     gulp.watch(paths.lessNg, [
         'less',
         'lint:css'
@@ -231,5 +234,5 @@ gulp.task('watch', function(){
     ]);
 });
 
-gulp.task('default', ['build']);
+gulp.task('default', ['watch']);
 
