@@ -15,7 +15,7 @@ if(count($ngQueue)): //wp_print_scripts();?>
                  */
                 var form = this;
                 if(!form.querySelectorAll('[ng-click], [data-ng-click]').length
-                    && !form.hasAttribute('ng-submit')
+                    && !form.hasAttribute('data-ng-submit')
                     && !form.hasAttribute('ng-submit')
                 ){
                     form.setAttribute('action', '');

@@ -430,7 +430,8 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
             scope: {
                 url: '@buttonAjaxRequest',
                 postData: '=?post',
-                confirm: '@?'
+                confirm: '@?',
+                formValidator: '=?validator'
             },
 
             link: ($scope, $element) => {
@@ -440,14 +441,16 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
                     }
                 };
                 var sendRequest = () => {
+                    var params = {
+                        success: onSuccess
+                    };
+                    if($scope.formValidator){
+                        params.formValidator = $scope.formValidator;
+                    }
                     if($scope.postData){
-                        ajax.post($scope.url, $scope.postData, {
-                            success: onSuccess
-                        });
+                        ajax.post($scope.url, $scope.postData, params);
                     }else{
-                        ajax.get($scope.url, {
-                            success: onSuccess
-                        });
+                        ajax.get($scope.url, params);
                     }
                 };
 
