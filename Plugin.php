@@ -66,6 +66,7 @@ class Plugin extends WP\Plugin{
             $app->addAngular();
 //            $app->addJsNls();
 
+            $app->addSupport_UriProcessing();
             $app->addSupport_ConsolePages();
             $app->addSupport_Metaboxes();
             $app->addSupport_PostProcessing();

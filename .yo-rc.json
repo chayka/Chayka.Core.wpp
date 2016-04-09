@@ -47,7 +47,8 @@
       "Rest": [],
       "Admin": [
         "logs"
-      ]
+      ],
+      "Update": []
     },
     "consolePages": [
       "logs"
