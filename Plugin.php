@@ -31,6 +31,7 @@ class Plugin extends WP\Plugin{
 	            'comment-models',
 	            'user-model',
 	            'user-models',
+                'update'
                 /* chayka: init/controllers */
             ));
 
