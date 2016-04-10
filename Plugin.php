@@ -31,7 +31,8 @@ class Plugin extends WP\Plugin{
 	            'comment-models',
 	            'user-model',
 	            'user-models',
-                'update'
+                'update',
+                UpdateClientHelper::getTemporaryAccessRoute(),
                 /* chayka: init/controllers */
             ));
 
@@ -337,6 +338,11 @@ class Plugin extends WP\Plugin{
 	    $this->addRestRoutes('comment-model', 'comment-models', '/?id', array('id'=>'/^\d+$/'), '\\Chayka\\WP\\Models\\CommentModel');
 
 	    $this->addRestRoutes('user-model', 'user-models', '/?id', array('id'=>'/^\d+$/'), '\\Chayka\\WP\\Models\\UserModel');
+        
+        $tempAccess = UpdateClientHelper::getTemporaryAccessRoute();
+        $tempParams = ['controller' => 'update'];
+        $tempParams[$tempAccess] = $tempAccess;
+        $this->addRoute('temporary-update-access-point', $tempAccess.'/:action/*', $tempParams);
     }
 
     /**
