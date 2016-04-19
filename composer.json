@@ -12,6 +12,12 @@
     "require": {
         "chayka/wp": "dev-master"
     },
+    "autoload":{
+        "classmap":[
+            "app/helpers",
+            "Plugin.php"
+        ]
+    },
     "suggest":{
         "chayka/email-wpp": "dev-master",
         "chayka/auth-wpp": "dev-master",
