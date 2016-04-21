@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @var {Gulp} gulp
  */
@@ -20,6 +22,9 @@ var concat = require('gulp-concat');
 var clean = require('gulp-clean');
 var merge = require('merge-stream');
 var plumber = require('gulp-plumber');
+
+var bump = require('gulp-bump');
+var argv = require('yargs').argv;
 
 var paths = {
     lessNg: ['res/src.es6.less/ng-modules/**/*.less'],
@@ -57,7 +62,14 @@ var paths = {
     ],
     img: 'res/src/img/**/*',
     srcNgModules: 'res/src/ng-modules',
-    dist: 'res/dist'
+    dist: 'res/dist',
+    pkgConfigs: [
+        'package.json',
+        'bower.json',
+        'composer.json',
+        'chayka.json',
+        '.yo-rc.json'
+    ]
 };
 
 paths.jsAll = paths.jsCore.concat(paths.jsAdmin).concat(paths.jsAvatars);
@@ -197,6 +209,32 @@ gulp.task('img', function(){
         }))
         .pipe(gulp.dest(paths.dist + '/img'));
 });
+
+/**
+ * Get a task function that bumps version
+ * @param release
+ * @return {Function}
+ */
+function bumpVersion(release){
+    return function() {
+        release = release || 'prerelease';
+        var version = argv.setversion;
+        var options = {};
+        if (version) {
+            options.version = version;
+        } else if (release) {
+            options.type = release;
+        }
+        return gulp.src(paths.pkgConfigs)
+            .pipe(bump(options))
+            .pipe(gulp.dest('./'));
+    };
+}
+gulp.task('bump', bumpVersion());
+gulp.task('bump:prerelease', bumpVersion('prerelease'));
+gulp.task('bump:patch', bumpVersion('patch'));
+gulp.task('bump:minor', bumpVersion('minor'));
+gulp.task('bump:major', bumpVersion('major'));
 
 gulp.task('lint', ['lint:js', 'lint:css']);
 

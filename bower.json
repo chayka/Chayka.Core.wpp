@@ -1,7 +1,7 @@
 {
   "name": "Chayka.Core",
   "description": "Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "MIT",
   "authors": [
     "Boris Mossounov <borix@tut.by>"

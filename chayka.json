@@ -3,7 +3,7 @@
     "appName": "Chayka.Core",
     "appDescription": "Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications",
     "appKeywords": "WordPress, Chayka, MVC, OOP",
-    "appVersion": "0.0.1",
+    "appVersion": "1.0.0",
     "appAuthor": "Boris Mossounov",
     "appAuthorEmail": "borix@tut.by",
     "appAuthorUri": "https://github.com/chayka/",

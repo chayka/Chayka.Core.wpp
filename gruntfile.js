@@ -35,6 +35,13 @@ module.exports = function(grunt) {
         ],
         jsAvatars: [
             'res/src/ng-modules/chayka-avatars.js'
+        ],
+        pkgConfigs: [
+            'package.json',
+            'bower.json',
+            'composer.json',
+            'chayka.json',
+            '.yo-rc.json'
         ]
     };
 
@@ -196,6 +203,19 @@ module.exports = function(grunt) {
             js: ['res/tmp/js'],
             img: ['res/tmp/img'],
             all: ['res/tmp']
+        },
+        bump: {
+            options:{
+                // regExp: /(appVersion|version)/,
+                commit: false,
+                createTag: false,
+                push: false,
+                globalReplace: false,
+                prereleaseName: false,
+                metadata: '',
+                files: resFiles.pkgConfigs
+            }
+
         },
         watch: {
             js: {

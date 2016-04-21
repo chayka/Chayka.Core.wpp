@@ -3,6 +3,7 @@
 namespace Chayka\Core;
 
 use Chayka\Helpers\FsHelper;
+use Chayka\Helpers\HttpHeaderHelper;
 use Chayka\WP\Helpers\AclHelper;
 use Chayka\WP\MVC\Controller;
 use Chayka\Helpers\InputHelper;
@@ -36,5 +37,4 @@ class UpdateController extends Controller{
 
         return false;
     }
-
-} 
+}

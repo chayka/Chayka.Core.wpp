@@ -32,6 +32,7 @@ class Plugin extends WP\Plugin{
 	            'user-model',
 	            'user-models',
                 'update',
+                'buggy',
                 UpdateClientHelper::getTemporaryAccessRoute(),
                 /* chayka: init/controllers */
             ));
