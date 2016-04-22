@@ -25,4 +25,4 @@ success:
         filename: "%project.title%-%build.commit%"
     shell:
         - "chown www-data:www-data ${CI_RELEASE_DIR}*"
-        - "curl ${CI_RELEASE_HOOK_URL} > /dev/null" # 2&>1
+        - "curl ${CI_RELEASE_HOOK_URL} > /dev/null"

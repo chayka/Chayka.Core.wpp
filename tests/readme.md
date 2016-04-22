@@ -1,11 +1,18 @@
 #CI environment setup
 
-## Setup PHPCI instance following this instruction
+## Setup PHPCI instance
  Follow this instruction:
  https://www.phptesting.org/wiki/Installing-PHPCI
  Heads up: do not forget to setup PHPCI deamon or Cron Job!
 
     nohup php ./daemonise phpci:daemonise > /dev/null 2>&1 &
+
+## In PHPCI Create a project "Chayka.Core.wpp"
+
+ Heads up: there's a bug there, so:
+ - While setting up project choose "Remote URL", not "GitHub" or "BitBucket"
+ - Use "https" url, not "ssh:git"
+ - Don't use deployment keys
 
 ## Step.1 create WP instance accessible from outside.
  Let's say it is accessible from domain name http://test.sample.com
