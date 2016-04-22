@@ -3,7 +3,7 @@
 wpUrl=${1-${WP_CI_URL}}
 extra=""
 if [ ! -z ${PHPCI} ]; then
-    extra=" --no-color"
+    extra=" --no-colors"
 fi
 
 if [ ! -z ${wpUrl} ]; then

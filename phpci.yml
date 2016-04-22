@@ -11,6 +11,7 @@ setup:
         - "mkdir ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
         - "cp -R ./* ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
         - "chown -R www-data:www-data ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+        - "cd ${WP_CI_DIR} && wp --allow-root plugin activate Chayka.Core.wpp"
 
 test:
     shell:
