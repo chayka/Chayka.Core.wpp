@@ -17,7 +17,7 @@ test:
 #        run_from: "phpunit/"
 #        coverage: "tests/logs/coverage"
 
-#    shell:
-#        - "bash %BUILD_PATH%/tests/casperjs/test.sh"
+    shell:
+        - "bash %BUILD_PATH%/tests/casperjs/test.sh"
 
 complete:
