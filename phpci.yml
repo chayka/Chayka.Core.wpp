@@ -13,7 +13,7 @@ setup:
 test:
     shell:
         - "phpunit --tap"
-        - "cd ./tests/casperjs/ && test.sh"
+        - "cd ./tests/casperjs/ && ./test.sh"
 #    php_unit:
 #        config:
 #            - "phpunit.xml.dist"
