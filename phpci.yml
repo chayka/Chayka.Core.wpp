@@ -4,8 +4,10 @@ build_settings:
 setup:
     composer:
         action: "install"
-    copy_build:
-        directory: "${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+    shell:
+        - "rm -rf ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+        - "mkdir ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+        - "cp -R ./* ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
 
 test:
     shell:
