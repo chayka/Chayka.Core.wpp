@@ -4,13 +4,14 @@ build_settings:
 setup:
     composer:
         action: "install"
-#    shell:
-#        - "ls ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp && rm -r ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
-#        - "cp %BUILD_PATH% ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+    shell:
+        - "ls ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp && rm -r ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+        - "cp ./* ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
 
 test:
     shell:
         - "phpunit --tap"
+        - "bash ./tests/casperjs/test.sh"
 #    php_unit:
 #        config:
 #            - "phpunit.xml.dist"
@@ -20,6 +21,5 @@ test:
 #        coverage: "tests/logs/coverage"
 
 #    shell:
-#        - "bash %BUILD_PATH%/tests/casperjs/test.sh"
 
 complete:
