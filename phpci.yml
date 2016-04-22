@@ -9,9 +9,11 @@ setup:
 #        - "cp %BUILD_PATH% ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
 
 test:
-    php_unit:
-        config:
-            - "phpunit.xml.dist"
+    shell:
+        - "phpunit --tap"
+#    php_unit:
+#        config:
+#            - "phpunit.xml.dist"
 #        directory:
 #            - "tests/"
 #        run_from: "phpunit/"
