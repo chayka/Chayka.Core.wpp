@@ -4,9 +4,9 @@ build_settings:
 setup:
     composer:
         action: "install"
-#    shell:
-#        - "ls ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp && rm -r ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
-#        - "cp %BUILD_PATH% ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+    shell:
+        - "ls ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp && rm -r ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+        - "cp %BUILD_PATH% ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
 
 test:
     php_unit:
