@@ -22,6 +22,7 @@ success:
     package_build:
         format: "zip"
         directory: "${CI_RELEASE_DIR}"
-        filename: "Chayka.Core.wpp.%build.commit%"
+        filename: "%project.title%-%build.commit%"
     shell:
-        - "curl ${CI_RELEASE_HOOK_URL} > /dev/null > /dev/null 2&>1"
+        - "chown www-data:www-data ${CI_RELEASE_DIR}*"
+        - "curl ${CI_RELEASE_HOOK_URL} > /dev/null" # 2&>1
