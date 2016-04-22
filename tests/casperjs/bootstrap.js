@@ -2,8 +2,6 @@
 
 var utils = require('utils');
 
-casper.options.colorizerType = casper.cli.get('no-color') === true ? 'Dummy' : 'Colorizer';
-
 /**
  * Get absolute url by providing relative url.
  * Base url is passed from cli

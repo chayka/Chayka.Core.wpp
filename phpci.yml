@@ -2,8 +2,6 @@ build_settings:
 #    clone_depth: 1 # depth of 1 is a shallow clone, remove this line to clone entire repo
 
 setup:
-    env:
-        PHPCI: "PHPCI"
     composer:
         action: "install"
     shell:
@@ -16,15 +14,14 @@ setup:
 test:
     shell:
         - "phpunit --tap"
-        - 'cd ./tests/casperjs/ && ./test.sh | sed "s/\[\d+;\d+m//"'
-#    php_unit:
-#        config:
-#            - "phpunit.xml.dist"
-#        directory:
-#            - "tests/"
-#        run_from: "phpunit/"
-#        coverage: "tests/logs/coverage"
-
-#    shell:
+        - 'cd ./tests/casperjs/ && ./test.sh | sed "s/\[\d+;\d+m//g"'
 
 complete:
+
+success:
+    package_build:
+        format: "zip"
+        directory: "${CI_RELEASE_DIR}"
+        filename: "Chayka.Core.wpp.%build.commit%"
+    shell:
+        - "curl ${CI_RELEASE_HOOK_URL} > /dev/null > /dev/null 2&>1"

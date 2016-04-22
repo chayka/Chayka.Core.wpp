@@ -1,5 +1,12 @@
 #CI environment setup
 
+## Setup PHPCI instance following this instruction
+ Follow this instruction:
+ https://www.phptesting.org/wiki/Installing-PHPCI
+ Heads up: do not forget to setup PHPCI deamon or Cron Job!
+
+    nohup php ./daemonise phpci:daemonise > /dev/null 2>&1 &
+
 ## Step.1 create WP instance accessible from outside.
  Let's say it is accessible from domain name http://test.sample.com
  and is located in /var/www/test.example.com/htdocs/
@@ -15,6 +22,12 @@
 
     # universal pass for all WP users that will be created on demand
     export WP_CI_PASS=_secret_pass_
+
+    # path where you want to put successful releases
+    export CI_RELEASE_DIR=/tmp/ci-releses/
+
+    # webhook url that you want to notify about new release
+    export CI_RELEASE_HOOK_URL=http://download.example.com/api
 
 ## Step.3 install wp-cli
 
