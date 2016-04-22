@@ -8,11 +8,12 @@ setup:
         - "rm -rf ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
         - "mkdir ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
         - "cp -R ./* ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+        - "chown -R www-data:www-data ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
 
 test:
     shell:
         - "phpunit --tap"
-        - "bash ./tests/casperjs/test.sh"
+        - "cd ./tests/casperjs/ && test.sh"
 #    php_unit:
 #        config:
 #            - "phpunit.xml.dist"
