@@ -2,6 +2,8 @@ build_settings:
 #    clone_depth: 1 # depth of 1 is a shallow clone, remove this line to clone entire repo
 
 setup:
+    env:
+        PHPCI: "PHPCI"
     composer:
         action: "install"
     shell:
