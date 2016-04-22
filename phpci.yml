@@ -4,7 +4,7 @@ build_settings:
 setup:
     composer:
         action: "install"
-    copy:
+    copy_build:
         directory: "${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
 
 test:
