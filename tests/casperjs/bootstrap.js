@@ -31,12 +31,12 @@ var errorHandlerBound = false;
  * @return {casper}
  */
 casper.wpLogin = function wpLogin (user, password){
-    return casper.open(wpUrl('/wp-login.php'), {
+    return casper.open(casper.wpUrl('/wp-login.php'), {
         method: 'post',
         data: {
             log: 'ci-admin',
-            pwd: password || wpCiPass(),
-            redirect_to: wpUrl('/wp-admin/'),
+            pwd: password || casper.wpCiPass(),
+            redirect_to: casper.wpUrl('/wp-admin/'),
             testcookie: 1,
             'wp-submin': 'Login'
         }
