@@ -7,12 +7,17 @@ setup:
     composer:
         action: "install"
     shell:
+        # installing fresh database
         - "php ${WP_CI_DIR}wp-content/tests-lib/includes/install.php ${WP_CI_DIR}wp-content/tests-lib/wp-tests-config.php"
+        # copying fresh Chayka.Core.wpp plugin instance to WP
         - "rm -rf ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
         - "mkdir ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
         - "cp -R ./* ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
         - "chown -R www-data:www-data ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
+        # enabling Chayka.Core.wpp plugin
         - "cd ${WP_CI_DIR} && wp --allow-root plugin activate Chayka.Core.wpp"
+        # creating test admin
+        - "cd ${WP_CI_DIR} && wp --allow-root user create ci-admin ci-admin@example.com --role=administrator --user_pass=${WP_CI_PASS}"
 
 test:
     shell:

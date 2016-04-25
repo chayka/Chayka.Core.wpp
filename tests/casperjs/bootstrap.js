@@ -15,9 +15,33 @@ casper.wpUrl = function wpUrl (url){
     return wpBaseUrl + url;
 };
 
+casper.wpCiPass = function wpCiPass (){
+    url = url || '';
+    return this.cli.options.wpCiPass || '';
+};
+
 var errors = [];
 var errorHandlerBound = false;
 
+/**
+ * Login to wordpress
+ *
+ * @param user
+ * @param [password]
+ * @return {casper}
+ */
+casper.wpLogin = function wpLogin (user, password){
+    return casper.open(wpUrl('/wp-login.php'), {
+        method: 'post',
+        data: {
+            log: 'ci-admin',
+            pwd: password || wpCiPass(),
+            redirect_to: wpUrl('/wp-admin/'),
+            testcookie: 1,
+            'wp-submin': 'Login'
+        }
+    })
+};
 
 /**
  * Set up test suite to capture JS errors and return errors array instance.
