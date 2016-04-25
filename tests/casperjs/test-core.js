@@ -27,7 +27,7 @@ casper.test.begin('Checking WP instance login page && logging in', function suit
         casper.wpLogin('ci-admin').then(function(){
             test.assertExists('#wp-toolbar', 'Admin toolbar exists');
             test.assertExists('#adminmenu', 'Admin menu exists');
-        }).thenOpen(casper.wpUrl('/wp-admin/admin.php?page=chayka-core'), function(){
+        }).thenOpen(casper.wpUrl('x/wp-admin/admin.php?page=chayka-core'), function(){
             casper.runBasicUrlTest(test, this);
             test.assertExists('[data-ng-controller="optionsForm"]', 'Options Form found');
         });

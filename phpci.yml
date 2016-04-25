@@ -22,7 +22,8 @@ setup:
 test:
     shell:
         - "phpunit --tap"
-        - 'cd ./tests/casperjs/ && ./test.sh | sed "s/\[\d+;\d+m//g"'
+        - 'cd ./tests/casperjs/ && ./test.sh'
+#        - 'cd ./tests/casperjs/ && ./test.sh | sed "s/\[\d+;\d+m//g"'
 
 complete:
 
