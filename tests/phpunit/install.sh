@@ -20,14 +20,19 @@ WP_VERSION=${4-latest}
 #
 # WordPress test instance
 #
-WP_CI_DIR=${5-/tmp/wordpress/}
-export WP_CI_DIR=${WP_CI_DIR}
+if [ -z ${WP_CI_DIR} ]; then
+    WP_CI_DIR=${5-/tmp/wordpress/}
+    export WP_CI_DIR=${WP_CI_DIR}
+    echo "export WP_CI_DIR=${WP_CI_DIR}" >> /etc/profile
+fi
 
 #
 # WordPress test library location
 #
-WP_TESTS_DIR=${6-${WP_CI_DIR}wp-content/tests-lib/}
-export WP_TESTS_DIR=${WP_TESTS_DIR}
+if [ -z WP_TESTS_DIR ]; then
+    WP_TESTS_DIR=${6-${WP_CI_DIR}wp-content/tests-lib/}
+    export WP_TESTS_DIR=${WP_TESTS_DIR}
+fi
 
 #
 # download $1 and save it to $2
@@ -132,9 +137,26 @@ install_wp() {
 	fi
 
     #
+	# portable in-place argument for both GNU sed and Mac OSX sed
+	#
+	if [ $(uname -s) == 'Darwin' ]; then
+		local ioption='-i .bak'
+	else
+		local ioption='-i'
+	fi
+	if [ ! -f ${WP_CI_DIR}wp-config.php ]; then
+    	cp ${WP_CI_DIR}wp-config-sample.php ${WP_CI_DIR}wp-config.php
+		sed $ioption "s:database_name_here:${DB_NAME}:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed $ioption "s:username_here:$DB_USER:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed $ioption "s:password_here/$DB_PASS:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed $ioption "s:localhost:${DB_HOST}:" ${WP_TESTS_DIR}/wp-tests-config.php
+	fi
+
+
+    #
     # Downloading mysqli driver for wordpress
     #
-	download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CI_DIR/wp-content/db.php
+	#download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CI_DIR/wp-content/db.php
 }
 
 #
@@ -168,23 +190,57 @@ install_test_suite() {
 		#
 		# check out from svn repository wp testing suite
 		#
-		svn co --quiet https://develop.svn.wordpress.org/${WP_TESTS_TAG}/tests/phpunit/includes/ $WP_TESTS_DIR/includes
+		svn co --quiet https://develop.svn.wordpress.org/${WP_TESTS_TAG}/tests/phpunit/includes/ ${WP_TESTS_DIR}/includes
 	fi
 
     #
     # setup wp-tests-config.php with db credentials
     #
 	if [ ! -f wp-tests-config.php ]; then
-		download https://develop.svn.wordpress.org/${WP_TESTS_TAG}/wp-tests-config-sample.php "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s:dirname( __FILE__ ) . '/src/':'$WP_CI_DIR':" "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s/youremptytestdbnamehere/$DB_NAME/" "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s/yourusernamehere/$DB_USER/" "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s/yourpasswordhere/$DB_PASS/" "$WP_TESTS_DIR"/wp-tests-config.php
-		sed $ioption "s|localhost|${DB_HOST}|" "$WP_TESTS_DIR"/wp-tests-config.php
+		download https://develop.svn.wordpress.org/${WP_TESTS_TAG}/wp-tests-config-sample.php ${WP_TESTS_DIR}/wp-tests-config.php
+		sed $ioption "s:dirname( __FILE__ ) . '/src/':'${WP_CI_DIR}':" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed $ioption "s:youremptytestdbnamehere:${DB_NAME}:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed $ioption "s:yourusernamehere:$DB_USER:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed $ioption "s:yourpasswordhere/$DB_PASS:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed $ioption "s:localhost:${DB_HOST}:" ${WP_TESTS_DIR}/wp-tests-config.php
 	fi
 
 }
 
+#
+# Install wp-cli
+#
+install_wp_cli() {
+    if [ ! -f /usr/local/bin/wp ]; then
+        download https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar wp-cli.phar
+        chmod +x wp-cli.phar
+        sudo mv wp-cli.phar /usr/local/bin/wp
+    fi
+    wp --info
+}
+
+install_composer() {
+    if [ ! -f /usr/local/bin/composer ]; then
+        download https://getcomposer.org/installer composer-setup.php
+        php composer-setup.php
+        rm composer-setup.php
+        chmod +x composer.phar
+        sudo mv composer.phar /usr/local/bin/composer
+    fi
+    composer --version
+}
+
+#
+# Install phpunit
+#
+install_phpunit() {
+    if [ ! -f /usr/local/bin/phpunit ]; then
+        download https://phar.phpunit.de/phpunit.phar phpunit.phar
+        chmod +x phpunit.phar
+        sudo mv phpunit.phar /usr/local/bin/phpunit
+    fi
+    phpunit --version
+}
 
 #
 # Install Chayka.Core.wpp plugin
@@ -194,6 +250,13 @@ install_chayka_core() {
     cd $_ && composer install
 }
 
+
+install_composer
+install_phpunit
+install_wp_cli
+
 install_wp
 install_test_suite
 install_db
+
+install_chayka_core

@@ -3,7 +3,7 @@
 ## Setup PHPCI instance
  Follow this instruction:
  https://www.phptesting.org/wiki/Installing-PHPCI
- Heads up: do not forget to setup PHPCI deamon or Cron Job!
+ **Heads up:** do not forget to setup PHPCI deamon or Cron Job!
 
     nohup php ./daemonise phpci:daemonise > /dev/null 2>&1 &
 
