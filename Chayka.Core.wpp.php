@@ -8,9 +8,8 @@
  * Author URI: https://github.com/chayka/
  * License: MIT
  */
-
-require_once __DIR__.'/vendor/autoload.php';
-
-require_once __DIR__.'/Plugin.php';
-
+if(!class_exists('\Chayka\Core\Plugin')){
+    require_once __DIR__ . '/vendor/autoload.php';
+    require_once __DIR__ . '/Plugin.php';
+}
 //add_action('init', array("Chayka\\Core\\Plugin", "init"));

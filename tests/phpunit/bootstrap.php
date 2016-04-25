@@ -21,14 +21,10 @@ require_once $_tests_dir . '/includes/functions.php';
 /**
  * Manually load the plugin being tested.
  */
-$thisPlugin = 'Chayka.Core.wpp\Chayka.Core.wpp.php';
-$activePlugins = get_option('active_plugins');
-if(array_search($thisPlugin, $activePlugins) === false){
-	tests_add_filter('muplugins_loaded', function () use ($_core_dir){
+tests_add_filter('muplugins_loaded', function () use ($_core_dir){
 //	require $_core_dir. 'wp-content/plugins/Chayka.Core.wpp.php';
-		require_once dirname(dirname(dirname(__FILE__))) . '/Chayka.Core.wpp.php';
-	});
-}
+    require_once dirname(dirname(dirname(__FILE__))) . '/Chayka.Core.wpp.php';
+});
 /**
  * Start up the WP testing environment.
  */
