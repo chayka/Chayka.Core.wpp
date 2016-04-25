@@ -90,6 +90,7 @@ casper.runJsErrorsTest = function(test){
  * - check for javascript errors
  *
  * @param test
+ * @return {casper}
  */
 casper.runBasicUrlTest = function basicUrlTest (test){
     // test.assertTextDoesntExist('( ! )', 'Page should not contain any PHP error output');
@@ -148,4 +149,23 @@ casper.runBasicUrlTest = function basicUrlTest (test){
      * Check if Javascript errors are absent
      */
     casper.runJsErrorsTest(test);
+
+    return casper;
+};
+
+casper.thenOpen = function(url, options, callback){
+    if (! callback && typeof options === 'function' && options.call && options.apply){
+        callback = options;
+        options = {};
+    }
+    return casper.then(function(){
+        casper.open(url, options).then(callback);
+    });
+};
+
+casper.thenPost = function(url, data, callback){
+    return casper.thenOpen(url, {
+        method: 'post',
+        data: data
+    }, callback);
 };
