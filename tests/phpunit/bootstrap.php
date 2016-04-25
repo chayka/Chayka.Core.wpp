@@ -29,4 +29,4 @@ tests_add_filter( 'muplugins_loaded', function() use ($_core_dir){
 /**
  * Start up the WP testing environment.
  */
-require $_tests_dir . '/includes/bootstrap.php';
+require $_tests_dir . '/includes/bootstrap.chayka.php';

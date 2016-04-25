@@ -7,6 +7,7 @@ setup:
     composer:
         action: "install"
     shell:
+        - "php ${WP_CI_DIR}wp-content/tests-lib/includes/install.php ${WP_CI_DIR}wp-content/tests-lib/wp-tests-config.php"
         - "rm -rf ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
         - "mkdir ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
         - "cp -R ./* ${WP_CI_DIR}wp-content/plugins/Chayka.Core.wpp"
