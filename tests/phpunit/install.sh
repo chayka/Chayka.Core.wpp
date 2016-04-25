@@ -48,9 +48,9 @@ download() {
 #
 # setting WP_TESTS_TAG variable based on version required
 #
-if [[ $WP_VERSION =~ [0-9]+\.[0-9]+(\.[0-9]+)? ]]; then
+if [[ ${WP_VERSION} =~ [0-9]+\.[0-9]+(\.[0-9]+)? ]]; then
 	WP_TESTS_TAG="tags/$WP_VERSION"
-elif [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
+elif [[ ${WP_VERSION} == 'nightly' || ${WP_VERSION} == 'trunk' ]]; then
 	WP_TESTS_TAG="trunk"
 else
     #
@@ -81,18 +81,18 @@ install_db() {
 	local DB_SOCK_OR_PORT=${PARTS[1]};
 	local EXTRA=""
 
-	if ! [ -z $DB_HOSTNAME ] ; then
-		if [ $(echo $DB_SOCK_OR_PORT | grep -e '^[0-9]\{1,\}$') ]; then
+	if ! [ -z ${DB_HOSTNAME} ] ; then
+		if [ $(echo ${DB_SOCK_OR_PORT} | grep -e '^[0-9]\{1,\}$') ]; then
 			EXTRA=" --host=$DB_HOSTNAME --port=$DB_SOCK_OR_PORT --protocol=tcp"
-		elif ! [ -z $DB_SOCK_OR_PORT ] ; then
+		elif ! [ -z ${DB_SOCK_OR_PORT} ] ; then
 			EXTRA=" --socket=$DB_SOCK_OR_PORT"
-		elif ! [ -z $DB_HOSTNAME ] ; then
+		elif ! [ -z ${DB_HOSTNAME} ] ; then
 			EXTRA=" --host=$DB_HOSTNAME --protocol=tcp"
 		fi
 	fi
 
 	# create database
-	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
+	mysqladmin create ${DB_NAME} --user="$DB_USER" --password="$DB_PASS"${EXTRA}
 }
 
 #
@@ -113,18 +113,19 @@ install_wp() {
 		mkdir -p /tmp/wordpress-nightly
 		download https://wordpress.org/nightly-builds/wordpress-latest.zip  /tmp/wordpress-nightly/wordpress-nightly.zip
 		unzip -q /tmp/wordpress-nightly/wordpress-nightly.zip -d /tmp/wordpress-nightly/
-		mv /tmp/wordpress-nightly/wordpress/* $WP_CI_DIR
+		mv /tmp/wordpress-nightly/wordpress/* ${WP_CI_DIR}
 	else
-		if [ $WP_VERSION == 'latest' ]; then
+    local ARCHIVE_NAME='latest'
+		if [ ${WP_VERSION} == 'latest' ]; then
 		    #
 		    # Installing latest release
 		    #
-			local ARCHIVE_NAME='latest'
+			ARCHIVE_NAME='latest'
 		else
 		    #
 		    # Installing specified version
 		    #
-			local ARCHIVE_NAME="wordpress-$WP_VERSION"
+			ARCHIVE_NAME="wordpress-$WP_VERSION"
 		fi
 		#
 		# Downloading WordPress
@@ -133,23 +134,22 @@ install_wp() {
 		#
 		# Unpacking WordPress
 		#
-		tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C $WP_CI_DIR
+		tar --strip-components=1 -zxmf /tmp/wordpress.tar.gz -C ${WP_CI_DIR}
 	fi
 
     #
 	# portable in-place argument for both GNU sed and Mac OSX sed
 	#
+    local sed_option='-i'
 	if [ $(uname -s) == 'Darwin' ]; then
-		local ioption='-i .bak'
-	else
-		local ioption='-i'
+		sed_option='-i .bak'
 	fi
 	if [ ! -f ${WP_CI_DIR}wp-config.php ]; then
     	cp ${WP_CI_DIR}wp-config-sample.php ${WP_CI_DIR}wp-config.php
-		sed $ioption "s:database_name_here:${DB_NAME}:" ${WP_TESTS_DIR}/wp-tests-config.php
-		sed $ioption "s:username_here:$DB_USER:" ${WP_TESTS_DIR}/wp-tests-config.php
-		sed $ioption "s:password_here/$DB_PASS:" ${WP_TESTS_DIR}/wp-tests-config.php
-		sed $ioption "s:localhost:${DB_HOST}:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:database_name_here:${DB_NAME}:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:username_here:$DB_USER:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:password_here/$DB_PASS:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:localhost:${DB_HOST}:" ${WP_TESTS_DIR}/wp-tests-config.php
 	fi
 
 
@@ -166,10 +166,9 @@ install_test_suite() {
     #
 	# portable in-place argument for both GNU sed and Mac OSX sed
 	#
+    local sed_option='-i'
 	if [ $(uname -s) == 'Darwin' ]; then
-		local ioption='-i .bak'
-	else
-		local ioption='-i'
+		sed_option='-i .bak'
 	fi
 
 	#
@@ -181,11 +180,11 @@ install_test_suite() {
     #
 	# set up testing suite if it doesn't yet exist
 	#
-	if [ ! -d $WP_TESTS_DIR ]; then
+	if [ ! -d ${WP_TESTS_DIR} ]; then
 	    #
 		# set up testing suite
 		#
-		mkdir -p $WP_TESTS_DIR
+		mkdir -p ${WP_TESTS_DIR}
 
 		#
 		# check out from svn repository wp testing suite
@@ -194,31 +193,33 @@ install_test_suite() {
 	fi
 
     #
+    # Creating alternative bootstrap, that does not flush database
+    # and does not check for WordPress specific test groups
+    #
+	if [ ! -d ${WP_TESTS_DIR}/includes/bootstrap.chayka.php ]; then
+	    cp ${WP_TESTS_DIR}/includes/bootstrap.php ${WP_TESTS_DIR}/includes/bootstrap.chayka.php
+		sed ${sed_option} "s:system:'//system':" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:_delete_all_posts:'//_delete_all_posts':" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:new WP_PHPUnit_Util_Getopt:'//new WP_PHPUnit_Util_Getopt':" ${WP_TESTS_DIR}/wp-tests-config.php
+    fi
+
+    #
     # setup wp-tests-config.php with db credentials
     #
 	if [ ! -f wp-tests-config.php ]; then
 		download https://develop.svn.wordpress.org/${WP_TESTS_TAG}/wp-tests-config-sample.php ${WP_TESTS_DIR}/wp-tests-config.php
-		sed $ioption "s:dirname( __FILE__ ) . '/src/':'${WP_CI_DIR}':" ${WP_TESTS_DIR}/wp-tests-config.php
-		sed $ioption "s:youremptytestdbnamehere:${DB_NAME}:" ${WP_TESTS_DIR}/wp-tests-config.php
-		sed $ioption "s:yourusernamehere:$DB_USER:" ${WP_TESTS_DIR}/wp-tests-config.php
-		sed $ioption "s:yourpasswordhere/$DB_PASS:" ${WP_TESTS_DIR}/wp-tests-config.php
-		sed $ioption "s:localhost:${DB_HOST}:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:dirname( __FILE__ ) . '/src/':'${WP_CI_DIR}':" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:youremptytestdbnamehere:${DB_NAME}:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:yourusernamehere:$DB_USER:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:yourpasswordhere/$DB_PASS:" ${WP_TESTS_DIR}/wp-tests-config.php
+		sed ${sed_option} "s:localhost:${DB_HOST}:" ${WP_TESTS_DIR}/wp-tests-config.php
 	fi
 
 }
 
 #
-# Install wp-cli
+# Install composer
 #
-install_wp_cli() {
-    if [ ! -f /usr/local/bin/wp ]; then
-        download https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar wp-cli.phar
-        chmod +x wp-cli.phar
-        sudo mv wp-cli.phar /usr/local/bin/wp
-    fi
-    wp --info
-}
-
 install_composer() {
     if [ ! -f /usr/local/bin/composer ]; then
         download https://getcomposer.org/installer composer-setup.php
@@ -253,7 +254,6 @@ install_chayka_core() {
 
 install_composer
 install_phpunit
-install_wp_cli
 
 install_wp
 install_test_suite
