@@ -23,7 +23,7 @@ require_once $_tests_dir . '/includes/functions.php';
  */
 tests_add_filter( 'muplugins_loaded', function() use ($_core_dir){
 //	require $_core_dir. 'wp-content/plugins/Chayka.Core.wpp.php';
-	require dirname( dirname( dirname( __FILE__ ) ) ). '/Chayka.Core.wpp.php';
+	require_once dirname( dirname( dirname( __FILE__ ) ) ). '/Chayka.Core.wpp.php';
 } );
 
 /**
