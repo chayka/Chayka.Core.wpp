@@ -15,8 +15,12 @@ casper.wpUrl = function wpUrl (url){
     return wpBaseUrl + url;
 };
 
+/**
+ * Get default password defined in env
+ *
+ * @return {string}
+ */
 casper.wpCiPass = function wpCiPass (){
-    url = url || '';
     return this.cli.options.wpCiPass || '';
 };
 
