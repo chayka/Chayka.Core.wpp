@@ -9,7 +9,9 @@ angular.module('chayka-ajax', ['chayka-modals', 'chayka-spinners'])
             /**
              * Registered error handlers for different error codes
              */
-            errorHandlers: {},
+            errorHandlers: {
+                
+            },
 
             /**
              * Add error handler for errorCode.

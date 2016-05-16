@@ -495,6 +495,20 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                         if (scrollTo) {
                             ctrl.scrollTo(scrollTo);
                         }
+                    },
+
+                    /**
+                     * Get form fields values
+                     *
+                     * @return {{}}
+                     */
+                    getFieldValues: () => {
+                        var values = {};
+                        angular.forEach(ctrl.fields, (field) => {
+                            values[field] = ctrl.fields[field].value || '';
+                        });
+
+                        return values;
                     }
                 };
 
