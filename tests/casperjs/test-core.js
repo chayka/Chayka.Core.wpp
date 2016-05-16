@@ -29,7 +29,7 @@ casper.test.begin('Checking WP instance login page & logging in', function suite
             test.assertExists('#adminmenu', 'Admin menu exists');
         }).thenOpen(casper.wpUrl('/wp-admin/admin.php?page=chayka-core'), function(){
             casper.runBasicUrlTest(test, this);
-            test.assertExists('[data-ng-controller="optionsForm"]', 'Options Form found');
+            test.assertExists('[data-console-page-options]', 'Options Form found');
         });
     });
 
