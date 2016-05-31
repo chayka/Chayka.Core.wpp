@@ -1,8 +1,7 @@
 <h2>Logs</h2>
 
-<div data-ng-cloak>
-    <div data-ng-controller="optionsForm" data-ng-init="namespace = 'Chayka.WP'">
-        <form data-form-validator="validator" novalidate="novalidate">
+<div data-ng-cloak data-ng-init="options={};">
+    <div data-console-page-options="options" data-namespace="Chayka.WP">
             <div class="form_field stretch logs_folder_location" data-form-field="logsFolderLocation">
                 <label class="width60">Logs Folder Location</label><select data-ng-init="options.logsFolderLocation='core'; logsFolderLocationOptions = {'wordpress':'WP folder','core':'Plugin folder'}" data-ng-model="options.logsFolderLocation" data-ng-options="key as value for (key, value) in logsFolderLocationOptions" title="Logs Folder Location"></select>
             </div>
@@ -35,9 +34,5 @@
             </div>
 
 	        <!-- chayka: fields -->
-            <div class="buttons">
-                <button class="button button-primary button-large" data-ng-click="saveOptions();">Save</button>
-            </div>
-        </form>
     </div>
 </div>

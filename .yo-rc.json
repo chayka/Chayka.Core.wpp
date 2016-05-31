@@ -49,10 +49,14 @@
         "logs"
       ],
       "Update": [],
-      "Buggy": []
+      "Buggy": [],
+      "Email": []
     },
     "consolePages": [
       "logs"
+    ],
+    "helpers": [
+      "option"
     ]
   }
 }

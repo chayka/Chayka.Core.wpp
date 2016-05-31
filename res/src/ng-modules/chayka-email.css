@@ -1,0 +1,6 @@
+[data-email-test-form] [data-form-validator] {
+  width: 300px;
+}
+[data-email-test-form] [data-form-validator] .buttons {
+  text-align: right;
+}

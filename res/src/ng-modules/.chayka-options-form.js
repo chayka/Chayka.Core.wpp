@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('chayka-options-form', ['chayka-forms', 'chayka-wp-admin'])
-    .directive('consolePageOptions', ['$timeout', 'ajax', ($timeout, ajax) => {
+    .directive('consolePageOptions', ['$timeout', 'ajax', function($timeout, ajax){
         return {
             transclude: true,
             controllerAs: 'ctrl',
@@ -19,7 +19,7 @@ angular.module('chayka-options-form', ['chayka-forms', 'chayka-wp-admin'])
                 '       </div>' +
                 '   </form>' +
                 '</div>',
-            controller: () => {
+            controller: function(){
                 var ctrl = {
                     /**
                      * Namespace for options to save
@@ -47,8 +47,8 @@ angular.module('chayka-options-form', ['chayka-forms', 'chayka-wp-admin'])
                      *
                      * @param data
                      */
-                    processResponse: (data) => {
-                        angular.forEach(data.payload, (value, option) => {
+                    processResponse: function(data){
+                        angular.forEach(data.payload, function(value, option){
                             ctrl.options[option] = value;
                         });
                     },
@@ -56,7 +56,7 @@ angular.module('chayka-options-form', ['chayka-forms', 'chayka-wp-admin'])
                     /**
                      * Save options on button click
                      */
-                    saveOptions: () => {
+                    saveOptions: function(){
                         if(!ctrl.validator || ctrl.validator.validateFields()){
                             ajax.post('/api/options/set', {
                                 namespace: ctrl.namespace,
@@ -71,7 +71,7 @@ angular.module('chayka-options-form', ['chayka-forms', 'chayka-wp-admin'])
                     /**
                      * Load options on form start
                      */
-                    loadOptions: () => {
+                    loadOptions: function(){
                         ajax.post('/api/options/get', {
                             namespace: ctrl.namespace,
                             options: ctrl.options
@@ -100,7 +100,7 @@ angular.module('chayka-options-form', ['chayka-forms', 'chayka-wp-admin'])
             }
         };
     }])
-    .controller('optionsForm', ['$scope', '$timeout', 'ajax', ($scope, $timeout, ajax) => {
+    .controller('optionsForm', ['$scope', '$timeout', 'ajax', function($scope, $timeout, ajax){
 
         $scope.namespace = '';
         $scope.options = {
@@ -108,14 +108,14 @@ angular.module('chayka-options-form', ['chayka-forms', 'chayka-wp-admin'])
         };
         $scope.validator = null;
 
-        var processResponse = (data) => {
-            angular.forEach(data.payload, (value, option) => {
+        var processResponse = function(data){
+            angular.forEach(data.payload, function(value, option){
                 $scope.options[option] = value;
             });
             //$scope.options = data.payload;
         };
 
-        $scope.saveOptions = () => {
+        $scope.saveOptions = function(){
             if(!$scope.validator || $scope.validator.validateFields()){
                 ajax.post('/api/options/set', {
                     namespace: $scope.namespace,
@@ -127,7 +127,7 @@ angular.module('chayka-options-form', ['chayka-forms', 'chayka-wp-admin'])
             }
         };
 
-        $scope.loadOptions = () => {
+        $scope.loadOptions = function(){
             ajax.post('/api/options/get', {
                 namespace: $scope.namespace,
                 options: $scope.options

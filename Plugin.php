@@ -31,6 +31,7 @@ class Plugin extends WP\Plugin{
 	            'comment-models',
 	            'user-model',
 	            'user-models',
+                'email',
                 'update',
                 'buggy',
                 UpdateClientHelper::getTemporaryAccessRoute(),
@@ -123,6 +124,9 @@ class Plugin extends WP\Plugin{
         return $post;
     }
 
+    /**
+     * @deprecated 
+     */
     public static function checkDomainAndScheme(){
         $server = Util::serverName();
         $scheme = OptionHelper::getOption('SingleScheme');
@@ -170,7 +174,7 @@ class Plugin extends WP\Plugin{
      */
     public function registerActions() {
         $this->addAction('activated_plugin', 'thisPluginGoesFirst');
-        $this->addAction('parse_request', 'checkDomainAndScheme', 1);
+//        $this->addAction('parse_request', 'checkDomainAndScheme', 1);
         $this->addAction('admin_head', function(){
             if(is_admin() && in_array('chayka-buttons', WP\Helpers\AngularHelper::getQueue())){
                 WP\Helpers\AngularHelper::enqueueScriptStyle('chayka-wp-admin');
@@ -197,6 +201,8 @@ class Plugin extends WP\Plugin{
             }
 
         }
+        
+        $this->addAction('phpmailer_init', ['\Chayka\Core\EmailHelper', 'setupPhpMailer']);
 
     	/* chayka: registerActions */
     }
@@ -275,8 +281,11 @@ class Plugin extends WP\Plugin{
 	    $this->registerNgScript('chayka-wp-admin', 'ng-modules/chayka-wp-admin.js', ['chayka-spinners', 'chayka-nls', 'chayka-utils', 'chayka-modals', 'chayka-forms', 'ng-sortable', 'wp-color-picker']);
 	    $this->registerNgStyle('chayka-wp-admin', 'ng-modules/chayka-wp-admin.css', ['chayka-forms', 'chayka-modals', 'ng-sortable', 'wp-color-picker']);
 
-	    $this->registerNgScript('chayka-options-form', 'ng-modules/chayka-options-form.js', ['chayka-forms', 'chayka-wp-admin']);
-        $this->registerNgStyle('chayka-options-form', 'ng-modules/chayka-options-form.css', ['chayka-forms', 'chayka-wp-admin']);
+        $this->registerNgScript('chayka-email', 'ng-modules/chayka-email.js', ['chayka-wp-admin']);
+        $this->registerNgStyle('chayka-email', 'ng-modules/chayka-email.css', ['chayka-wp-admin']);
+
+//	    $this->registerNgScript('chayka-options-form', 'ng-modules/chayka-options-form.js', ['chayka-forms', 'chayka-wp-admin']);
+//        $this->registerNgStyle('chayka-options-form', 'ng-modules/chayka-options-form.css', ['chayka-forms', 'chayka-wp-admin']);
 
 	    $this->registerNgScript('chayka-pagination', 'ng-modules/chayka-pagination.js', ['chayka-utils', 'chayka-nls']);
         $this->registerNgStyle('chayka-pagination', 'ng-modules/chayka-pagination.css');
@@ -289,7 +298,7 @@ class Plugin extends WP\Plugin{
 		    $this->addAction('wp_footer', $cb, 1000);
 	    });
 
-        $this->registerMinimizedScript('chayka-core', 'ng-modules/chayka-core.js', [
+        $this->registerCombinedScript('chayka-core', 'ng-modules/chayka-core.js', [
 //	        'angular-translate',
 	        'angular-sanitize',
             'chayka-nls',
@@ -302,7 +311,7 @@ class Plugin extends WP\Plugin{
             'chayka-pagination',
         ]);
 
-        $this->registerMinimizedStyle('chayka-core', 'ng-modules/chayka-core.css', [
+        $this->registerCombinedStyle('chayka-core', 'ng-modules/chayka-core.css', [
 	        'angular',
             'chayka-spinners',
             'chayka-modals',
@@ -310,17 +319,17 @@ class Plugin extends WP\Plugin{
             'chayka-pagination',
         ]);
 
-        $this->registerMinimizedScript('chayka-admin', 'ng-modules/chayka-admin.js', [
-            'chayka-options-form',
+        $this->registerCombinedScript('chayka-admin', 'ng-modules/chayka-admin.js', [
+//            'chayka-options-form',
             'chayka-wp-admin',
         ]);
 
-        $this->registerMinimizedStyle('chayka-admin', 'ng-modules/chayka-admin.css', [
-            'chayka-options-form',
+        $this->registerCombinedStyle('chayka-admin', 'ng-modules/chayka-admin.css', [
+//            'chayka-options-form',
             'chayka-wp-admin',
         ]);
 
-	    $this->registerMinimizedScript('chayka-avatars-md5', 'ng-modules/chayka-avatars-md5.js', [
+	    $this->registerCombinedScript('chayka-avatars-md5', 'ng-modules/chayka-avatars-md5.js', [
 		    'angular-md5',
 		    'chayka-avatars',
 	    ]);
@@ -334,11 +343,11 @@ class Plugin extends WP\Plugin{
     public function registerRoutes() {
         $this->addRoute('default');
 
-	    $this->addRestRoutes('post-model', 'post-models', '/?id', array('id'=>'/^\d+$/'), '\\Chayka\\WP\\Models\\PostModel');
+	    $this->addRestRoutes('post-model', 'post-models', '/?id', array('id'=>'/^\d+$/'), '\Chayka\WP\Models\PostModel');
 
-	    $this->addRestRoutes('comment-model', 'comment-models', '/?id', array('id'=>'/^\d+$/'), '\\Chayka\\WP\\Models\\CommentModel');
+	    $this->addRestRoutes('comment-model', 'comment-models', '/?id', array('id'=>'/^\d+$/'), '\Chayka\WP\Models\CommentModel');
 
-	    $this->addRestRoutes('user-model', 'user-models', '/?id', array('id'=>'/^\d+$/'), '\\Chayka\\WP\\Models\\UserModel');
+	    $this->addRestRoutes('user-model', 'user-models', '/?id', array('id'=>'/^\d+$/'), '\Chayka\WP\Models\UserModel');
         
         $tempAccess = UpdateClientHelper::getTemporaryAccessRoute();
         $tempParams = ['controller' => 'update'];
@@ -452,14 +461,17 @@ class Plugin extends WP\Plugin{
             'phpinfo()', 'update_core', 'chayka-core-phpinfo',
             '/admin/phpinfo');
 
+        $this->addConsoleSubPage('chayka-core', 
+            'Email', 'update_core', 'chayka-email', 
+            '/admin/email/');
+        
         $this->addConsoleSubPage('chayka-core',
             'WP Hooks', 'update_core', 'chayka-core-wp-hooks',
             '/admin/wp-hooks');
 
-//        $this->addConsoleSubPage('chayka-core-admin',
-//            'Blockade', 'Blockade', 'update_core', 'zf-core-blockade',
-//            '/admin/blockade-options', '', null);
-        $this->addConsoleSubPage('chayka-core', 'Logs', 'update_core', 'logs', '/admin/logs');
+        $this->addConsoleSubPage('chayka-core', 
+            'Logs', 'update_core', 'logs', 
+            '/admin/logs');
 
         /* chayka: registerConsolePages */
     }

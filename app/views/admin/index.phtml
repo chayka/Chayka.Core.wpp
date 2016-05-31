@@ -43,31 +43,12 @@
             <div class="form_field stretch" data-form-field="Locale">
                 <label class="width50">Locale</label><select data-ng-init="options.Locale='auto'; localeOptions = {'auto': 'Browser', 'en-US': 'English', 'ru-RU': 'Русский'}" data-ng-options="key as value for (key, value) in localeOptions" data-ng-model="options.Locale" title="Locale"></select>
             </div>
-            <div class="form_field stretch" data-form-field="SingleDomain">
-                <label class="width50">Single Domain</label><select data-ng-init="options.SingleDomain=''; domainOptions = {'': 'Ignore', 'no-www': '<?php echo $server= \Chayka\Helpers\Util::serverName();?>'}" data-ng-options="key as value for (key, value) in domainOptions" data-ng-model="options.SingleDomain" title="Single domain"></select>
-            </div>
-            <div class="form_field stretch" data-form-field="SingleScheme">
-                <label class="width50">Single Scheme</label><select data-ng-init="options.SingleScheme=''; schemeOptions = {'': 'Ignore', 'http': 'http', 'https': 'https'}" data-ng-options="key as value for (key, value) in schemeOptions" data-ng-model="options.SingleScheme" title="Single Scheme"></select>
-                <div><strong>Heads up!</strong> If your server is not setup for https, enabling this feature would force https redirect thus making your server unavailable!</div>
-            </div>
             <div class="form_field stretch" data-form-field="MinimizeMedia">
-                <label class="width50">Minimize Media</label><select data-ng-init="options.MinimizeMedia='0'; minOptions = {'0': 'No', '1': 'Yes'}" data-ng-options="key as value for (key, value) in minOptions" data-ng-model="options.MinimizeMedia" title="Minimize Media"></select>
-            </div>
-            <div class="form_field fullsize" data-form-field="Logo">
-                <label>Logo</label>
-                <input type="hidden" data-ng-init="options.Logo='';"  data-ng-model="options.Logo" title="Minimize Media"/>
-                <div data-media-picker data-mode="id" data-size="large" data-model="options.Logo" data-picker-button-text="Pick images" data-multiple="true" data-item-width="93px" data-item-mode="contain">
-                    JPG or PNG 100x100
-                </div>
-            </div>
-            <div class="form_field stretch color_picker" data-form-field="themeBaseColor">
-                <label class="width50">Theme base color</label><input type="color" data-ng-init="options.themeBaseColor='#000000'" data-ng-model="options.themeBaseColor" data-default-color="#000000" data-color-picker title="Theme base color"/>
+                <label class="width50">Minimize Media</label><select data-ng-init="options.MinimizeMedia='1'; minOptions = {'0': 'No', '1': 'Yes'}" data-ng-options="key as value for (key, value) in minOptions" data-ng-model="options.MinimizeMedia" title="Minimize Media"></select>
             </div>
             <div class="form_field fullsize update_server_url" data-form-field="updateServerUrl">
                 <label class="">Update Server URL</label><input type="text" data-ng-init="options.updateServerUrl=''" data-ng-model="options.updateServerUrl" title="Update Server URL"/>
             </div>
-
-
             <!-- chayka: fields -->
     </div>
 </div>

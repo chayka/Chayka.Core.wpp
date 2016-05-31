@@ -334,3 +334,17 @@ html {
 .metabox > [form-validator] {
   width: auto;
 }
+/* console pages */
+.chayka-options_form [data-form-validator],
+.chayka-options_form [form-validator] {
+  width: 300px;
+}
+.chayka-options_form .buttons,
+.chayka-options_form .options_form-buttons {
+  text-align: right;
+  margin: 30px 0;
+}
+.chayka-options_form .buttons button,
+.chayka-options_form .options_form-buttons button {
+  margin: 1em 0 1em 1em;
+}

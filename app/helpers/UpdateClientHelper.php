@@ -73,18 +73,18 @@ class UpdateClientHelper{
      */
     public static function getTemporaryAccessRoute($expirationPeriodInSeconds = 0){
         if(!self::$temporaryAccessRoute && !$expirationPeriodInSeconds){
-            self::$temporaryAccessRoute = get_option('Chayka.UpdateClient.temporaryAccessRoute', '');
-            $expirationDate = get_option('Chayka.UpdateClient.temporaryAccessExpirationDate', null);
+            self::$temporaryAccessRoute = OptionHelper::getEncryptedOption('UpdateClient.temporaryAccessRoute', '');
+            $expirationDate = OptionHelper::getEncryptedOption('UpdateClient.temporaryAccessExpirationDate', null);
             self::$temporaryAccessExpirationDate = $expirationDate ? DateHelper::dbStrToDatetime($expirationDate) : null;
         }
         if(!self::$temporaryAccessRoute || $expirationPeriodInSeconds){
             $existing = [self::$temporaryAccessRoute];
             self::$temporaryAccessRoute = mb_strtolower(str_replace(' ', '-', RandomizerHelper::getRandomCelebrity($existing)));
-            update_option('Chayka.UpdateClient.temporaryAccessRoute', self::$temporaryAccessRoute);
+            OptionHelper::setEncryptedOption('UpdateClient.temporaryAccessRoute', self::$temporaryAccessRoute);
             $expirationDate = new \DateTime();
             $expirationDate->add(new \DateInterval(sprintf('PT%dS', $expirationPeriodInSeconds)));
             self::$temporaryAccessExpirationDate = $expirationDate;
-            update_option('Chayka.UpdateClient.temporaryAccessExpirationDate', DateHelper::datetimeToDbStr($expirationDate));
+            OptionHelper::setEncryptedOption('UpdateClient.temporaryAccessExpirationDate', DateHelper::datetimeToDbStr($expirationDate));
         }
         return self::$temporaryAccessRoute;
     }

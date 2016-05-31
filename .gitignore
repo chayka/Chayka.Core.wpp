@@ -8,3 +8,4 @@ vendor/
 composer.lock
 composer.phar
 update.sh
+res/tmp

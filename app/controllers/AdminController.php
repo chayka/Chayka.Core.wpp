@@ -13,7 +13,7 @@ use Chayka\WP\MVC\Controller;
 class AdminController extends Controller{
 
     public function init(){
-        $this->enqueueNgScriptStyle('chayka-options-form');
+        $this->enqueueNgScriptStyle('chayka-wp-admin');
     }
 
     public function indexAction(){
@@ -80,5 +80,9 @@ class AdminController extends Controller{
 
     public function logsAction(){
 
+    }
+
+    public function emailAction(){
+        $this->enqueueNgScriptStyle('chayka-email');
     }
 }
