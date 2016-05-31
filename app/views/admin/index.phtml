@@ -38,17 +38,15 @@
         </form>
     </div>
 </div-->
-<div data-ng-cloak data-ng-init="options={};">
-    <div data-console-page-options="options" data-namespace="Chayka.WP">
-            <div class="form_field stretch" data-form-field="Locale">
-                <label class="width50">Locale</label><select data-ng-init="options.Locale='auto'; localeOptions = {'auto': 'Browser', 'en-US': 'English', 'ru-RU': 'Русский'}" data-ng-options="key as value for (key, value) in localeOptions" data-ng-model="options.Locale" title="Locale"></select>
-            </div>
-            <div class="form_field stretch" data-form-field="MinimizeMedia">
-                <label class="width50">Minimize Media</label><select data-ng-init="options.MinimizeMedia='1'; minOptions = {'0': 'No', '1': 'Yes'}" data-ng-options="key as value for (key, value) in minOptions" data-ng-model="options.MinimizeMedia" title="Minimize Media"></select>
-            </div>
-            <div class="form_field fullsize update_server_url" data-form-field="updateServerUrl">
-                <label class="">Update Server URL</label><input type="text" data-ng-init="options.updateServerUrl=''" data-ng-model="options.updateServerUrl" title="Update Server URL"/>
-            </div>
-            <!-- chayka: fields -->
+<div data-console-page-options="options" data-namespace="Chayka.WP" data-ng-init="options={};" data-ng-cloak>
+    <div class="form_field stretch" data-form-field="Locale">
+        <label class="width50">Locale</label><select data-ng-init="options.Locale='auto'; localeOptions = {'auto': 'Browser', 'en-US': 'English', 'ru-RU': 'Русский'}" data-ng-options="key as value for (key, value) in localeOptions" data-ng-model="options.Locale" title="Locale"></select>
     </div>
+    <div class="form_field stretch" data-form-field="MinimizeMedia">
+        <label class="width50">Minimize Media</label><select data-ng-init="options.MinimizeMedia='1'; minOptions = {'0': 'No', '1': 'Yes'}" data-ng-options="key as value for (key, value) in minOptions" data-ng-model="options.MinimizeMedia" title="Minimize Media"></select>
+    </div>
+    <div class="form_field fullsize update_server_url" data-form-field="updateServerUrl">
+        <label class="">Update Server URL</label><input type="text" data-ng-init="options.updateServerUrl=''" data-ng-model="options.updateServerUrl" title="Update Server URL"/>
+    </div>
+    <!-- chayka: fields -->
 </div>

@@ -95,6 +95,10 @@ class EmailHelper {
 
         $fn = get_template_directory().'/app/views/email/template.phtml';
 
+        if(!file_exists($fn)){
+            $fn = Plugin::getInstance()->getPath('app/views/email/template.phtml');
+        }
+
         $fn = apply_filters_ref_array('EmailHelper.htmlTemplate', array($fn));
 
         if(file_exists($fn)){
