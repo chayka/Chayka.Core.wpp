@@ -5,10 +5,8 @@
  */
 var gulp = require('gulp');
 
-// var eslint = require('gulp-eslint');
 var jshint = require('gulp-jshint');
 var uglify = require('gulp-uglify');
-// var babel = require('gulp-babel');
 
 var less = require('gulp-less');
 var autoprefixer = require('gulp-autoprefixer');
@@ -25,20 +23,24 @@ var plumber = require('gulp-plumber');
 
 var bump = require('gulp-bump');
 var argv = require('yargs').argv;
+var git = require('gulp-git');
+var shell = require('gulp-shell');
+var runSequence = require('run-sequence');
+
+var fs = require('fs');
+var pkg = require('./package.json');
 
 var paths = {
     resSrcNgLess: ['res/src/ng-modules/**/*.less'],
     resSrcNgCss: ['res/src/ng-modules/**/*.css'],
     resSrcNgJs: ['res/src/ng-modules/**/*.js'],
     resSrcNgCoreCss: [
-        //'res/lib/angular/angular-csp.css',
         'res/src/ng-modules/chayka-spinners.css',
         'res/src/ng-modules/chayka-modals.css',
         'res/src/ng-modules/chayka-forms.css',
         'res/src/ng-modules/chayka-pagination.css'
     ],
     resSrcNgCoreJs: [
-        //'res/lib/angular-sanitize/angular-sanitize.js',
         'res/src/ng-modules/chayka-utils.js',
         'res/src/ng-modules/chayka-buttons.js',
         'res/src/ng-modules/chayka-nls.js',
@@ -49,11 +51,9 @@ var paths = {
         'res/src/ng-modules/chayka-pagination.js'
     ],
     resSrcNgAdminCss: [
-        // 'res/src/ng-modules/chayka-options-form.css',
         'res/src/ng-modules/chayka-wp-admin.css'
     ],
     resSrcNgAdminJs: [
-        // 'res/src/ng-modules/chayka-options-form.js',
         'res/src/ng-modules/chayka-wp-admin.js'
     ],
     resSrcNgEmailCss: [
@@ -63,7 +63,6 @@ var paths = {
         'res/src/ng-modules/chayka-email.js'
     ],
     resSrcNgAvatarsJs: [
-        //'res/lib/angular-md5/angular-md5.js',
         'res/src/ng-modules/chayka-avatars.js'
     ],
     resSrcImg: 'res/src/img/**/*',
@@ -129,7 +128,7 @@ gulp.task('clean', function(){
         .pipe(clean({force: true}));
 });
 
-/*
+/**
  * CSS
  */
 gulp.task('less', function(){
@@ -166,15 +165,9 @@ gulp.task('css:email', function(){
 
 gulp.task('css', ['css:core', 'css:admin', 'css:email']);
 
-/*
+/**
  * JS
  */
-// gulp.task('lint:es6', function() {
-//     return gulp.src(paths.resSrcNgJs)
-//         .pipe(plumber(handleError))
-//         .pipe(eslint('.eslintrc.json'))
-//         .pipe(eslint.format());
-// });
 
 gulp.task('lint:js', function() {
     gulp.src(paths.resSrcNgJs)
@@ -182,15 +175,6 @@ gulp.task('lint:js', function() {
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
-
-// gulp.task('babel', ['lint:es6'], function(){
-//     return gulp.src(paths.resSrcNgJs)
-//         .pipe(plumber(handleError))
-//         .pipe(babel({
-//             presets: ['es2015']
-//         }))
-//         .pipe(gulp.dest(paths.resSrcNg))
-// });
 
 gulp.task('js:core', function(){
     var core = uglifyJs(paths.resSrcNgCoreJs);
@@ -227,6 +211,47 @@ gulp.task('img', function(){
 });
 
 /**
+ * Releases
+ */
+gulp.task('git:tag', function(){
+    var currentVersion = 'v' + pkg.version;
+    git.tag(currentVersion, 'Version ' + pkg.version, function (err) {
+        if (err) {
+            throw err;
+        }
+    });
+});
+
+gulp.task('git:push', function(){
+    git.push('origin', 'master', {args: '--follow-tags'}, function (err) {
+        if (err) {
+            throw err;
+        }
+    });
+});
+
+gulp.task('git:add', function() {
+    return gulp.src('.')
+        .pipe(git.add());
+});
+
+gulp.task('git:commit:bump', function(){
+    var pkgBumped = JSON.parse(fs.readFileSync('./package.json'));
+    var newVersion = pkgBumped.version;
+    gulp.src('.')
+        .pipe(git.commit('Bumped to version ' + newVersion));
+});
+
+gulp.task('release:notes', shell.task([
+    'cat RELEASE-NOTES.md >> RELEASE-HISTORY.md',
+    'echo "" > RELEASE-NOTES.md'
+]));
+
+gulp.task('release', function(){
+    runSequence('git:tag', 'release:notes');
+});
+
+/**
  * Get a task function that bumps version
  * @param release
  * @return {Function}
@@ -241,20 +266,27 @@ function bumpVersion(release){
         } else if (release) {
             options.type = release;
         }
-        return gulp.src(paths.pkgConfigs)
+        gulp.src(paths.pkgConfigs)
             .pipe(bump(options))
-            .pipe(gulp.dest('./'));
+            .pipe(gulp.dest('./'))
+            .on('end', function(){
+                runSequence('git:add', 'git:commit:bump', 'git:push');
+            });
+
     };
 }
-gulp.task('bump', bumpVersion());
-gulp.task('bump:prerelease', bumpVersion('prerelease'));
-gulp.task('bump:patch', bumpVersion('patch'));
-gulp.task('bump:minor', bumpVersion('minor'));
-gulp.task('bump:major', bumpVersion('major'));
+var releaseIfNeeded = pkg.version.indexOf('-') >=0 ? [] : ['release'];
+gulp.task('bump:norelease', bumpVersion());
+gulp.task('bump:prerelease', releaseIfNeeded, bumpVersion('prerelease'));
+gulp.task('bump:patch', releaseIfNeeded, bumpVersion('patch'));
+gulp.task('bump:minor', releaseIfNeeded, bumpVersion('minor'));
+gulp.task('bump:major', releaseIfNeeded, bumpVersion('major'));
 
 gulp.task('lint', ['lint:js', 'lint:css']);
 
-gulp.task('build', ['less', 'lint', 'js', 'css', 'img']);
+gulp.task('build', function(){
+    runSequence('less', 'lint', ['js', 'css', 'img']);
+});
 
 gulp.task('watch', ['build'], function(){
     gulp.watch(paths.resSrcNgLess, [
@@ -262,8 +294,6 @@ gulp.task('watch', ['build'], function(){
         'lint:css'
     ]);
     gulp.watch(paths.resSrcNgJs, [
-        // 'lint:es6',
-        // 'babel'
         'lint:js'
     ]);
     gulp.watch(paths.resSrcNgCoreCss, [
