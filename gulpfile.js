@@ -25,6 +25,7 @@ var bump = require('gulp-bump');
 var argv = require('yargs').argv;
 var git = require('gulp-git');
 var shell = require('gulp-shell');
+var replace = require('gulp-replace');
 var runSequence = require('run-sequence');
 
 var fs = require('fs');
@@ -210,6 +211,8 @@ gulp.task('img', function(){
         .pipe(gulp.dest(paths.resDistImg));
 });
 
+gulp.task('lint', ['lint:js', 'lint:css']);
+
 /**
  * Releases
  */
@@ -242,6 +245,14 @@ gulp.task('git:commit:bump', function(){
         .pipe(git.commit('Bumped to version ' + newVersion));
 });
 
+gulp.task('replace:version:bump', function(){
+    var pkgBumped = JSON.parse(fs.readFileSync('./package.json'));
+    var newVersion = pkgBumped.version;
+    gulp.src(['*.wpp.php', 'style.css'])
+        .pipe(replace(/Version:\s*[^\s]+/, 'Version: ' + newVersion))
+        .pipe(gulp.dest('.'));
+});
+
 gulp.task('release:notes', shell.task([
     'cat RELEASE-NOTES.md >> RELEASE-HISTORY.md',
     'echo "" > RELEASE-NOTES.md'
@@ -270,7 +281,7 @@ function bumpVersion(release){
             .pipe(bump(options))
             .pipe(gulp.dest('./'))
             .on('end', function(){
-                runSequence('git:add', 'git:commit:bump', 'git:push');
+                runSequence('replace:version:bump', 'git:add', 'git:commit:bump', 'git:push');
             });
 
     };
@@ -281,8 +292,6 @@ gulp.task('bump:prerelease', releaseIfNeeded, bumpVersion('prerelease'));
 gulp.task('bump:patch', releaseIfNeeded, bumpVersion('patch'));
 gulp.task('bump:minor', releaseIfNeeded, bumpVersion('minor'));
 gulp.task('bump:major', releaseIfNeeded, bumpVersion('major'));
-
-gulp.task('lint', ['lint:js', 'lint:css']);
 
 gulp.task('build', function(){
     runSequence('less', 'lint', ['js', 'css', 'img']);

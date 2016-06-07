@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Chayka.Core
  * Plugin URI: git@github.com:chayka/Chayka.Core.wpp.git
- * Description: Wordpress plugin that allows you to create WP Plugins and Themes as MVC applications
- * Version: 0.0.1
+ * Description: WordPress plugin that allows you to create WP Plugins and Themes as MVC applications
+ * Version: 1.0.0
  * Author: Boris Mossounov <borix@tut.by>
  * Author URI: https://github.com/chayka/
  * License: MIT

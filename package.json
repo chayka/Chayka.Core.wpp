@@ -17,6 +17,7 @@
     "gulp-jshint": "*",
     "gulp-less": "*",
     "gulp-plumber": "*",
+    "gulp-replace": "*",
     "gulp-shell": "*",
     "gulp-sourcemaps": "*",
     "gulp-uglify": "*",
