@@ -11,6 +11,7 @@ use Chayka\Helpers\CurlHelper;
 use Chayka\Helpers\DateHelper;
 use Chayka\Helpers\FsHelper;
 use Chayka\Helpers\RandomizerHelper;
+use Chayka\Helpers\Util;
 
 /**
  * Class UpdateClientHelper is responsible for communicating with update server
@@ -114,11 +115,11 @@ class UpdateClientHelper{
         set_time_limit(0);
         $url = OptionHelper::getEncryptedOption('updateServerUrl');
         $url = untrailingslashit($url) . '/api/release/get-updates';
-        $result = null;
+        $result = [];
         if($url){
-            $result = CurlHelper::postJson($url, self::getInstalledPluginsData());
+            $result = CurlHelper::postJson($url, ['plugins' => self::getInstalledPluginsData()]);
         }
-        
-        return $result;
+
+        return Util::getItem($result, 'payload');
     }
 }
