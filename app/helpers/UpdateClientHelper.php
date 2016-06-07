@@ -101,8 +101,15 @@ class UpdateClientHelper{
             self::$temporaryAccessExpirationDate > $now : false;
     }
 
+    /**
+     * @return \DateTime|null
+     */
     public static function getTemporaryAccessExpirationDate(){
         self::getTemporaryAccessRoute();
         return self::$temporaryAccessExpirationDate;
+    }
+
+    public static function requestUpdates(){
+        
     }
 }

@@ -13,7 +13,7 @@ use Chayka\Helpers\JsonHelper;
 use Chayka\Helpers\Util;
 use Chayka\MVC\Controller;
 use Chayka\WP\Helpers\AclHelper;
-use Chayka\WP\Helpers\OptionHelper;
+//use Chayka\WP\Helpers\OptionHelper;
 
 class OptionsController extends Controller{
 
