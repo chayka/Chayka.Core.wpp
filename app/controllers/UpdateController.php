@@ -37,4 +37,9 @@ class UpdateController extends Controller{
 
         return false;
     }
+    
+    public function getUpdatesAction(){
+        $data = UpdateClientHelper::requestUpdates();
+        JsonHelper::respond(['request' => $data, 'response' => '']);
+    }
 }

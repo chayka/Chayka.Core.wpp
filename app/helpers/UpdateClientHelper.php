@@ -7,6 +7,7 @@
  */
 
 namespace Chayka\Core;
+use Chayka\Helpers\CurlHelper;
 use Chayka\Helpers\DateHelper;
 use Chayka\Helpers\FsHelper;
 use Chayka\Helpers\RandomizerHelper;
@@ -110,6 +111,14 @@ class UpdateClientHelper{
     }
 
     public static function requestUpdates(){
+        set_time_limit(0);
+        $url = OptionHelper::getEncryptedOption('updateServerUrl');
+        $url = untrailingslashit($url) . '/api/release/get-updates';
+        $result = null;
+        if($url){
+            $result = CurlHelper::postJson($url, self::getInstalledPluginsData());
+        }
         
+        return $result;
     }
 }
