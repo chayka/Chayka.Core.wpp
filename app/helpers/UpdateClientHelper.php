@@ -160,6 +160,8 @@ class UpdateClientHelper{
                 $obj->new_version = $update['version'];
                 $obj->url = $update['url_info'];
                 $obj->package = $update['url_download'];
+                $obj->compatibility = false;
+                $obj->tested = $update['tested'];
                 $transient->response[$path] = $obj;
             }
         }
