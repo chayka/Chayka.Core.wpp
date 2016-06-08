@@ -56,19 +56,21 @@ class UpdateClientHelper{
         $plugins = get_plugins();
 
         foreach($plugins as $path => $plugin){
-            list($pluginFolder, $phpScript) = explode('/', $path);
-            $configFn = $pluginsRootDir . $pluginFolder . '/chayka.json';
-            $slug = str_replace('.php', '', $phpScript);
-            $slug = strtolower($slug);
-            $slug = preg_replace('/[^\w\d]+/', '-', $slug);
-            if(file_exists($configFn)){
-                $json = file_get_contents($configFn);
-                $config = json_decode($json);
-                $data[$path] = [
-                    'name' => $config->appName,
-                    'slug' => $slug,
-                    'version' => $config->appVersion,
-                ];
+            if(strpos($path, '/')){
+                list($pluginFolder, $phpScript) = explode('/', $path);
+                $configFn = $pluginsRootDir . $pluginFolder . '/chayka.json';
+                $slug = str_replace('.php', '', $phpScript);
+                $slug = strtolower($slug);
+                $slug = preg_replace('/[^\w\d]+/', '-', $slug);
+                if(file_exists($configFn)){
+                    $json = file_get_contents($configFn);
+                    $config = json_decode($json);
+                    $data[$path] = [
+                        'name' => $config->appName,
+                        'slug' => $slug,
+                        'version' => $config->appVersion,
+                    ];
+                }
             }
         }
 
