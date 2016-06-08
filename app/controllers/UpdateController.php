@@ -40,7 +40,7 @@ class UpdateController extends Controller{
     
     public function getUpdatesAction(){
         $data = UpdateClientHelper::requestUpdates();
-        $data = array_merge($data, ['wp' => get_site_transient('update_plugins'), 'op' => get_option('_site_transient_update_plugins')]);
+        $data = array_merge($data, ['wp' => get_site_transient('update_plugins'), 'plugins' => get_plugins()]);
         JsonHelper::respond($data);
     }
 }

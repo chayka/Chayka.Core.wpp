@@ -49,6 +49,7 @@ class UpdateClientHelper{
 
         $plugins = FsHelper::readDir($pluginsRootDir);
 
+
         foreach($plugins as $plugin){
             $configFn = $pluginsRootDir.$plugin . '/chayka.json';
             if(file_exists($configFn)){
