@@ -43,22 +43,31 @@ class UpdateClientHelper{
      * @return array
      */
     public static function getInstalledPluginsData(){
+        if(!function_exists('get_plugins')){
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
         $data = [];
 
         $pluginsRootDir = defined('WP_PLUGIN_DIR')? WP_PLUGIN_DIR.'/' : WP_CONTENT_DIR.'/plugins/';
+//
+//        $plugins = FsHelper::readDir($pluginsRootDir);
 
-        $plugins = FsHelper::readDir($pluginsRootDir);
+        $plugins = get_plugins();
 
-
-        foreach($plugins as $plugin){
-            $configFn = $pluginsRootDir.$plugin . '/chayka.json';
+        foreach($plugins as $path => $plugin){
+            list($pluginFolder, $phpScript) = explode('/', $path);
+            $configFn = $pluginsRootDir . $pluginFolder . '/chayka.json';
+            $slug = str_replace('.php', '', $phpScript);
+            $slug = strtolower($slug);
+            $slug = preg_replace('/[^\w\d]+/', '-', $slug);
             if(file_exists($configFn)){
                 $json = file_get_contents($configFn);
                 $config = json_decode($json);
-                $data[$plugin] = [
+                $data[$path] = [
                     'name' => $config->appName,
+                    'slug' => $slug,
                     'version' => $config->appVersion,
-                    'description' => $config->appDescription,
                 ];
             }
         }
