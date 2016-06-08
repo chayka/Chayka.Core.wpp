@@ -12,6 +12,7 @@ use Chayka\Helpers\DateHelper;
 use Chayka\Helpers\FsHelper;
 use Chayka\Helpers\RandomizerHelper;
 use Chayka\Helpers\Util;
+use Chayka\WP\Helpers\CacheHelper;
 
 /**
  * Class UpdateClientHelper is responsible for communicating with update server
@@ -123,6 +124,9 @@ class UpdateClientHelper{
         return self::$temporaryAccessExpirationDate;
     }
 
+    /**
+     * @return array
+     */
     public static function requestUpdates(){
         set_time_limit(0);
         $url = OptionHelper::getEncryptedOption('updateServerUrl');
@@ -132,6 +136,34 @@ class UpdateClientHelper{
             $result = CurlHelper::postJson($url, ['plugins' => self::getInstalledPluginsData()]);
         }
 
-        return Util::getItem($result, 'payload');
+        $payload = Util::getItem($result, 'payload', []);
+        return Util::getItem($payload, 'response', []);
+    }
+
+    public static function updatePluginsTransient($transient){
+        if (empty($transient->last_checked)) {
+            return $transient;
+        }
+
+        $updates = CacheHelper::getSiteValue('Chayka.Plugins.Updates', function (){
+            return self::requestUpdates();
+        }, 60);
+
+        $plugins = self::getInstalledPluginsData();
+
+        foreach($plugins as $path => $plugin){
+            $update = Util::getItem($updates, $path);
+            if (strpos($path, '/') && $update && version_compare($plugin['version'], $update['version'], '<')) {
+                list($pluginDir, $phpScript) = explode('/', $path);
+                $obj = new \stdClass();
+                $obj->slug = $pluginDir;
+                $obj->new_version = $update['version'];
+                $obj->url = $update['url_info'];
+                $obj->package = $update['url_download'];
+                $transient->response[$path] = $obj;
+            }
+        }
+
+        return $transient;
     }
 }
