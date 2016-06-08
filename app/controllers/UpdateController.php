@@ -9,6 +9,8 @@ use Chayka\WP\MVC\Controller;
 use Chayka\Helpers\InputHelper;
 use Chayka\WP\Helpers\JsonHelper;
 
+require_once ABSPATH.'/wp-admin/includes/plugin.php';
+
 class UpdateController extends Controller{
 
     public function init(){
