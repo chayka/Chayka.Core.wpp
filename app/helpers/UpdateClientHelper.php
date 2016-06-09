@@ -140,32 +140,74 @@ class UpdateClientHelper{
         return Util::getItem($payload, 'response', []);
     }
 
+    /**
+     * @param int $cacheTimeout
+     *
+     * @return mixed
+     */
+    public static function getUpdates($cacheTimeout = 60){
+        return CacheHelper::getSiteValue('Chayka.Plugins.Updates', function (){
+            return self::requestUpdates();
+        }, $cacheTimeout);
+    }
+
+    /**
+     * @param $transient
+     *
+     * @return mixed
+     */
     public static function updatePluginsTransient($transient){
         if (empty($transient->last_checked)) {
             return $transient;
         }
 
-        $updates = CacheHelper::getSiteValue('Chayka.Plugins.Updates', function (){
-            return self::requestUpdates();
-        }, 60);
+        $updates = self::getUpdates();
 
         $plugins = self::getInstalledPluginsData();
 
         foreach($plugins as $path => $plugin){
             $update = Util::getItem($updates, $path);
             if (strpos($path, '/') && $update && version_compare($plugin['version'], $update['version'], '<')) {
-                list($pluginDir, $phpScript) = explode('/', $path);
-                $obj = new \stdClass();
-                $obj->slug = $pluginDir;
-                $obj->new_version = $update['version'];
-                $obj->url = $update['url_info'];
-                $obj->package = $update['url_download'];
-                $obj->compatibility = false;
-                $obj->tested = $update['tested'];
+                $obj = (object)$update;
+//                list($pluginDir, $phpScript) = explode('/', $path);
+//                $obj = new \stdClass();
+//                $obj->slug = $pluginDir;
+//                $obj->new_version = $update['version'];
+//                $obj->url = $update['url_info'];
+//                $obj->package = $update['url_download'];
+//                $obj->compatibility = false;
+//                $obj->tested = $update['tested'];
                 $transient->response[$path] = $obj;
             }
         }
 
         return $transient;
+    }
+
+    public static function pluginInformation($false, $action, $arg){
+        if('plugin_information' === $action){
+            $slug = Util::getItem($arg, 'slug');
+            $updates = self::getUpdates();
+            $update = Util::getItem($updates, $slug);
+            if($update){
+                $obj = new stdClass();
+                $obj->slug = $slug;
+                $obj->plugin_name = 'plugin.php';
+                $obj->new_version = '1.1';
+                $obj->requires = '3.0';
+                $obj->tested = '3.3.1';
+                $obj->downloaded = 12540;
+                $obj->last_updated = '2012-01-12';
+                $obj->sections = array(
+                    'description' => 'The new version of the Auto-Update plugin',
+                    'another_section' => 'This is another section',
+                    'changelog' => 'Some new features'
+                );
+                $obj->download_link = 'http://localhost/update.php';
+                return $obj;
+            }
+        }
+
+        return $false;
     }
 }
