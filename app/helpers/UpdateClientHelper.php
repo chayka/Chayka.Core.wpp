@@ -222,11 +222,13 @@ class UpdateClientHelper{
 
         return $false;
     }
-    
+
     public static function allowCustomUpdateServer( $allow, $host, $url ) {
+        LogHelper::dir($host, 'Checking host');
         $updateServerUrl = OptionHelper::getEncryptedOption('updateServerUrl');
         $updateServerUrl = trailingslashit($updateServerUrl);
         $updateServerHost = parse_url($updateServerUrl, 'host');
+        LogHelper::dir($updateServerHost, 'Custom update host');
         if ( $host === $updateServerHost ){
             $allow = true;
         }

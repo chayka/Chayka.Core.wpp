@@ -215,7 +215,7 @@ class Plugin extends WP\Plugin{
         $this->addFilter('pre_set_site_transient_update_plugins', ['\Chayka\Core\UpdateClientHelper', 'updatePluginsTransient']);
         $this->addFilter('pre_set_site_transient_update_plugins', ['\Chayka\Core\UpdateClientHelper', 'updatePluginsTransient']);
         $this->addFilter('plugins_api', ['\Chayka\Core\UpdateClientHelper', 'pluginInformation'], 10, 3);
-        $this->addFilter( 'http_request_host_is_external', ['\Chayka\Core\UpdateClientHelper', 'allowCustomUpdateServer'], 10, 3 );
+        $this->addFilter('http_request_host_is_external', ['\Chayka\Core\UpdateClientHelper', 'allowCustomUpdateServer'], 10, 3 );
         /* chayka: registerFilters */
     }
 
