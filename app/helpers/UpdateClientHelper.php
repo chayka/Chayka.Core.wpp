@@ -190,7 +190,7 @@ class UpdateClientHelper{
             $slug = Util::getItem($arg, 'slug');
             $updates = self::getUpdates();
             $update = Util::getItem($updates, $slug);
-            LogHelper::dir($slug, 'Looking update for');
+            LogHelper::dir($arg, 'Looking update for');
             if($update){
                 $obj = (object) $update;
 //                $obj = new stdClass();
