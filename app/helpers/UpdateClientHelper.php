@@ -189,10 +189,15 @@ class UpdateClientHelper{
         if('plugin_information' === $action){
             $slug = Util::getItem($arg, 'slug');
             $updates = self::getUpdates();
-            $update = Util::getItem($updates, $slug);
+            $update = (object) Util::getItem($updates, $slug);
+            foreach($updates as $update){
+                if($slug === $update->slug){
+                    break;
+                }
+            }
             LogHelper::dir($arg, 'Looking update for');
-            if($update){
-                $obj = (object) $update;
+            if($update && $slug === $update->slug){
+//                $obj = (object) $update;
 //                $obj = new stdClass();
 //                $obj->slug = $slug;
 //                $obj->plugin_name = 'plugin.php';
@@ -207,8 +212,8 @@ class UpdateClientHelper{
 //                    'changelog' => 'Some new features'
 //                );
 //                $obj->download_link = 'http://localhost/update.php';
-                LogHelper::dir($obj, 'Update Object');
-                return $obj;
+                LogHelper::dir($update, 'Update Object');
+                return $update;
             }
         }
 
