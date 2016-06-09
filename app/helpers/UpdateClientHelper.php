@@ -135,7 +135,7 @@ class UpdateClientHelper{
         if($url){
             $result = CurlHelper::postJson($url, ['plugins' => self::getInstalledPluginsData()]);
         }
-        Util::print_r($result);
+//        Util::print_r($result);
         $payload = Util::getItem($result, 'payload', []);
         return Util::getItem($payload, 'response', []);
     }
