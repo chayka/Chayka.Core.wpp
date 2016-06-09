@@ -194,8 +194,8 @@ class UpdateClientHelper{
 //            $update = (object) Util::getItem($updates, $slug);
             $update = $false;
             foreach($updates as $u){
-                if($slug === $u->slug){
-                    $update = $u;
+                if($slug === $u['slug']){
+                    $update = (object) $u;
                     break;
                 }
             }
