@@ -222,4 +222,14 @@ class UpdateClientHelper{
 
         return $false;
     }
+    
+    public static function allowCustomUpdateServer( $allow, $host, $url ) {
+        $updateServerUrl = OptionHelper::getEncryptedOption('updateServerUrl');
+        $updateServerUrl = trailingslashit($updateServerUrl);
+        $updateServerHost = parse_url($updateServerUrl, 'host');
+        if ( $host === $updateServerHost ){
+            $allow = true;
+        }
+        return $allow;
+    }
 }
