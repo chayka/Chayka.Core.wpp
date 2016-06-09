@@ -227,7 +227,7 @@ class UpdateClientHelper{
         LogHelper::dir($host, 'Checking host');
         $updateServerUrl = OptionHelper::getEncryptedOption('updateServerUrl');
         $updateServerUrl = trailingslashit($updateServerUrl);
-        $updateServerHost = parse_url($updateServerUrl, 'host');
+        $updateServerHost = parse_url($updateServerUrl, PHP_URL_HOST);
         LogHelper::dir($updateServerHost, 'Custom update host');
         if ( $host === $updateServerHost ){
             $allow = true;
