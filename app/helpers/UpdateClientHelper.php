@@ -188,14 +188,17 @@ class UpdateClientHelper{
     public static function pluginInformation($false, $action, $arg){
         if('plugin_information' === $action){
             $slug = Util::getItem($arg, 'slug');
+            LogHelper::dir($arg, 'Looking update for');
+
             $updates = self::getUpdates();
-            $update = (object) Util::getItem($updates, $slug);
-            foreach($updates as $update){
-                if($slug === $update->slug){
+//            $update = (object) Util::getItem($updates, $slug);
+            $update = $false;
+            foreach($updates as $u){
+                if($slug === $u->slug){
+                    $update = $u;
                     break;
                 }
             }
-            LogHelper::dir($arg, 'Looking update for');
             if($update && $slug === $update->slug){
 //                $obj = (object) $update;
 //                $obj = new stdClass();
