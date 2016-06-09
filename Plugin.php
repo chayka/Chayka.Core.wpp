@@ -213,6 +213,8 @@ class Plugin extends WP\Plugin{
     public function registerFilters() {
         $this->addFilter('wp_insert_post_data', 'autoSlug', 10, 1 );
         $this->addFilter('pre_set_site_transient_update_plugins', ['\Chayka\Core\UpdateClientHelper', 'updatePluginsTransient']);
+        $this->addFilter('pre_set_site_transient_update_plugins', ['\Chayka\Core\UpdateClientHelper', 'updatePluginsTransient']);
+        $this->addFilter('plugins_api', ['\Chayka\Core\UpdateClientHelper', 'pluginInformation'], 10, 3);
         /* chayka: registerFilters */
     }
 
