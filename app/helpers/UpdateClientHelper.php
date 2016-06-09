@@ -10,6 +10,7 @@ namespace Chayka\Core;
 use Chayka\Helpers\CurlHelper;
 use Chayka\Helpers\DateHelper;
 use Chayka\Helpers\FsHelper;
+use Chayka\Helpers\LogHelper;
 use Chayka\Helpers\RandomizerHelper;
 use Chayka\Helpers\Util;
 use Chayka\WP\Helpers\CacheHelper;
@@ -189,6 +190,7 @@ class UpdateClientHelper{
             $slug = Util::getItem($arg, 'slug');
             $updates = self::getUpdates();
             $update = Util::getItem($updates, $slug);
+            LogHelper::dir($slug, 'Looking update for');
             if($update){
                 $obj = (object) $update;
 //                $obj = new stdClass();
@@ -205,6 +207,7 @@ class UpdateClientHelper{
 //                    'changelog' => 'Some new features'
 //                );
 //                $obj->download_link = 'http://localhost/update.php';
+                LogHelper::dir($obj, 'Update Object');
                 return $obj;
             }
         }
