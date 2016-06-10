@@ -229,6 +229,8 @@ class UpdateClientHelper{
         $updateServerUrl = trailingslashit($updateServerUrl);
         $updateServerHost = parse_url($updateServerUrl, PHP_URL_HOST);
         LogHelper::dir($updateServerHost, 'Custom update host');
+        ;
+        LogHelper::dir(wp_kses_bad_protocol( $url, array( 'http', 'https', 'ssl' ) ), 'wp_kses_bad_protocol');
         if ( $host === $updateServerHost ){
             $allow = true;
         }

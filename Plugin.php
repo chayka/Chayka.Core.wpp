@@ -203,12 +203,12 @@ class Plugin extends WP\Plugin{
         }
         
         $this->addAction('phpmailer_init', ['\Chayka\Core\EmailHelper', 'setupPhpMailer']);
-        $this->addAction('requests.before_request', function(&$url, &$headers, &$data, &$type, &$options){
-            LogHelper::dir([$url, $headers, $data, $type, $options], 'requests.before_request');
-        });
-        $this->addAction('requests.before_parse', function(&$response, $url, $headers, $data, $type, $options){
-            LogHelper::dir([$response, $url, $headers, $data, $type, $options], 'requests.before_parse');
-        });
+//        $this->addAction('requests.before_request', function(&$url, &$headers, &$data, &$type, &$options){
+//            LogHelper::dir([$url, $headers, $data, $type, $options], 'requests.before_request');
+//        });
+//        $this->addAction('requests.before_parse', function(&$response, $url, $headers, $data, $type, $options){
+//            LogHelper::dir([$response, $url, $headers, $data, $type, $options], 'requests.before_parse');
+//        });
 
     	/* chayka: registerActions */
     }
