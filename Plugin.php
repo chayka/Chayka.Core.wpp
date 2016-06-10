@@ -227,6 +227,10 @@ class Plugin extends WP\Plugin{
             $args['sslverify'] = 0;
             return $args;
         }, 10, 2);
+        $this->addFilter('http_response', function($response, $args, $url){
+            LogHelper::dir([$args, $response], 'Response of ' . $url);
+            return $response;
+        }, 10, 2);
         /* chayka: registerFilters */
     }
 
