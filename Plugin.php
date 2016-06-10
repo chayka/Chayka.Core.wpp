@@ -224,6 +224,7 @@ class Plugin extends WP\Plugin{
         $this->addFilter('http_request_host_is_external', ['\Chayka\Core\UpdateClientHelper', 'allowCustomUpdateServer'], 10, 3 );
         $this->addFilter('http_request_args', function($args, $url){
             LogHelper::dir($args, 'Requesting ' . $url);
+            $args['sslverify'] = 0;
             return $args;
         }, 10, 2);
         /* chayka: registerFilters */
