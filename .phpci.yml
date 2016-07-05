@@ -29,10 +29,12 @@ complete:
 failure:
     email:
         committer: true
+        default_mailto_address: chayka@chayka.io
 
 success:
     email:
         committer: true
+        default_mailto_address: chayka@chayka.io
     package_build:
         format: "zip"
         directory: "${CI_RELEASE_DIR}"
