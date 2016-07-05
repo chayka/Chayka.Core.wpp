@@ -26,7 +26,13 @@ test:
 
 complete:
 
+failure:
+    email:
+        committer: true
+
 success:
+    email:
+        committer: true
     package_build:
         format: "zip"
         directory: "${CI_RELEASE_DIR}"
