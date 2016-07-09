@@ -76,10 +76,12 @@ class OptionsController extends Controller{
             }
             if($option[0] === '_'){
                 $value = OptionHelper::encrypt($value);
-                $option = substr($option, 1);
+                update_option($namespace.substr($option, 1), $value);
+                $options[$option] = get_option($namespace.substr($option, 1));
+            }else{
+                update_option($namespace.$option, $value);
+                $options[$option] = get_option($namespace.$option);
             }
-            update_option($namespace.$option, $value);
-            $options[$option] = get_option($namespace.$option);
         }
         AclHelper::apiPermissionRequired('', 'manage_network_options');
         foreach($siteOptions as $option => $value){
@@ -88,10 +90,12 @@ class OptionsController extends Controller{
             }
             if($option[0] === '_'){
                 $value = OptionHelper::encrypt($value);
-                $option = substr($option, 1);
+                update_site_option($namespace.substr($option, 1), $value);
+                $siteOptions[$option] = get_site_option($namespace.substr($option, 1));
+            }else{
+                update_site_option($namespace.$option, $value);
+                $siteOptions[$option] = get_site_option($namespace.$option);
             }
-            update_site_option($namespace.$option, $value);
-            $siteOptions[$option] = get_site_option($namespace.$option);
         }
         $options['site'] = $siteOptions;
         JsonHelper::respond($options);
