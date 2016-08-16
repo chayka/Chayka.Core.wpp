@@ -176,6 +176,7 @@ angular.module('chayka-modals', ['chayka-nls', 'chayka-buttons', 'chayka-utils']
             restrict: 'AE',
             transclude: true,
             controllerAs: 'm',
+            // bindToController: true,
             scope: {
                 modal: '=modal',
                 title: '@?modalTitle',
@@ -206,8 +207,8 @@ angular.module('chayka-modals', ['chayka-nls', 'chayka-buttons', 'chayka-utils']
                 var ctrl = {
 
                     isOpen: false,
-                    title: '',
-                    buttons: [],
+                    title: $scope.title || '',
+                    buttons: $scope.buttons || [],
 
                     /**
                      * Show element within modal popup.

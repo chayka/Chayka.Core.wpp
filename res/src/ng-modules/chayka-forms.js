@@ -137,7 +137,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                      */
                     checkRequired: function(field){
                         var c = field['checks'].required;
-                        return !c.active || !!field['value'];
+                        return !c.active || !!(field['value'] + '');
                     },
 
                     /**
@@ -286,10 +286,16 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                                     //console.dir({'data': data});
                                     c.dictionary[value] = 'valid';
                                     ctrl.setFieldState(field, 'valid', null);
+                                    // if(c.callback){
+                                    //     $scope.$parent[c.callback].call($scope, data, field);
+                                    // }
                                 },
                                 error: function(data){
                                     c.dictionary[value] = 'invalid';
                                     c.message = c.message || 'mass_errors' === data.code && data.message[field['name']] || data.message;
+                                    // if(c.callback){
+                                    //     $scope.$parent[c.callback].call($scope, data, field);
+                                    // }
                                 }
                             });
                         }
@@ -306,7 +312,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                     checkCustom: function(field){
                         var c = field['checks'].custom;
                         var callback = c.callback;
-                        return !c.active || $scope.$parent[callback].call($scope, field['value']);
+                        return !c.active || $scope.$parent[callback].call($scope, field['value'], field);
                     },
 
                     /**
@@ -332,7 +338,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                             message = checks.required.message;
                         }
 
-                        if (field['value']) {
+                        if (field['value'] + '') {
                             angular.forEach(checks, function(c, check){
                                 if (!valid) {
                                     return;
@@ -968,11 +974,13 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                  *
                  * Html format:
                  *      data-check-api = "/api/check-existing/{name}/{value}|Email exists|500|scopeCondition"
+                 * //     data-check-api-callback = "doSomething"
                  * or
                  *      data-check-api-message = "Invalid phone format"
                  *      data-check-api-url = "/api/check-existing/{name}/{value}"
                  *      data-check-api-delay = "500"
                  *      data-check-api-if = "scopeCondition"
+                 * //     data-check-api-callback = "doSomething"
                  */
                 function setupApiCall() {
                     var short = $attrs['checkApi']; // '/api/check-existing/{name}/{value}|Email exists|500'
@@ -984,11 +992,14 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
 
                     var delay = shorts[2] || $attrs['checkApiDelay'] || 0;
 
+                    // var callback = $attrs['checkApiCallback'];
+
                     field.checks.api = {
                         message: message,
                         url: url,
                         delay: delay,
                         dictionary: {},
+                        // callback: callback,
                         active: true
                     };
                     var condition = shorts[3] || $attrs['checkApiIf'];
@@ -1039,7 +1050,7 @@ angular.module('chayka-forms', ['ngSanitize', 'chayka-modals', 'chayka-nls', 'ch
                         callback: callback,
                         active: true
                     };
-                    var condition = shorts[2] || $attrs['checkCustomeIf'];
+                    var condition = shorts[2] || $attrs['checkCustomIf'];
                     if (condition) {
                         $scope.$parent.$watch(condition, function(value){
                             field.checks.custom.active = value;

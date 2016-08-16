@@ -3,7 +3,7 @@ if(count($ngQueue)): //wp_print_scripts();?>
 <script>
     (function($){
 		$(document).ready(function(){
-<?php if(is_admin()): ?>
+<?php if(true || is_admin()): ?>
             /**
              * This is a fix for wp-admin forms to work, otherwise angular
              * makes event.preventDefault();
