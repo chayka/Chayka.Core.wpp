@@ -202,7 +202,9 @@ class Plugin extends WP\Plugin{
 
         }
         
-        $this->addAction('phpmailer_init', ['\Chayka\Core\EmailHelper', 'setupPhpMailer']);
+        if(OptionHelper::getOption('advancedPhpMailerSetupEnabled')){
+            $this->addAction('phpmailer_init', ['\Chayka\Core\EmailHelper', 'setupPhpMailer']);
+        }
 
     	/* chayka: registerActions */
     }
@@ -227,7 +229,8 @@ class Plugin extends WP\Plugin{
     public function registerResources($minimize = false) {
         $this->registerBowerResources(false);
         $this->unregisterScript('angular');
-        $this->registerScript('angular', $minimize ? 'lib/angular/angular.min.js':'lib/angular/angular.js', ['jquery'], '1.3.0');
+//        $this->registerScript('angular', $minimize ? 'lib/angular/angular.min.js':'lib/angular/angular.js', ['jquery'], '1.3.0');
+        $this->registerScript('angular', 'lib/angular/angular.min.js', ['jquery'], '1.3.0');
         $this->registerStyle('angular', 'lib/angular/angular-csp.css', [], '1.3.0');
         $this->enqueueStyle('angular');
 //	    $this->setScriptLocation('angular', false);
