@@ -245,8 +245,12 @@ class Plugin extends WP\Plugin{
 		    $cb = function() use ($view){
 			    echo $view->render('chayka-js-nls.phtml');
 		    };
-		    $this->addAction('wp_head', $cb);
-		    $this->addAction('admin_head', $cb);
+            if(did_action('wp_head') || did_action('admin_head')){
+                call_user_func($cb);
+            }else{
+                $this->addAction('wp_head', $cb);
+                $this->addAction('admin_head', $cb);
+            }
 	    });
 
 	    $this->registerNgScript('chayka-utils', 'ng-modules/chayka-utils.js', [], function(){
@@ -254,8 +258,12 @@ class Plugin extends WP\Plugin{
             $cb = function() use ($view){
                 echo $view->render('chayka-js-app-urls.phtml');
             };
-            $this->addAction('wp_head', $cb);
-            $this->addAction('admin_head', $cb);
+            if(did_action('wp_head') || did_action('admin_head')){
+                call_user_func($cb);
+            }else{
+                $this->addAction('wp_head', $cb);
+                $this->addAction('admin_head', $cb);
+            }
         });
 
 	    $this->registerNgScript('chayka-spinners', 'ng-modules/chayka-spinners.js', ['chayka-nls', 'chayka-utils'], function(){
@@ -263,8 +271,12 @@ class Plugin extends WP\Plugin{
 		    $cb = function() use ($view){
 			    echo $view->render('chayka-spinners.phtml');
 		    };
-		    $this->addAction('wp_footer', $cb, 1000);
-		    $this->addAction('admin_footer', $cb, 1000);
+            if(did_action('wp_footer') || did_action('admin_footer')){
+                call_user_func($cb);
+            }else{
+                $this->addAction('wp_footer', $cb, 1000);
+                $this->addAction('admin_footer', $cb, 1000);
+            }
 	    });
         $this->registerNgStyle('chayka-spinners', 'ng-modules/chayka-spinners.css');
 
@@ -275,8 +287,12 @@ class Plugin extends WP\Plugin{
 		    $cb = function() use ($view){
 			    echo $view->render('chayka-modals.phtml');
 		    };
-		    $this->addAction('wp_footer', $cb, 1000);
-		    $this->addAction('admin_footer', $cb, 1000);
+            if(did_action('wp_footer') || did_action('admin_footer')){
+                call_user_func($cb);
+            }else{
+                $this->addAction('wp_footer', $cb, 1000);
+                $this->addAction('admin_footer', $cb, 1000);
+            }
 	    });
         $this->registerNgStyle('chayka-modals', 'ng-modules/chayka-modals.css');
 
