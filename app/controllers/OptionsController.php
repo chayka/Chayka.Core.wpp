@@ -13,6 +13,8 @@ use Chayka\Helpers\JsonHelper;
 use Chayka\Helpers\Util;
 use Chayka\MVC\Controller;
 use Chayka\WP\Helpers\AclHelper;
+use Chayka\WP\Helpers\EncryptionHelper;
+
 //use Chayka\WP\Helpers\OptionHelper;
 
 class OptionsController extends Controller{
@@ -36,7 +38,7 @@ class OptionsController extends Controller{
             }
             $encrypted = $option[0] === '_';
             $value = $encrypted ?
-                OptionHelper::decrypt(get_option($namespace.substr($option, 1))):
+                EncryptionHelper::decrypt(get_option($namespace.substr($option, 1))):
                 get_option($namespace.$option);
             $options[$option] = strlen($value)?$value:$defValue;
         }
@@ -47,7 +49,7 @@ class OptionsController extends Controller{
             }
             $encrypted = $option[0] === '_';
             $value = $encrypted ?
-                OptionHelper::decrypt(get_site_option($namespace.substr($option, 1))):
+                EncryptionHelper::decrypt(get_site_option($namespace.substr($option, 1))):
                 get_site_option($namespace.$option);
             $siteOptions[$option] = strlen($value)?$value:$defValue;
         }
@@ -75,9 +77,9 @@ class OptionsController extends Controller{
                 AclHelper::apiPermissionRequired( '', 'update_option', $namespace . $option );
             }
             if($option[0] === '_'){
-                $value = OptionHelper::encrypt($value);
+                $value = EncryptionHelper::encrypt($value);
                 update_option($namespace.substr($option, 1), $value);
-                $options[$option] = OptionHelper::decrypt(get_option($namespace.substr($option, 1)));
+                $options[$option] = EncryptionHelper::decrypt(get_option($namespace.substr($option, 1)));
             }else{
                 update_option($namespace.$option, $value);
                 $options[$option] = get_option($namespace.$option);
@@ -89,9 +91,9 @@ class OptionsController extends Controller{
                 AclHelper::apiPermissionRequired( '', 'update_site_option', $namespace . $option );
             }
             if($option[0] === '_'){
-                $value = OptionHelper::encrypt($value);
+                $value = EncryptionHelper::encrypt($value);
                 update_site_option($namespace.substr($option, 1), $value);
-                $siteOptions[$option] = OptionHelper::decrypt(get_site_option($namespace.substr($option, 1)));
+                $siteOptions[$option] = EncryptionHelper::decrypt(get_site_option($namespace.substr($option, 1)));
             }else{
                 update_site_option($namespace.$option, $value);
                 $siteOptions[$option] = get_site_option($namespace.$option);
