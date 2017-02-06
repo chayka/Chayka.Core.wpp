@@ -145,7 +145,8 @@ angular.module('chayka-modals', ['chayka-nls', 'chayka-buttons', 'chayka-utils']
             restrict: 'AE',
             controllerAs: 'mm',
             bindToController: {},
-            template: '<div id="chayka-modals" data-ng-show="mm.queue.length" class="ng-cloak chayka-modals" data-ng-cloak="">' +
+            template:
+            '<div id="chayka-modals" data-ng-show="mm.queue.length" class="ng-cloak chayka-modals" data-ng-cloak="">' +
             '   <div class="chayka-modals-fader" data-ng-click="mm.close($event)">' +
             '       <div data-ng-repeat="item in mm.queue | limitTo: 1" class="chayka-modals-modal">' +
             '           <div class="modal_header">' +
@@ -160,7 +161,6 @@ angular.module('chayka-modals', ['chayka-nls', 'chayka-buttons', 'chayka-utils']
             '           </div>' +
             '       </div>' +
             '   </div>' +
-                //'   <div class="ng-hide" id="chayka-modals-pool"></div>' +
             '</div>',
             controller: function () {
                 return {
@@ -187,7 +187,8 @@ angular.module('chayka-modals', ['chayka-nls', 'chayka-buttons', 'chayka-utils']
                 onClose: '&?onModalClose'
 
             },
-            template: '<div class="chayka-modals ng-cloak" data-ng-show="m.isOpen">' +
+            template:
+            '<div class="chayka-modals ng-cloak" data-ng-show="m.isOpen">' +
             '   <div class="chayka-modals-fader" data-ng-click="m.hide($event)">' +
             '       <div class="chayka-modals-modal">' +
             '           <div class="modal_header">' +
