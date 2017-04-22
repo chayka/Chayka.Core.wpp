@@ -1,7 +1,9 @@
+<?php use Chayka\WP\Helpers\NlsHelper; ?>
+
 <script>
     var Chayka = Chayka || {};
     Chayka.Core = Chayka.Core || {};
-    Chayka.Core.locale = '<?php echo \Locale::getDefault();?>';
+    Chayka.Core.locale = '<?php echo NlsHelper::getLocale();?>';
 </script>
 
 <?php
