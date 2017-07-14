@@ -180,10 +180,10 @@ class Plugin extends WP\Plugin{
                 WP\Helpers\AngularHelper::enqueueScriptStyle('chayka-wp-admin');
             }
         });
-        Util::sessionStart();
-        if(empty($_SESSION['timezone'])){
+//        Util::sessionStart();
+//        if(empty($_SESSION['timezone'])){
 //            $this->addAction('wp_footer', 'fixTimezone');
-        }
+//        }
         if(true){
             if(is_active_sidebar('chayka-core-js-header')){
                 $this->addAction('wp_head', function (){
